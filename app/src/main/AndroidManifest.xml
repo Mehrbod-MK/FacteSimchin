@@ -13,6 +13,7 @@
         android:theme="@style/Theme.FacteSimchin"
         android:windowSoftInputMode="adjustResize"
         >
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

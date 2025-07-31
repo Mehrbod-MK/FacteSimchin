@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">FacteSimchin</string>
     <string name="facte_simchin">فکت سیم‌چین️\n🛠️</string>
+    <string name="mafia_game">\nبازی مافیا</string>
+    <string name="start_game">شروع بازی</string>
+    <string name="designed_by_mehrbod">طراحی شده توسط مهربد</string>
+    <string name="mordad_1404">مرداد 1404</string>
 </resources>
