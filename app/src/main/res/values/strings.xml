@@ -5,4 +5,8 @@
     <string name="start_game">شروع بازی</string>
     <string name="designed_by_mehrbod">طراحی شده توسط مهربد</string>
     <string name="mordad_1404">مرداد 1404</string>
+    <string name="please_enter_player_names">لطفاً اسامی بازیکنان را وارد کنید.</string>
+    <string name="new_player_name">نام بازیکن جدید را اینجا بنویسید</string>
+    <string name="action_add">اضافه کردن</string>
+    <string name="remove">حذف</string>
 </resources>

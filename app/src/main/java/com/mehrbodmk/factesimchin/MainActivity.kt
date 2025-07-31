@@ -3,6 +3,7 @@ package com.mehrbodmk.factesimchin
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         val buttonStartGame = findViewById<AppCompatButton>(R.id.buttonStartGame)
         buttonStartGame.setOnClickListener {
             helpers.playSoundEffect(this@MainActivity, R.raw.button)
+            startActivity(Intent(this@MainActivity, players::class.java))
         }
     }
 
@@ -49,18 +51,6 @@ class MainActivity : AppCompatActivity() {
         animator.duration = 3000
         animator.repeatCount = ValueAnimator.INFINITE
         animator.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if(mediaPlayer.isPlaying)
-            mediaPlayer.pause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(!mediaPlayer.isPlaying)
-            mediaPlayer.start()
     }
 
     private fun playMainMenuMusic()
