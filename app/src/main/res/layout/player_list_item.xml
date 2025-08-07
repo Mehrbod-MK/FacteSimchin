@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
+    <!--ImageView
         android:id="@+id/list_item_thumbnail"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginHorizontal="7dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars[0]"
-        android:background="#00000000"/>
+        android:background="#00000000"/-->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -26,12 +27,11 @@
     <TextView
         android:id="@+id/list_item_text"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"
+        android:layout_height="70dp"
+        android:gravity="center"
         android:text="@string/mafia_game"
         android:textColor="#ffffff"
-        android:textSize="25sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/list_item_removeButton"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
+        android:layout_margin="7dp"
         android:background="@drawable/button_selector"
         android:text="@string/remove"
         android:textColor="#ffffff"

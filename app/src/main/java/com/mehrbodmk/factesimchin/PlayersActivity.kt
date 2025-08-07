@@ -11,14 +11,15 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mehrbodmk.factesimchin.utils.Helpers
 
-class players : AppCompatActivity() {
+class PlayersActivity : AppCompatActivity() {
 
     private var playersList : ArrayList<String> = ArrayList()
 
@@ -38,13 +39,14 @@ class players : AppCompatActivity() {
             playersList.add(editTextPlayerName.text.toString())
             listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
             android.util.Log.i("tag", playersList.count().toString())
+            Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
     }
 
     private class MyListAdapter(
         context: Context,
         private val layout: Int,
-        private val mObjects: List<String>
+        private val mObjects: MutableList<String>
     ) : ArrayAdapter<String>(context, layout, mObjects) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -54,7 +56,7 @@ class players : AppCompatActivity() {
             if (convertView == null) {
                 view = LayoutInflater.from(context).inflate(layout, parent, false)
                 viewHolder = ViewHolder(
-                    thumbnail = view.findViewById(R.id.list_item_thumbnail),
+                    thumbnail = null,
                     title = view.findViewById(R.id.list_item_text),
                     button = view.findViewById(R.id.list_item_removeButton)
                 )
@@ -65,7 +67,9 @@ class players : AppCompatActivity() {
             }
 
             viewHolder.button.setOnClickListener {
-                Toast.makeText(context, "Button was clicked for list item $position", Toast.LENGTH_SHORT).show()
+                Helpers.playSoundEffect(this.context, R.raw.button)
+                mObjects.removeAt(position)
+                notifyDataSetChanged()
             }
 
             viewHolder.title.text = getItem(position)
@@ -74,7 +78,7 @@ class players : AppCompatActivity() {
         }
 
         data class ViewHolder(
-            val thumbnail: ImageView,
+            val thumbnail: ImageView?,
             val title: TextView,
             val button: Button
         )

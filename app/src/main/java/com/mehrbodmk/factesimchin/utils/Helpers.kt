@@ -2,9 +2,8 @@ package com.mehrbodmk.factesimchin.utils
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.provider.MediaStore.Audio.Media
 
-class helpers {
+class Helpers {
 
     companion object
     {

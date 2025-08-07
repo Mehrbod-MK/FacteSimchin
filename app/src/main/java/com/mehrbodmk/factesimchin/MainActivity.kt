@@ -2,23 +2,16 @@ package com.mehrbodmk.factesimchin
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.PowerManager
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.mehrbodmk.factesimchin.utils.helpers
-import kotlin.concurrent.thread
-import kotlin.time.Duration
+import com.mehrbodmk.factesimchin.utils.Helpers
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         val buttonStartGame = findViewById<AppCompatButton>(R.id.buttonStartGame)
         buttonStartGame.setOnClickListener {
-            helpers.playSoundEffect(this@MainActivity, R.raw.button)
-            startActivity(Intent(this@MainActivity, players::class.java))
+            Helpers.playSoundEffect(this@MainActivity, R.raw.button)
+            startActivity(Intent(this@MainActivity, PlayersActivity::class.java))
         }
     }
 
