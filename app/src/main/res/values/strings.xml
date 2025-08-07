@@ -9,4 +9,7 @@
     <string name="new_player_name">نام بازیکن جدید را اینجا بنویسید</string>
     <string name="action_add">اضافه کردن</string>
     <string name="remove">حذف</string>
+    <string name="name_cannot_be_empty">‌نام نمی‌تواند خالی باشد!</string>
+    <string name="player_already_exists">‌بازیکن قبلاً به لیست اضافه شده است.</string>
+    <string name="no_players_available">‌بازیکنی موجود نیست.</string>
 </resources>

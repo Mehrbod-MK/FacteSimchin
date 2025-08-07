@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -33,12 +34,32 @@ class PlayersActivity : AppCompatActivity() {
             insets
         }
         val buttonAddPlayer = findViewById<AppCompatButton>(R.id.buttonAddPlayer)
+        val buttonGoToRoles = findViewById<AppCompatButton>(R.id.buttonGoToRoles)
         val listViewPlayers = findViewById<ListView>(R.id.listViewPlayers)
         val editTextPlayerName = findViewById<EditText>(R.id.editTextPlayerName)
         buttonAddPlayer.setOnClickListener {
-            playersList.add(editTextPlayerName.text.toString())
+            val newPlayerName = editTextPlayerName.text.toString().trim()
+            if(newPlayerName.isEmpty()) {
+                Toast.makeText(this@PlayersActivity, R.string.name_cannot_be_empty, Toast.LENGTH_SHORT).show()
+                Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
+                return@setOnClickListener
+            }
+            else if(playersList.contains(newPlayerName)) {
+                Toast.makeText(this@PlayersActivity, R.string.player_already_exists, Toast.LENGTH_SHORT).show()
+                Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
+                return@setOnClickListener
+            }
+            playersList.add(newPlayerName)
             listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
             android.util.Log.i("tag", playersList.count().toString())
+            Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
+        }
+        buttonGoToRoles.setOnClickListener {
+            if(playersList.isEmpty()) {
+                Toast.makeText(this@PlayersActivity, R.string.no_players_available, Toast.LENGTH_SHORT).show()
+                Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
+                return@setOnClickListener
+            }
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
     }
