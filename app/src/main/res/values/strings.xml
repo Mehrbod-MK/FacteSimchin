@@ -12,4 +12,14 @@
     <string name="name_cannot_be_empty">‌نام نمی‌تواند خالی باشد!</string>
     <string name="player_already_exists">‌بازیکن قبلاً به لیست اضافه شده است.</string>
     <string name="no_players_available">‌بازیکنی موجود نیست.</string>
+    <string name="role_godfather">پدرخوانده</string>
+    <string name="role_mafia">مافیا</string>
+    <string name="role_bomber">بمب‌گذار</string>
+    <string name="role_citizen">شهروند</string>
+    <string name="role_detective">کارآگاه</string>
+    <string name="role_doctor">دکتر</string>
+    <string name="role_sniper">اسنایپر</string>
+    <string name="role_gunner">تفنگ‌دار</string>
+    <string name="role_detonator">نگهبان</string>
+    <string name="accept">تأیید</string>
 </resources>

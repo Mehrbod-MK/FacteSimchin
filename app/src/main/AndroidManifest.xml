@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FacteSimchin"
         android:windowSoftInputMode="adjustResize">
         <activity
+            android:name=".ChooseRolesActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayersActivity"
             android:exported="false" />
         <activity

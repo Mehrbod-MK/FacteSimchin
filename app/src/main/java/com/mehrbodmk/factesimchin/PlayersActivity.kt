@@ -1,6 +1,7 @@
 package com.mehrbodmk.factesimchin
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
 
 class PlayersActivity : AppCompatActivity() {
@@ -60,6 +62,9 @@ class PlayersActivity : AppCompatActivity() {
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
+            var rolesActivityIntent = Intent(this@PlayersActivity, ChooseRolesActivity::class.java)
+            rolesActivityIntent.putExtra(Constants.INTENT_PLAYERS_NAMES_LIST, playersList)
+            startActivity(rolesActivityIntent)
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
     }
