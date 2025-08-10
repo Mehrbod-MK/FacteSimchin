@@ -35,7 +35,7 @@
 
             <ImageView
                 android:layout_width="300dp"
-                android:layout_height="500dp"
+                android:layout_height="400dp"
                 android:id="@+id/imageViewCard"
                 android:src="@drawable/card_question"
                 android:background="#00000000"
@@ -86,7 +86,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/button_selector"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginVertical="10dp"
                 android:textColor="#ffffff"
                 android:text="@string/ok"
                 android:textSize="40sp"

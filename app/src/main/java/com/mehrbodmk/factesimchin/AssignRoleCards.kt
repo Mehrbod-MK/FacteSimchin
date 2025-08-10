@@ -1,5 +1,8 @@
 package com.mehrbodmk.factesimchin
 
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +10,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.animation.doOnEnd
 import androidx.core.content.IntentCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,20 +18,79 @@ import com.mehrbodmk.factesimchin.models.Player
 import com.mehrbodmk.factesimchin.models.Role
 import com.mehrbodmk.factesimchin.models.RoleNameAndCount
 import com.mehrbodmk.factesimchin.utils.Constants
+import com.mehrbodmk.factesimchin.utils.Helpers
 
 class AssignRoleCards : AppCompatActivity() {
 
     private lateinit var players: ArrayList<Player>
-    private lateinit var playerNames: ArrayList<String>
 
+    private lateinit var playerNames: ArrayList<String>
     private lateinit var roleNamesAndCount: ArrayList<RoleNameAndCount>
+
     private lateinit var textViewPlayerName:  TextView
     private lateinit var textViewPlayerRole: TextView
     private lateinit var imageViewCard: ImageView
     private lateinit var buttonRoleOK: AppCompatButton
 
+    private var isCardEnable = false
+
     private lateinit var currentPlayerName: String
     private lateinit var currentPlayerRole: Role
+
+    private lateinit var cardAnimator : ObjectAnimator
+
+    companion object
+    {
+        fun getRoleLocalName(context: Context, roleName: String) : String
+        {
+            return when (roleName) {
+                Constants.ROLE_NAME_GODFATHER -> context.getString(R.string.role_godfather)
+                Constants.ROLE_NAME_MAFIA -> context.getString(R.string.role_mafia)
+                Constants.ROLE_NAME_BOMBER -> context.getString(R.string.role_bomber)
+                Constants.ROLE_NAME_CITIZEN -> context.getString(R.string.role_citizen)
+                Constants.ROLE_NAME_DETECTIVE -> context.getString(R.string.role_detective)
+                Constants.ROLE_NAME_DOCTOR -> context.getString(R.string.role_doctor)
+                Constants.ROLE_NAME_SNIPER -> context.getString(R.string.role_sniper)
+                Constants.ROLE_NAME_GUNNER -> context.getString(R.string.role_gunner)
+                Constants.ROLE_NAME_DETONATOR -> context.getString(R.string.role_detonator)
+                else -> ""
+            }
+        }
+
+        fun getRole(context: Context, roleName: String) : Role
+        {
+            return when(roleName)
+            {
+                Constants.ROLE_NAME_GODFATHER -> Role(getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_MAFIA -> Role(getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_BOMBER -> Role(getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_CITIZEN -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DETECTIVE -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DOCTOR -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_SNIPER -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_GUNNER -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DETONATOR -> Role(getRoleLocalName(context, roleName), false)
+                else -> throw Exception("Invalid player role name: $roleName")
+            }
+        }
+
+        fun getRoleImageCardResource(roleName: String) : Int
+        {
+            return when(roleName)
+            {
+                Constants.ROLE_NAME_GODFATHER -> R.drawable.card_godfather
+                Constants.ROLE_NAME_MAFIA -> R.drawable.card_mafia
+                Constants.ROLE_NAME_BOMBER -> R.drawable.card_bomber
+                Constants.ROLE_NAME_CITIZEN -> R.drawable.card_citizen
+                Constants.ROLE_NAME_DETECTIVE -> R.drawable.card_detective
+                Constants.ROLE_NAME_DOCTOR -> R.drawable.card_doctor
+                Constants.ROLE_NAME_SNIPER -> R.drawable.card_sniper
+                Constants.ROLE_NAME_GUNNER -> R.drawable.card_gunner
+                Constants.ROLE_NAME_DETONATOR -> R.drawable.card_detonator
+                else -> throw Exception("Invalid player role name: $roleName")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +112,27 @@ class AssignRoleCards : AppCompatActivity() {
 
         if(!prepareNextRoleSelection())
             throw Exception("No players specified.")
+
+        imageViewCard.setOnClickListener {
+            if(!isCardEnable)
+            {
+                Helpers.playSoundEffect(this@AssignRoleCards, R.raw.event_bad)
+                return@setOnClickListener
+            }
+            isCardEnable = false
+
+            cardAnimator = ObjectAnimator.ofFloat(imageViewCard, "rotationY", 0f, 90f)
+            cardAnimator.duration = 1000
+            cardAnimator.start()
+            cardAnimator.doOnEnd {
+                assignNewRoleToCurrentPlayer()
+            }
+        }
+
+        buttonRoleOK.setOnClickListener {
+            Helpers.playSoundEffect(this, R.raw.button)
+            prepareNextRoleSelection()
+        }
     }
 
     private fun prepareNextRoleSelection() : Boolean
@@ -59,9 +143,32 @@ class AssignRoleCards : AppCompatActivity() {
         currentPlayerName = playerNames.shuffled().first()
         playerNames.remove(currentPlayerName)
         textViewPlayerName.text = currentPlayerName
+        textViewPlayerRole.text = ""
         imageViewCard.setImageResource(R.drawable.card_question)
-        buttonRoleOK.visibility = View.GONE
+        buttonRoleOK.visibility = View.INVISIBLE
+        isCardEnable = true
 
         return true
+    }
+
+    private fun assignNewRoleToCurrentPlayer()
+    {
+        roleNamesAndCount.shuffle()
+        val pickedRole = roleNamesAndCount.find { it.count > 0 }!!
+        currentPlayerRole = getRole(this, pickedRole.roleName)
+        pickedRole.count--;
+        if(pickedRole.count <= 0)
+        {
+            roleNamesAndCount.remove(roleNamesAndCount.find { it.roleName == pickedRole.roleName }!!)
+        }
+        textViewPlayerRole.text = getRoleLocalName(this, pickedRole.roleName)
+        imageViewCard.setImageResource(getRoleImageCardResource(pickedRole.roleName))
+
+        cardAnimator = ObjectAnimator.ofFloat(imageViewCard, "rotationY", 90f, 0f)
+        cardAnimator.duration = 1000
+        cardAnimator.start()
+        cardAnimator.doOnEnd {
+            buttonRoleOK.visibility = View.VISIBLE
+        }
     }
 }

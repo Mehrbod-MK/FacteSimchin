@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RoleNameAndCount(
     val roleName: String,
-    val count: Int
+    var count: Int
 ) : Parcelable

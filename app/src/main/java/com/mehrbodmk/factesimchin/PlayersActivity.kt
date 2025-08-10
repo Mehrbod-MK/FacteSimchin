@@ -60,6 +60,7 @@ class PlayersActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             playersList.add(newPlayerName)
+            editTextPlayerName.setText("")
             listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
             android.util.Log.i("tag", playersList.count().toString())
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)

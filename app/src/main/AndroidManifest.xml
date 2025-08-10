@@ -10,8 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FacteSimchin"
-        android:windowSoftInputMode="adjustResize">
+        android:theme="@style/Theme.FacteSimchin">
         <activity
             android:name=".AssignRoleCards"
             android:exported="false" />
@@ -20,6 +19,7 @@
             android:exported="false" />
         <activity
             android:name=".PlayersActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
