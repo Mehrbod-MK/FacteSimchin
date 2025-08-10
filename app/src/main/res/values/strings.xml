@@ -22,4 +22,8 @@
     <string name="role_gunner">تفنگ‌دار</string>
     <string name="role_detonator">نگهبان</string>
     <string name="accept">تأیید</string>
+    <string name="assign_roles_please_click">تعیین نقش بازیکنان\nنامبرده بر روی کارت خود کلیک کند.</string>
+    <string name="player_name">نام بازیکن</string>
+    <string name="player_role">نقش بازیکن</string>
+    <string name="ok">قبول</string>
 </resources>
