@@ -14,5 +14,7 @@ class Constants {
         const val ROLE_NAME_SNIPER = "Sniper"
         const val ROLE_NAME_GUNNER = "Gunner"
         const val ROLE_NAME_DETONATOR = "Detonator"
+
+        const val FILENAME_PLAYERS_LIST = "players_list.txt"
     }
 }

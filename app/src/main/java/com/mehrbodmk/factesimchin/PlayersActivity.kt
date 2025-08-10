@@ -19,8 +19,11 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
+import java.io.File
 
 class PlayersActivity : AppCompatActivity() {
 
@@ -39,6 +42,11 @@ class PlayersActivity : AppCompatActivity() {
         val buttonGoToRoles = findViewById<AppCompatButton>(R.id.buttonGoToRoles)
         val listViewPlayers = findViewById<ListView>(R.id.listViewPlayers)
         val editTextPlayerName = findViewById<EditText>(R.id.editTextPlayerName)
+        if(checkIfPlayersListFileExists())
+        {
+            playersList = ReadPlayersListFromLocalStorage()
+            listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
+        }
         buttonAddPlayer.setOnClickListener {
             val newPlayerName = editTextPlayerName.text.toString().trim()
             if(newPlayerName.isEmpty()) {
@@ -62,10 +70,36 @@ class PlayersActivity : AppCompatActivity() {
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
-            var rolesActivityIntent = Intent(this@PlayersActivity, ChooseRolesActivity::class.java)
+            WritePlayersListToLocalStorage()
+            val rolesActivityIntent = Intent(this@PlayersActivity, ChooseRolesActivity::class.java)
             rolesActivityIntent.putExtra(Constants.INTENT_PLAYERS_NAMES_LIST, playersList)
             startActivity(rolesActivityIntent)
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
+        }
+    }
+
+    private fun checkIfPlayersListFileExists() : Boolean
+    {
+        val fileName = Constants.FILENAME_PLAYERS_LIST
+        val file = File(this.filesDir, fileName)
+        return file.exists()
+    }
+
+    private fun ReadPlayersListFromLocalStorage() : ArrayList<String>
+    {
+        val fileName = Constants.FILENAME_PLAYERS_LIST
+        val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
+        val type = object : TypeToken<ArrayList<String>>() {}.type
+        val myList: ArrayList<String> = Gson().fromJson(fileContents, type)
+        return myList
+    }
+
+    private fun WritePlayersListToLocalStorage()
+    {
+        val fileName = Constants.FILENAME_PLAYERS_LIST
+        val fileContents = Gson().toJson(playersList)
+        this.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+            it.write(fileContents.toByteArray())
         }
     }
 
