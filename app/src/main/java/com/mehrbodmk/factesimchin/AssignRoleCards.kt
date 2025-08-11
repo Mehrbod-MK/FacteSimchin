@@ -22,7 +22,7 @@ import com.mehrbodmk.factesimchin.utils.Helpers
 
 class AssignRoleCards : AppCompatActivity() {
 
-    private lateinit var players: ArrayList<Player>
+    private var players: ArrayList<Player> = arrayListOf()
 
     private lateinit var playerNames: ArrayList<String>
     private lateinit var roleNamesAndCount: ArrayList<RoleNameAndCount>
@@ -131,7 +131,13 @@ class AssignRoleCards : AppCompatActivity() {
 
         buttonRoleOK.setOnClickListener {
             Helpers.playSoundEffect(this, R.raw.button)
-            prepareNextRoleSelection()
+            players.add(Player(currentPlayerName, currentPlayerRole))
+            if(!prepareNextRoleSelection())
+            {
+                val mainGameIntent = Intent(this@AssignRoleCards, MainGameActivity::class.java)
+                mainGameIntent.putParcelableArrayListExtra(Constants.INTENT_PLAYERS_LIST, players)
+                startActivity(mainGameIntent)
+            }
         }
     }
 

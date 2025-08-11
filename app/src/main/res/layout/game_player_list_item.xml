@@ -93,6 +93,7 @@
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:id="@+id/buttonPlayerTalk"
         app:layout_constraintStart_toStartOf="@id/guidelinePlayerButton3"
         app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton2"
         app:layout_constraintTop_toTopOf="parent"
@@ -105,13 +106,14 @@
     <androidx.appcompat.widget.AppCompatCheckBox
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:id="@+id/checkBoxPlayerIsDead"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton3"
         app:layout_constraintTop_toTopOf="parent"
         app:buttonTint="#ff0000"
         android:gravity="center"
         android:textColor="#ffffff"
-        android:text="مرگ"
+        android:text="@string/is_dead"
         android:textSize="12sp"
         />
 

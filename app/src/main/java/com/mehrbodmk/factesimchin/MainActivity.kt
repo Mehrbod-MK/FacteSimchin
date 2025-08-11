@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         animateMafiaIcon()
-        playMainMenuMusic()
+        Helpers.playMainMenuMusic(this@MainActivity)
 
         val buttonStartGame = findViewById<AppCompatButton>(R.id.buttonStartGame)
         buttonStartGame.setOnClickListener {
@@ -44,12 +44,5 @@ class MainActivity : AppCompatActivity() {
         animator.duration = 3000
         animator.repeatCount = ValueAnimator.INFINITE
         animator.start()
-    }
-
-    private fun playMainMenuMusic()
-    {
-        mediaPlayer = MediaPlayer.create(this, R.raw.main_menu)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
     }
 }

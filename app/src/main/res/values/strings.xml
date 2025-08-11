@@ -28,4 +28,6 @@
     <string name="ok">قبول</string>
     <string name="talk">صحبت</string>
     <string name="kill">کشتن</string>
+    <string name="game_turn">دست %1$d %2$s</string>
+    <string name="is_dead">مرگ</string>
 </resources>

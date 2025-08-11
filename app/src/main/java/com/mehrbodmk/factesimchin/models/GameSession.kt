@@ -1,6 +1,10 @@
 package com.mehrbodmk.factesimchin.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class GameSession(
-    var players: MutableList<Player>,
+    var players: ArrayList<Player>,
     var round: Int
-)
+) : Parcelable

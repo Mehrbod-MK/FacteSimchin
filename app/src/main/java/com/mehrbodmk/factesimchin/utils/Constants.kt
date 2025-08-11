@@ -4,6 +4,7 @@ class Constants {
     companion object {
         const val INTENT_PLAYERS_NAMES_LIST = "intent_players_names_list"
         const val INTENT_ROLE_NAMES_AND_COUNT_LIST = "intent_role_names_and_count"
+        const val INTENT_PLAYERS_LIST = "intent_players_list"
 
         const val ROLE_NAME_GODFATHER = "GodFather"
         const val ROLE_NAME_MAFIA = "Mafia"
