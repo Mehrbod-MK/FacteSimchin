@@ -26,4 +26,6 @@
     <string name="player_name">نام بازیکن</string>
     <string name="player_role">نقش بازیکن</string>
     <string name="ok">قبول</string>
+    <string name="talk">صحبت</string>
+    <string name="kill">کشتن</string>
 </resources>
