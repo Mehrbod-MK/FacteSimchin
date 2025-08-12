@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.13" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <TextView
         android:layout_width="0dp"
@@ -90,18 +90,14 @@
         android:background="#00000000"
         />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:id="@+id/buttonPlayerTalk"
+        android:id="@+id/checkBoxSelectPlayer"
         app:layout_constraintStart_toStartOf="@id/guidelinePlayerButton3"
         app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton2"
         app:layout_constraintTop_toTopOf="parent"
-        android:backgroundTint="#f0f090"
-        android:gravity="center"
-        android:text="@string/talk"
-        android:textSize="12sp"
-        android:layout_marginHorizontal="7dp"
+        app:buttonTint="#00BCD4"
         />
 
     <androidx.appcompat.widget.AppCompatCheckBox

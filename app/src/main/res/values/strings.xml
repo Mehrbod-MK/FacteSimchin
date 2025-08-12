@@ -30,4 +30,11 @@
     <string name="kill">کشتن</string>
     <string name="game_turn">دست %1$d %2$s</string>
     <string name="is_dead">مرگ</string>
+    <string name="introductory_turn">(دست معارفه)</string>
+    <string name="the_living">زنده ها</string>
+    <string name="the_dead">مرده ها</string>
+    <string name="mafia">مافیا:</string>
+    <string name="citizen">شهروند:</string>
+    <string name="neutral">خنثی:</string>
+    <string name="zero_string">0</string>
 </resources>

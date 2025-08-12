@@ -136,6 +136,7 @@ class AssignRoleCards : AppCompatActivity() {
             {
                 val mainGameIntent = Intent(this@AssignRoleCards, MainGameActivity::class.java)
                 mainGameIntent.putParcelableArrayListExtra(Constants.INTENT_PLAYERS_LIST, players)
+                finish()
                 startActivity(mainGameIntent)
             }
         }

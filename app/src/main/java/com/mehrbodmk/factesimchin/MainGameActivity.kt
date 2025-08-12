@@ -28,6 +28,7 @@ class MainGameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
 
+    private lateinit var textViewGameTurn: TextView
     private lateinit var listViewPlayers: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class MainGameActivity : AppCompatActivity() {
             insets
         }
 
+        textViewGameTurn = findViewById(R.id.textViewGameTurn)
         listViewPlayers = findViewById(R.id.listViewGamePlayers)
 
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
@@ -47,8 +49,7 @@ class MainGameActivity : AppCompatActivity() {
         updateUI()
 
         val buttonGoNight = findViewById<FloatingActionButton>(R.id.buttonGoNight)
-        buttonGoNight.setOnClickListener {
-        }
+
     }
 
     private fun createGameSession(players: ArrayList<Player>)
@@ -59,7 +60,16 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun updateUI()
     {
+        textViewGameTurn.setText(getGameTurnText())
         listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
+    }
+
+    private fun getGameTurnText() : String
+    {
+        if(gameSession.round == 1)
+            return getString(R.string.game_turn, gameSession.round, getString(R.string.introductory_turn))
+        else
+            return getString(R.string.game_turn, gameSession.round, "")
     }
 
     private class PlayersListAdapter(
@@ -80,7 +90,7 @@ class MainGameActivity : AppCompatActivity() {
                     playerName = view.findViewById(R.id.textViewPlayerName),
                     playerRole = view.findViewById(R.id.textViewPlayerRole),
                     playerRoleImage = view.findViewById(R.id.imageViewRole),
-                    talkButton = view.findViewById(R.id.buttonPlayerTalk),
+                    checkBoxSelect = view.findViewById(R.id.checkBoxSelectPlayer),
                     isDead = view.findViewById(R.id.checkBoxPlayerIsDead)
                 )
                 view.tag = viewHolder
@@ -100,7 +110,7 @@ class MainGameActivity : AppCompatActivity() {
             val playerName: TextView,
             val playerRole: TextView,
             val playerRoleImage: ImageView,
-            val talkButton: AppCompatButton,
+            val checkBoxSelect: AppCompatCheckBox,
             val isDead: AppCompatCheckBox
         )
     }
