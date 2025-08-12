@@ -101,6 +101,7 @@
         android:gravity="center"
         android:text="@string/talk"
         android:textSize="12sp"
+        android:layout_marginHorizontal="7dp"
         />
 
     <androidx.appcompat.widget.AppCompatCheckBox

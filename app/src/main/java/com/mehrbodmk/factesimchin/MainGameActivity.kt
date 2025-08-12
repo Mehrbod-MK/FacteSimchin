@@ -12,11 +12,13 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
 import com.mehrbodmk.factesimchin.models.Player
 import com.mehrbodmk.factesimchin.utils.Constants
@@ -43,6 +45,10 @@ class MainGameActivity : AppCompatActivity() {
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
         createGameSession(players)
         updateUI()
+
+        val buttonGoNight = findViewById<FloatingActionButton>(R.id.buttonGoNight)
+        buttonGoNight.setOnClickListener {
+        }
     }
 
     private fun createGameSession(players: ArrayList<Player>)

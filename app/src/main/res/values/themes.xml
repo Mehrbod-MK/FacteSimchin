@@ -15,4 +15,10 @@
     <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
+
+    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Title & message text -->
+        <item name="android:textColor">#00BCD4</item> <!-- Button text -->
+        <item name="android:background">#7A7A7A</item>
+    </style>
 </resources>
