@@ -268,4 +268,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/buttonTimer"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="190dp"
+        android:backgroundTint="#3F51B5"
+        android:foreground="@drawable/icon_timer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
