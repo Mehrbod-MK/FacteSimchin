@@ -6,6 +6,90 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TimerActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTimerText"
+        android:background="#00000000"
+        android:fontFamily="@font/b_titr_bold"
+        android:textColor="#ffffff"
+        android:text="@string/timer"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTimerValue"
+        android:background="#00000000"
+        android:textColor="#ffffff"
+        android:textSize="60sp"
+        android:textAlignment="center"
+        android:text="@string/timer_value"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#00000000">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/buttonTimerAddTime"
+            android:src="@drawable/icon_plus"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#FFEB3B"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/buttonTimerSubtractTime"
+            android:src="@drawable/icon_subtract"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#FFEB3B"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/buttonTimerMusic"
+            android:src="@drawable/icon_music"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#FFEB3B"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/buttonTimerStartPause"
+            android:src="@drawable/icon_play"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#FFEB3B"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/buttonTimerReset"
+            android:src="@drawable/icon_reset"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#FFEB3B"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

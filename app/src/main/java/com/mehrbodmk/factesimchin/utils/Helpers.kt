@@ -14,9 +14,16 @@ class Helpers {
         fun playSoundEffect(context: Context, soundResourceId: Int)
         {
             if(soundPlayer?.isPlaying == true)
+            {
                 soundPlayer?.stop()
+                soundPlayer?.release()
+            }
             soundPlayer = MediaPlayer.create(context, soundResourceId)
-            soundPlayer!!.start()
+            soundPlayer?.setOnCompletionListener {
+                it.release()
+                soundPlayer = null
+            }
+            soundPlayer?.start()
         }
 
         fun playMainMenuMusic(context: Context)
@@ -31,13 +38,10 @@ class Helpers {
         fun stopMainMenuMusic()
         {
             if(mainMenuSoundPlayer?.isPlaying == true)
+            {
                 mainMenuSoundPlayer?.stop()
-        }
-
-        fun resumeMainMenuMusic()
-        {
-            if(mainMenuSoundPlayer?.isPlaying == false)
-                mainMenuSoundPlayer?.start()
+            }
+            mainMenuSoundPlayer?.release()
         }
     }
 }

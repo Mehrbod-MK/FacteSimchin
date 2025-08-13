@@ -37,4 +37,6 @@
     <string name="citizen">شهروند:</string>
     <string name="neutral">خنثی:</string>
     <string name="zero_string">0</string>
+    <string name="timer">زمان سنج</string>
+    <string name="timer_value">%1$02d : %2$02d</string>
 </resources>

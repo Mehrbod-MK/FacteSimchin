@@ -1,7 +1,9 @@
 package com.mehrbodmk.factesimchin
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +14,12 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,6 +34,16 @@ class MainGameActivity : AppCompatActivity() {
 
     private lateinit var textViewGameTurn: TextView
     private lateinit var listViewPlayers: ListView
+    private lateinit var buttonGoNight: FloatingActionButton
+    private lateinit var buttonTimer: FloatingActionButton
+
+    private val timerActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        if(result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            gameSession = data?.extras?.getParcelable(Constants.INTENT_GAME_SESSION)!!
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +57,22 @@ class MainGameActivity : AppCompatActivity() {
 
         textViewGameTurn = findViewById(R.id.textViewGameTurn)
         listViewPlayers = findViewById(R.id.listViewGamePlayers)
+        buttonGoNight = findViewById(R.id.buttonGoNight)
+        buttonTimer = findViewById(R.id.buttonTimer)
+        attachEvents()
 
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
         createGameSession(players)
         updateUI()
+    }
 
-        val buttonGoNight = findViewById<FloatingActionButton>(R.id.buttonGoNight)
-
+    private fun attachEvents()
+    {
+        buttonTimer.setOnClickListener {
+            val intent = Intent(this@MainGameActivity, TimerActivity::class.java)
+            intent.putExtra(Constants.INTENT_GAME_SESSION, gameSession)
+            timerActivityLauncher.launch(intent)
+        }
     }
 
     private fun createGameSession(players: ArrayList<Player>)
