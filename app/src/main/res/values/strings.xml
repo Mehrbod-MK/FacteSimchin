@@ -39,4 +39,8 @@
     <string name="zero_string">0</string>
     <string name="timer">زمان سنج</string>
     <string name="timer_value">%1$02d : %2$02d</string>
+    <string name="timer_working">صحبت کنید…</string>
+    <string name="timer_near_the_end">نزدیک به پایان زمان…</string>
+    <string name="timer_last_words">حرف آخر…!</string>
+    <string name="timer_the_end">تمام شد!</string>
 </resources>

@@ -25,6 +25,7 @@ class TimerActivity : AppCompatActivity() {
     private var countdownTimer: CountDownTimer? = null
 
     private lateinit var textViewTimerValue: TextView
+    private lateinit var textViewTimerText: TextView
     private lateinit var buttonTimerAddTime: AppCompatImageButton
     private lateinit var buttonTimerSubtractTime: AppCompatImageButton
     private lateinit var buttonTimerMusicOnOff: AppCompatImageButton
@@ -49,6 +50,7 @@ class TimerActivity : AppCompatActivity() {
         gameSession = intent.extras?.getParcelable(Constants.INTENT_GAME_SESSION)!!
 
         textViewTimerValue = findViewById(R.id.textViewTimerValue)
+        textViewTimerText = findViewById(R.id.textViewTimerText)
         buttonTimerAddTime = findViewById(R.id.buttonTimerAddTime)
         buttonTimerSubtractTime = findViewById(R.id.buttonTimerSubtractTime)
         buttonTimerMusicOnOff = findViewById(R.id.buttonTimerMusic)
@@ -190,6 +192,35 @@ class TimerActivity : AppCompatActivity() {
         val numMinutes: Int = gameSession.timerValue / 60
 
         textViewTimerValue.text = getString(R.string.timer_value, numMinutes, numSeconds)
+
+        if(isTimerRunning)
+        {
+            if(gameSession.timerValue > 10)
+            {
+                textViewTimerText.text = getString(R.string.timer_working)
+                textViewTimerText.setTextColor(getColor(R.color.white))
+            }
+            if(gameSession.timerValue <= 10)
+            {
+                textViewTimerText.text = getString(R.string.timer_near_the_end)
+                textViewTimerText.setTextColor(getColor(R.color.yellow))
+            }
+            if(gameSession.timerValue <= 5)
+            {
+                textViewTimerText.text = getString(R.string.timer_last_words)
+                textViewTimerText.setTextColor(getColor(R.color.orange))
+            }
+            if(gameSession.timerValue == 0)
+            {
+                textViewTimerText.text = getString(R.string.timer_the_end)
+                textViewTimerText.setTextColor(getColor(R.color.red))
+            }
+        }
+        else
+        {
+            textViewTimerText.text = getString(R.string.timer)
+            textViewTimerText.setTextColor(getColor(R.color.white))
+        }
     }
 
     private fun updateButtons()
