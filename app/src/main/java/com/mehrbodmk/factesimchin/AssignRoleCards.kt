@@ -61,15 +61,15 @@ class AssignRoleCards : AppCompatActivity() {
         {
             return when(roleName)
             {
-                Constants.ROLE_NAME_GODFATHER -> Role(getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_MAFIA -> Role(getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_BOMBER -> Role(getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_CITIZEN -> Role(getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DETECTIVE -> Role(getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DOCTOR -> Role(getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_SNIPER -> Role(getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_GUNNER -> Role(getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DETONATOR -> Role(getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_GODFATHER -> Role(Constants.ROLE_NAME_GODFATHER, getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_MAFIA -> Role(Constants.ROLE_NAME_MAFIA, getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_BOMBER -> Role(Constants.ROLE_NAME_BOMBER, getRoleLocalName(context, roleName), true)
+                Constants.ROLE_NAME_CITIZEN -> Role(Constants.ROLE_NAME_CITIZEN, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DETECTIVE -> Role(Constants.ROLE_NAME_DETECTIVE, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DOCTOR -> Role(Constants.ROLE_NAME_DOCTOR, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_SNIPER -> Role(Constants.ROLE_NAME_SNIPER, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_GUNNER -> Role(Constants.ROLE_NAME_GUNNER, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_DETONATOR -> Role(Constants.ROLE_NAME_DETONATOR, getRoleLocalName(context, roleName), false)
                 else -> throw Exception("Invalid player role name: $roleName")
             }
         }

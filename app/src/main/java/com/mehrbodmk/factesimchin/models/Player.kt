@@ -7,4 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class Player(
     var name: String,
     var role: Role,
+    var isDead: Boolean = false,
 ) : Parcelable

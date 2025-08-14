@@ -1,5 +1,6 @@
 package com.mehrbodmk.factesimchin.utils
 
+import android.app.AlertDialog
 import android.content.Context
 import android.media.MediaPlayer
 import com.mehrbodmk.factesimchin.R
@@ -42,6 +43,28 @@ class Helpers {
                 mainMenuSoundPlayer?.stop()
             }
             mainMenuSoundPlayer?.release()
+        }
+
+        fun askUserYesNo(context:Context, theme: Int, title: String, message: String,
+                         positiveButtonText: String, negativeButtonText: String,
+                         dialogOpenSoundId: Int, dialogCloseSoundId: Int,
+                         onYes: () -> Unit, onNo: () -> Unit)
+        {
+            val builder = AlertDialog.Builder(context, theme)
+            builder.setTitle(title)
+            builder.setMessage(message)
+            builder.setPositiveButton(positiveButtonText, { dialog, _ ->
+                dialog.dismiss()
+                playSoundEffect(context, dialogCloseSoundId)
+                onYes.invoke()
+            })
+            builder.setNegativeButton(negativeButtonText, { dialog, _ ->
+                dialog.dismiss()
+                playSoundEffect(context, dialogCloseSoundId)
+                onNo.invoke()
+            })
+            playSoundEffect(context, dialogOpenSoundId)
+            builder.show()
         }
     }
 }

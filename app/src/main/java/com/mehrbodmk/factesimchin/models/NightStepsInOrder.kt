@@ -1,0 +1,20 @@
+package com.mehrbodmk.factesimchin.models
+
+enum class NightStepsInOrder {
+    SLEEP_EVERYONE,
+
+    WAKE_ALL_MAFIAS,
+    GODFATHER_SHOW_LIKE,
+    BOMBER_SHOW_LIKE,
+    SLEEP_MAFIA,
+    WAKE_DOCTOR,
+    SLEEP_DOCTOR,
+    WAKE_DETECTIVE,
+    SLEEP_DETECTIVE,
+    WAKE_SNIPER,
+    SLEEP_SNIPER,
+    WAKE_GUNNER,
+    SLEEP_GUNNER,
+    WAKE_DETONATOR,
+    SLEEP_DETONATOR,
+}

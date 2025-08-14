@@ -6,6 +6,7 @@ class Constants {
         const val INTENT_ROLE_NAMES_AND_COUNT_LIST = "intent_role_names_and_count"
         const val INTENT_PLAYERS_LIST = "intent_players_list"
         const val INTENT_GAME_SESSION = "intent_game_session"
+        const val INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND = "sleep_or_wake_someone_command"
 
         const val ROLE_NAME_GODFATHER = "GodFather"
         const val ROLE_NAME_MAFIA = "Mafia"
