@@ -72,6 +72,7 @@ class MainGameActivity : AppCompatActivity() {
             val intent = Intent(this@MainGameActivity, TimerActivity::class.java)
             intent.putExtra(Constants.INTENT_GAME_SESSION, gameSession)
             timerActivityLauncher.launch(intent)
+            Helpers.playSoundEffect(this@MainGameActivity, R.raw.button)
         }
     }
 
@@ -83,7 +84,7 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun updateUI()
     {
-        textViewGameTurn.setText(getGameTurnText())
+        textViewGameTurn.text = getGameTurnText()
         listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
     }
 

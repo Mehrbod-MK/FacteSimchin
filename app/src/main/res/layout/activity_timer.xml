@@ -31,6 +31,8 @@
         android:textSize="60sp"
         android:textAlignment="center"
         android:text="@string/timer_value"
+        android:layoutDirection="ltr"
+        android:textDirection="ltr"
         />
 
     <LinearLayout

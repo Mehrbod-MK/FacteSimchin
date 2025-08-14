@@ -76,6 +76,13 @@ class TimerActivity : AppCompatActivity() {
 
     private fun attachEvents()
     {
+        textViewTimerValue.setOnClickListener {
+            if(!isTimerRunning && !hasSetInitialTimeValue)
+            {
+                gameSession.timerValue = 0
+                updateUI()
+            }
+        }
         buttonTimerAddTime.setOnClickListener {
             gameSession.timerValue += 5
             updateUI()
@@ -87,6 +94,13 @@ class TimerActivity : AppCompatActivity() {
             if(gameSession.timerValue - 5 >= 0)
             {
                 gameSession.timerValue -= 5
+                updateUI()
+                refreshTimer()
+                Helpers.playSoundEffect(this@TimerActivity, R.raw.click_object)
+            }
+            else if(gameSession.timerValue > 0)
+            {
+                gameSession.timerValue = 0
                 updateUI()
                 refreshTimer()
                 Helpers.playSoundEffect(this@TimerActivity, R.raw.click_object)
