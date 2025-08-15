@@ -123,6 +123,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/linearLayoutGodfatherNato"
+                android:orientation="vertical"
+                android:background="#00000000"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp"
+                    android:text="@string/choose_godfahter_nato"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/buttonChooseGodfatherNatoGuessedRole"
+                    android:background="@drawable/button_selector"
+                    android:backgroundTint="#59142C"
+                    android:foregroundTint="#ffffff"
+                    android:text="@string/choose"
+                    android:textColor="#ffffffff"
+                    android:textSize="25sp"
+                    />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="17dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="#00000000">
 
@@ -159,7 +195,7 @@
             android:background="#00000000"
             android:textColor="#ffffffff"
             android:textAlignment="center"
-            android:textSize="35sp"
+            android:textSize="30sp"
             />
 
             <Space

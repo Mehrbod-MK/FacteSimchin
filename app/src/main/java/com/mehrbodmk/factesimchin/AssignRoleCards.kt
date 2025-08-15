@@ -42,6 +42,16 @@ class AssignRoleCards : AppCompatActivity() {
 
     companion object
     {
+        fun getRolesLocalNames(context: Context, roles: Iterable<RoleTypes>) : ArrayList<String>
+        {
+            val result: ArrayList<String> = arrayListOf()
+            for(roleType in roles)
+            {
+                result.add(getRoleLocalName(context, roleType.roleName))
+            }
+            return result
+        }
+
         fun getRoleLocalName(context: Context, roleName: String) : String
         {
             return when (roleName) {
@@ -148,7 +158,7 @@ class AssignRoleCards : AppCompatActivity() {
         if(!playerNames.any())
             return false
 
-        currentPlayerName = playerNames.shuffled().first()
+        currentPlayerName = playerNames.random()
         playerNames.remove(currentPlayerName)
         textViewPlayerName.text = currentPlayerName
         textViewPlayerRole.text = ""

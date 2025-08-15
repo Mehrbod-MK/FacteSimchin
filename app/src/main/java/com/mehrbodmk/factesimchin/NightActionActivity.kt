@@ -1,19 +1,20 @@
 package com.mehrbodmk.factesimchin
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.widget.ArrayAdapter
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mehrbodmk.factesimchin.models.Missions
 import com.mehrbodmk.factesimchin.models.NightAction
+import com.mehrbodmk.factesimchin.models.Player
+import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.models.commands.NightCommand
 import com.mehrbodmk.factesimchin.utils.Constants
 
@@ -25,12 +26,20 @@ class NightActionActivity : AppCompatActivity() {
     private lateinit var buttonSourcePlayers: AppCompatButton
     private lateinit var buttonMissions: AppCompatButton
     private lateinit var buttonTargetPlayers: AppCompatButton
+    private lateinit var buttonAddNightCommand: AppCompatButton
+    private lateinit var buttonRemoveAllNightCommands: AppCompatButton
+    private lateinit var textViewlistMissions: TextView
+    private lateinit var buttonChooseGodfatherNatoGuessedRole: AppCompatButton
+
+    private lateinit var linearLayoutGodfatherNato: LinearLayout
 
     private var selectedSourcePlayerIndex: Int = -1
     private var selectedMissionIndex: Int = -1
     private var selectedTargetPlayerIndex: Int = -1
+    private var selectedNatoGuessedRoleIndex: Int = -1
+    private var selectedBombCode: Int = 0
 
-    private lateinit var nightCommands: ArrayList<NightCommand>
+    private var nightCommands: ArrayList<NightCommand> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +60,22 @@ class NightActionActivity : AppCompatActivity() {
         buttonSourcePlayers = findViewById(R.id.buttonChooseSourcePlayer)
         buttonMissions = findViewById(R.id.buttonChooseMission)
         buttonTargetPlayers = findViewById(R.id.buttonChooseTargetPlayer)
+        buttonAddNightCommand = findViewById(R.id.buttonAddNightCommand)
+        buttonRemoveAllNightCommands = findViewById(R.id.buttonRemoveAllNightCommands)
+        textViewlistMissions = findViewById(R.id.textViewListMissions)
+        linearLayoutGodfatherNato = findViewById(R.id.linearLayoutGodfatherNato)
+        buttonChooseGodfatherNatoGuessedRole = findViewById(R.id.buttonChooseGodfatherNatoGuessedRole)
 
         attachEvents()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun attachEvents()
     {
         var selectedSourcePlayerItem = 0
         var selectedMission = 0
         var selectedTargetPlayerItem = 0
+        var selectedNatoGuessedRoleItem = 0
 
         buttonSourcePlayers.setOnClickListener {
             val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
@@ -100,42 +116,170 @@ class NightActionActivity : AppCompatActivity() {
                 .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
             alertDialogSelectTargetPlayer.show()
         }
+
+        // Special Roles Action Buttons.
+        buttonChooseGodfatherNatoGuessedRole.setOnClickListener {
+            val alertDialogChooseGodFatherNatoGuessedRole = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setTitle(getString(R.string.choose_godfahter_nato))
+                .setSingleChoiceItems(AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries).toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
+                    selectedNatoGuessedRoleItem = which
+                }
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    selectedNatoGuessedRoleIndex =
+                        selectedNatoGuessedRoleItem; dialog.dismiss(); updateUI()
+                }
+                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+            alertDialogChooseGodFatherNatoGuessedRole.show()
+        }
+
+        buttonAddNightCommand.setOnClickListener {
+            val newNightCommand = getNewNightCommand()
+            resetNightUI()
+            if(newNightCommand != null)
+            {
+                nightCommands.add(newNightCommand)
+                textViewlistMissions.text = "${textViewlistMissions.text}\n${getNightCommandString(newNightCommand)}"
+            }
+        }
+    }
+
+    private fun resetNightUI()
+    {
+        selectedSourcePlayerIndex = -1
+        selectedMissionIndex = -1
+        selectedTargetPlayerIndex = -1
+        selectedNatoGuessedRoleIndex = -1
+        selectedBombCode = 0
+
+        updateUI()
+    }
+
+    private fun getNightCommandString(nightCommand: NightCommand) : String
+    {
+        val additionalInfoStringBuilder: StringBuilder = StringBuilder()
+        if(nightCommand.natoGuessedRole != null)
+            additionalInfoStringBuilder.append("(${AssignRoleCards.getRoleLocalName(this@NightActionActivity, nightCommand.natoGuessedRole.roleName)}) ")
+        if(nightCommand.bombCode != null)
+            additionalInfoStringBuilder.append("(${nightCommand.bombCode}) ")
+
+        return getString(R.string.night_command_item, nightCommands.size,
+            nightCommand.sourcePlayer.name, getMissionLocalName(nightCommand.mission), nightCommand.targetPlayer.name,
+            additionalInfoStringBuilder.toString())
+    }
+
+    private fun getNewNightCommand() : NightCommand?
+    {
+        var sourcePlayer: Player? = null
+        var mission: Missions? = null
+        var targetPlayer: Player? = null
+        var natoGuessedRole: RoleTypes? = null
+        var bombCode: Int? = null
+
+        var result: Boolean = true
+
+        if(selectedSourcePlayerIndex >= 0)
+            sourcePlayer = nightAction.candidateSourcePlayers[selectedSourcePlayerIndex]
+        else
+            result = false
+        if(selectedMissionIndex >= 0)
+            mission = nightAction.missions[selectedMissionIndex]
+        else
+            result = false
+        if(selectedTargetPlayerIndex >= 0)
+            targetPlayer = nightAction.candidateTargetPlayers[selectedTargetPlayerIndex]
+        else
+            result = false
+        if(mission == Missions.GODFATHER_NATOS_PLAYER)
+        {
+            if(selectedNatoGuessedRoleIndex >= 0)
+                natoGuessedRole = RoleTypes.entries[selectedNatoGuessedRoleIndex]
+            else
+                result = false
+        }
+        if(mission == Missions.BOMBER_BOMBS_PLAYER)
+        {
+            if(selectedBombCode > 0)
+                bombCode = selectedBombCode
+            else
+                result = false
+        }
+
+        if(!result)
+            return null
+
+        return NightCommand(sourcePlayer!!, mission!!, targetPlayer!!, natoGuessedRole, bombCode)
     }
 
     private fun updateUI()
     {
+        val chooseString = getString(R.string.choose)
         if(selectedSourcePlayerIndex >= 0)
         {
             buttonSourcePlayers.text = nightAction.candidateSourcePlayers[selectedSourcePlayerIndex].name
+        }
+        else
+        {
+            buttonSourcePlayers.text = chooseString
         }
         if(selectedMissionIndex >= 0)
         {
             buttonMissions.text = getMissionsLocalNames(nightAction.missions)[selectedMissionIndex]
         }
+        else
+        {
+            buttonMissions.text = chooseString
+        }
         if(selectedTargetPlayerIndex >= 0)
         {
             buttonTargetPlayers.text = nightAction.candidateTargetPlayers[selectedTargetPlayerIndex].name
         }
+        else
+        {
+            buttonTargetPlayers.text = chooseString
+        }
+
+        // Special roles.
+        linearLayoutGodfatherNato.visibility = View.GONE
+        when(selectedMissionIndex)
+        {
+            Missions.entries.indexOf(Missions.GODFATHER_NATOS_PLAYER) ->
+            {
+                linearLayoutGodfatherNato.visibility = View.VISIBLE
+                if(selectedNatoGuessedRoleIndex >= 0)
+                {
+                    buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex].roleName)
+                }
+                else
+                {
+                    buttonChooseGodfatherNatoGuessedRole.text = chooseString
+                }
+            }
+        }
     }
 
-    private fun getMissionsLocalNames(missions: ArrayList<Missions>) : Array<String>
+    private fun getMissionsLocalNames(missions: Iterable<Missions>) : Array<String>
     {
         val result : ArrayList<String> = arrayListOf()
         for(mission in missions)
         {
-            result.add(
-                when(mission) {
-                Missions.GODFATHER_SHOOTS_PLAYER -> getString(R.string.action_godfather_shoot)
-                Missions.GODFATHER_NATOS_PLAYER -> getString(R.string.action_godfather_nato)
-                Missions.BOMBER_BOMBS_PLAYER -> getString(R.string.action_bomber_bomb)
-                Missions.DETECTIVE_ACKNOWLEDGES_PLAYER -> getString(R.string.action_detective_acknowledge)
-                Missions.DOCTOR_HEALS_PLAYER -> getString(R.string.action_doctor_heal)
-                Missions.SNIPER_SHOOTS_PLAYER -> getString(R.string.action_sniper_shoot)
-                Missions.GUNNER_GIVES_DUMMY_BULLET -> getString(R.string.action_gunner_dummy_bullet)
-                Missions.GUNNER_GIVES_WAR_BULLET -> getString(R.string.action_gunner_war_bullet)
-                Missions.DETONATOR_DETONATES -> getString(R.string.action_detonator_detonate)
-            })
+            result.add(getMissionLocalName(mission))
         }
         return result.toTypedArray()
+    }
+
+    private fun getMissionLocalName(mission: Missions) : String
+    {
+        return when(mission)
+        {
+            Missions.GODFATHER_SHOOTS_PLAYER -> getString(R.string.action_godfather_shoot)
+            Missions.GODFATHER_NATOS_PLAYER -> getString(R.string.action_godfather_nato)
+            Missions.BOMBER_BOMBS_PLAYER -> getString(R.string.action_bomber_bomb)
+            Missions.DETECTIVE_ACKNOWLEDGES_PLAYER -> getString(R.string.action_detective_acknowledge)
+            Missions.DOCTOR_HEALS_PLAYER -> getString(R.string.action_doctor_heal)
+            Missions.SNIPER_SHOOTS_PLAYER -> getString(R.string.action_sniper_shoot)
+            Missions.GUNNER_GIVES_DUMMY_BULLET -> getString(R.string.action_gunner_dummy_bullet)
+            Missions.GUNNER_GIVES_WAR_BULLET -> getString(R.string.action_gunner_war_bullet)
+            Missions.DETONATOR_DETONATES -> getString(R.string.action_detonator_detonate)
+        }
     }
 }

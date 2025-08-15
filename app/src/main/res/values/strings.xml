@@ -74,4 +74,6 @@
     <string name="cancel">لغو</string>
     <string name="choose">انتخاب کنید…</string>
     <string name="players_do_what">%1$s\n%2$s\n%3$s</string>
+    <string name="night_command_item">%1$d- %2$s عملیات %3$s را روی %4$s انجام می‌دهد. %5$s</string>
+    <string name="choose_godfahter_nato">نقش ناتویی:</string>
 </resources>
