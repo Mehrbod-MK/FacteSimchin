@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NightAction(
+    val cardResId: Int,
     val roleLocalName: String,
     val verbString: String,
     val candidateSourcePlayers: List<Player>,

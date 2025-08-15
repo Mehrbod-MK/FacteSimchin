@@ -1,8 +1,11 @@
 package com.mehrbodmk.factesimchin
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -22,6 +25,7 @@ class NightActionActivity : AppCompatActivity() {
 
     private lateinit var nightAction: NightAction
 
+    private lateinit var imageViewNightActionCard: ImageView
     private lateinit var textViewNightActionText: TextView
     private lateinit var buttonSourcePlayers: AppCompatButton
     private lateinit var buttonMissions: AppCompatButton
@@ -30,6 +34,9 @@ class NightActionActivity : AppCompatActivity() {
     private lateinit var buttonRemoveAllNightCommands: AppCompatButton
     private lateinit var textViewlistMissions: TextView
     private lateinit var buttonChooseGodfatherNatoGuessedRole: AppCompatButton
+    private lateinit var buttonAcceptNightActions: AppCompatButton
+    private lateinit var linearLayoutBomberBomb: LinearLayout
+    private lateinit var buttonChooseBomberBombCode: AppCompatButton
 
     private lateinit var linearLayoutGodfatherNato: LinearLayout
 
@@ -37,7 +44,7 @@ class NightActionActivity : AppCompatActivity() {
     private var selectedMissionIndex: Int = -1
     private var selectedTargetPlayerIndex: Int = -1
     private var selectedNatoGuessedRoleIndex: Int = -1
-    private var selectedBombCode: Int = 0
+    private var selectedBombCodeIndex: Int = -1
 
     private var nightCommands: ArrayList<NightCommand> = arrayListOf()
 
@@ -53,6 +60,7 @@ class NightActionActivity : AppCompatActivity() {
 
         nightAction = intent.extras?.getParcelable(Constants.INTENT_NIGHT_ACTION)!!
 
+        imageViewNightActionCard = findViewById(R.id.imageViewNightActionCard)
         textViewNightActionText = findViewById(R.id.textViewNightActionText)
         textViewNightActionText.text = getString(R.string.players_do_what, nightAction.roleLocalName,
             nightAction.candidateSourcePlayers.joinToString(separator = "\n") { it.name },
@@ -65,7 +73,11 @@ class NightActionActivity : AppCompatActivity() {
         textViewlistMissions = findViewById(R.id.textViewListMissions)
         linearLayoutGodfatherNato = findViewById(R.id.linearLayoutGodfatherNato)
         buttonChooseGodfatherNatoGuessedRole = findViewById(R.id.buttonChooseGodfatherNatoGuessedRole)
+        buttonAcceptNightActions = findViewById(R.id.buttonAcceptNightActions)
+        linearLayoutBomberBomb = findViewById(R.id.linearLayoutBomberBomb)
+        buttonChooseBomberBombCode = findViewById(R.id.buttonChooseBomberBombCode)
 
+        imageViewNightActionCard.setImageResource(nightAction.cardResId)
         attachEvents()
     }
 
@@ -76,6 +88,7 @@ class NightActionActivity : AppCompatActivity() {
         var selectedMission = 0
         var selectedTargetPlayerItem = 0
         var selectedNatoGuessedRoleItem = 0
+        var selectedBombCodeItem = 0
 
         buttonSourcePlayers.setOnClickListener {
             val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
@@ -131,6 +144,19 @@ class NightActionActivity : AppCompatActivity() {
                 .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
             alertDialogChooseGodFatherNatoGuessedRole.show()
         }
+        buttonChooseBomberBombCode.setOnClickListener {
+            val alertDialogChooseBombCode = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setTitle(getString(R.string.choose_bomb_code))
+                .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), selectedBombCodeItem) { _, which ->
+                    selectedBombCodeItem = which
+                }
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    selectedBombCodeIndex =
+                        selectedBombCodeItem; dialog.dismiss(); updateUI()
+                }
+                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+            alertDialogChooseBombCode.show()
+        }
 
         buttonAddNightCommand.setOnClickListener {
             val newNightCommand = getNewNightCommand()
@@ -141,6 +167,13 @@ class NightActionActivity : AppCompatActivity() {
                 textViewlistMissions.text = "${textViewlistMissions.text}\n${getNightCommandString(newNightCommand)}"
             }
         }
+
+        buttonAcceptNightActions.setOnClickListener {
+            val answerIntent = Intent()
+            answerIntent.putParcelableArrayListExtra(Constants.INTENT_NIGHT_COMMANDS, nightCommands)
+            setResult(Activity.RESULT_OK, answerIntent)
+            finish()
+        }
     }
 
     private fun resetNightUI()
@@ -149,7 +182,7 @@ class NightActionActivity : AppCompatActivity() {
         selectedMissionIndex = -1
         selectedTargetPlayerIndex = -1
         selectedNatoGuessedRoleIndex = -1
-        selectedBombCode = 0
+        selectedBombCodeIndex = -1
 
         updateUI()
     }
@@ -198,8 +231,8 @@ class NightActionActivity : AppCompatActivity() {
         }
         if(mission == Missions.BOMBER_BOMBS_PLAYER)
         {
-            if(selectedBombCode > 0)
-                bombCode = selectedBombCode
+            if(selectedBombCodeIndex >= 0)
+                bombCode = selectedBombCodeIndex + 1
             else
                 result = false
         }
@@ -210,6 +243,7 @@ class NightActionActivity : AppCompatActivity() {
         return NightCommand(sourcePlayer!!, mission!!, targetPlayer!!, natoGuessedRole, bombCode)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI()
     {
         val chooseString = getString(R.string.choose)
@@ -248,6 +282,19 @@ class NightActionActivity : AppCompatActivity() {
                 if(selectedNatoGuessedRoleIndex >= 0)
                 {
                     buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex].roleName)
+                }
+                else
+                {
+                    buttonChooseGodfatherNatoGuessedRole.text = chooseString
+                }
+            }
+
+            Missions.entries.indexOf(Missions.BOMBER_BOMBS_PLAYER) ->
+            {
+                linearLayoutBomberBomb.visibility = View.VISIBLE
+                if(selectedBombCodeIndex >= 0)
+                {
+                    buttonChooseBomberBombCode.text = "${selectedBombCodeIndex + 1}"
                 }
                 else
                 {

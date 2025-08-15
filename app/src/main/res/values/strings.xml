@@ -76,4 +76,10 @@
     <string name="players_do_what">%1$s\n%2$s\n%3$s</string>
     <string name="night_command_item">%1$d- %2$s عملیات %3$s را روی %4$s انجام می‌دهد. %5$s</string>
     <string name="choose_godfahter_nato">نقش ناتویی:</string>
+    <string name="bomber_does_what">بمب میذاره؟</string>
+    <string name="choose_bomb_code">کد بمب:</string>
+    <string name="doctor_does_what">کیو نجات میده؟</string>
+    <string name="detective_does_what">استعلام کیو میگیره؟</string>
+    <string name="sniper_does_what">به کی شلیک میکنه؟</string>
+    <string name="gunner_does_what">به کیا تیر میده؟</string>
 </resources>
