@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NightActionActivity"
+    android:orientation="vertical"
+    android:layout_margin="30dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:id="@+id/imageViewNightActionCard"
+                android:background="#00000000"
+                android:src="@drawable/card_night"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewNightActionText"
+                android:background="#00000000"
+                android:text="@string/everyone_sleep"
+                android:textColor="#ffffffff"
+                android:textAlignment="center"
+                android:textSize="35sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
+                android:text="@string/source_player"
+                />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/spinnerSourcePlayer"
+                android:backgroundTint="#ffffff"
+                android:foregroundTint="#ffffff"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="17dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
+                android:text="@string/mission"
+                />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/spinnerMission"
+                android:backgroundTint="#ffffff"
+                android:foregroundTint="#ffffff"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="17dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
+                android:text="@string/target_player"
+                />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/spinnerTargetPlayer"
+                android:backgroundTint="#ffffff"
+                android:foregroundTint="#ffffff"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#2C8906"
+                    android:text="@string/add"
+                    android:textColor="#ffffffff"
+                    android:textSize="20sp"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#890606"
+                    android:text="@string/remove_all"
+                    android:textColor="#ffffffff"
+                    android:textSize="20sp"
+                    />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="25dp"/>
+
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewListMissions"
+            android:background="#00000000"
+            android:text="@string/everyone_sleep"
+            android:textColor="#ffffffff"
+            android:textAlignment="center"
+            android:textSize="35sp"
+            />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="30dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonAcceptNightAction"
+                android:background="@drawable/button_selector"
+                android:textColor="#ffffff"
+                android:text="@string/ok"
+                android:textSize="30sp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

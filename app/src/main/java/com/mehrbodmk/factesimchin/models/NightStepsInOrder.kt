@@ -17,4 +17,6 @@ enum class NightStepsInOrder {
     SLEEP_GUNNER,
     WAKE_DETONATOR,
     SLEEP_DETONATOR,
+
+    WAKE_UP_EVERYONE,
 }

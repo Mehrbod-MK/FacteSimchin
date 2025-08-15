@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,18 @@ class MainGameActivity : AppCompatActivity() {
         nightStepIndex++;
         decideNextNightStepsForFirstRound()
     }
+    private var getSleepOrWakeResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+    { _ ->
+        nightStepIndex++;
+        decideNextNightSteps()
+    }
+    private var getNightActionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        _ ->
+        nightStepIndex++;
+        decideNextNightSteps()
+    }
+
+    private var mediaPlayerGodfatherSong : MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +107,146 @@ class MainGameActivity : AppCompatActivity() {
         nightStepIndex = 0
         if(gameSession.round == 1)
             decideNextNightStepsForFirstRound()
+        else
+            decideNextNightSteps()
+    }
+
+    private fun playGodfatherWaltzMusic()
+    {
+        mediaPlayerGodfatherSong = MediaPlayer.create(this@MainGameActivity, R.raw.godfather_waltz)
+        mediaPlayerGodfatherSong!!.isLooping = true
+        mediaPlayerGodfatherSong!!.start()
+    }
+
+    private fun stopGodFatherWaltzMusic()
+    {
+        if(mediaPlayerGodfatherSong?.isPlaying == true)
+            mediaPlayerGodfatherSong?.stop()
+        mediaPlayerGodfatherSong?.release()
+    }
+
+    private fun decideNextNightSteps()
+    {
+        if(nightStepIndex >= NightStepsInOrder.entries.size)
+        {
+            gameSession.round++
+            updateUI()
+            return
+        }
+        val nightStepNow = NightStepsInOrder.entries[nightStepIndex]
+        val sleepOrWakeIntent = Intent(this@MainGameActivity, SleepOrWakeSomeoneActivity::class.java)
+        val nightActionIntent = Intent(this@MainGameActivity, NightActionActivity::class.java)
+        when(nightStepNow)
+        {
+            NightStepsInOrder.SLEEP_EVERYONE ->
+            {
+                playGodfatherWaltzMusic()
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_night, getString(R.string.everyone_sleep)))
+            }
+            NightStepsInOrder.WAKE_ALL_MAFIAS ->
+            {
+                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
+                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
+                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                if(allMafias.isBlank())
+                {
+                    bypassNightDecisionFirstRound()
+                    return
+                }
+                val sleepOrWakeCommand = SleepOrWakeSomeoneCommand(R.drawable.card_mafia, getString(R.string.wake_up, getString(R.string.role_mafia), allMafias))
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, sleepOrWakeCommand)
+            }
+            NightStepsInOrder.GODFATHER_SHOW_LIKE ->
+            {
+                bypassNightDecision()
+            }
+            NightStepsInOrder.BOMBER_SHOW_LIKE ->
+            {
+                bypassNightDecision()
+            }
+            NightStepsInOrder.SLEEP_MAFIA ->
+            {
+                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
+                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
+                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                if(allMafias.isBlank())
+                {
+                    bypassNightDecisionFirstRound()
+                    return
+                }
+                val sleepOrWakeCommand = SleepOrWakeSomeoneCommand(R.drawable.card_mafia, getString(R.string.sleep, getString(R.string.role_mafia), allMafias))
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, sleepOrWakeCommand)
+            }
+            NightStepsInOrder.WAKE_DOCTOR ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                    R.drawable.card_doctor, R.string.wake_up, R.string.role_doctor)
+            }
+            NightStepsInOrder.WAKE_DETECTIVE ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                    R.drawable.card_detective, R.string.wake_up, R.string.role_detective)
+            }
+            NightStepsInOrder.WAKE_SNIPER ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                    R.drawable.card_sniper, R.string.wake_up, R.string.role_sniper)
+            }
+            NightStepsInOrder.WAKE_GUNNER ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                    R.drawable.card_gunner, R.string.wake_up, R.string.role_gunner)
+            }
+            NightStepsInOrder.WAKE_DETONATOR ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                    R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
+            }
+            NightStepsInOrder.SLEEP_DOCTOR ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                    R.drawable.card_doctor, R.string.sleep, R.string.role_doctor)
+            }
+            NightStepsInOrder.SLEEP_DETECTIVE ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                    R.drawable.card_detective, R.string.sleep, R.string.role_detective)
+            }
+            NightStepsInOrder.SLEEP_SNIPER ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                    R.drawable.card_sniper, R.string.sleep, R.string.role_sniper)
+            }
+            NightStepsInOrder.SLEEP_GUNNER ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                    R.drawable.card_gunner, R.string.sleep, R.string.role_gunner)
+            }
+            NightStepsInOrder.SLEEP_DETONATOR ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                    R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
+            }
+
+            NightStepsInOrder.WAKE_UP_EVERYONE ->
+            {
+                stopGodFatherWaltzMusic()
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_day, getString(R.string.wake_up_everyone)))
+            }
+        }
+
+        // Simple wake/sleep.
+        if(sleepOrWakeIntent.extras != null && sleepOrWakeIntent.extras?.size()!! > 0)
+        {
+            getSleepOrWakeResult.launch(sleepOrWakeIntent)
+        }
+        // Night Actions -> Commands.
+        else if(nightActionIntent.extras != null && nightActionIntent.extras?.size()!! > 0)
+        {
+            getNightActionResult.launch(nightActionIntent)
+        }
     }
 
     private fun decideNextNightStepsForFirstRound()
@@ -109,6 +262,7 @@ class MainGameActivity : AppCompatActivity() {
         when (nightStepNow) {
             NightStepsInOrder.SLEEP_EVERYONE ->
             {
+                playGodfatherWaltzMusic()
                 sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_night, getString(R.string.everyone_sleep)))
             }
             NightStepsInOrder.WAKE_ALL_MAFIAS ->
@@ -199,6 +353,12 @@ class MainGameActivity : AppCompatActivity() {
                 prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
                     R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
             }
+
+            NightStepsInOrder.WAKE_UP_EVERYONE ->
+            {
+                stopGodFatherWaltzMusic()
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_day, getString(R.string.wake_up_everyone)))
+            }
         }
 
         // Simple wake/sleep.
@@ -210,8 +370,14 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun bypassNightDecisionFirstRound()
     {
-        nightStepIndex++;
+        nightStepIndex++
         decideNextNightStepsForFirstRound()
+    }
+
+    private fun bypassNightDecision()
+    {
+        nightStepIndex++
+        decideNextNightSteps()
     }
 
     private fun prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent: Intent, roleName: String, cardResId: Int, messageStringId: Int, roleStringResId: Int)

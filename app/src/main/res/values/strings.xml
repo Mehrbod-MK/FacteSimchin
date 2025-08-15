@@ -52,4 +52,10 @@
     <string name="wake_up">%1$s بیدار شن!\n\n%2$s</string>
     <string name="show_like">%1$s لایک نشون بده!\n\n%2$s</string>
     <string name="sleep">%1$s بخوابه...!\n\n%2$s</string>
+    <string name="remove_all">حذف همه</string>
+    <string name="add">اضافه کردن</string>
+    <string name="target_player">بازیکن مقصد:</string>
+    <string name="mission">عملیات:</string>
+    <string name="source_player">بازیکن مبدأ:</string>
+    <string name="wake_up_everyone">روز میشه.\nهمه بیدار شن! 🥱</string>
 </resources>

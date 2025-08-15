@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FacteSimchin">
         <activity
+            android:name=".NightActionActivity"
+            android:exported="false" />
+        <activity
             android:name=".SleepOrWakeSomeoneActivity"
             android:exported="false" />
         <activity
