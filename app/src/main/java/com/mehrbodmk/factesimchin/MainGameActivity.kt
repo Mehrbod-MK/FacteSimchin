@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
@@ -55,6 +56,8 @@ class MainGameActivity : AppCompatActivity() {
     private lateinit var textViewNumMafiasDead: TextView
     private lateinit var textViewNumCitizensDead: TextView
     private lateinit var textViewNumNeutralsDead: TextView
+    private lateinit var buttonViewBullets: FloatingActionButton
+    private lateinit var buttonViewBombs: FloatingActionButton
 
     private var nightStepIndex : Int = 0
 
@@ -67,22 +70,32 @@ class MainGameActivity : AppCompatActivity() {
     }
 
     private var getSleepOrWakeResultFirstRound = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-    { _ ->
-        nightStepIndex++;
+    { result ->
+        if(result.resultCode == Activity.RESULT_OK)
+        {
+            nightStepIndex++;
+        }
+        // Don't allow user to cancel.
         decideNextNightStepsForFirstRound()
     }
     private var getSleepOrWakeResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-    { _ ->
-        nightStepIndex++;
+    { result ->
+        if(result.resultCode == Activity.RESULT_OK)
+        {
+            nightStepIndex++;
+        }
+        // Don't allow user to cancel.
         decideNextNightSteps()
     }
     private var getNightActionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         result ->
-
-        val nightCommands: ArrayList<NightCommand> = result.data?.getParcelableArrayListExtra(Constants.INTENT_NIGHT_COMMANDS)!!
-        makeDecisionForNightCommands(nightCommands)
-
-        nightStepIndex++;
+        if(result.resultCode == Activity.RESULT_OK) {
+            val nightCommands: ArrayList<NightCommand> =
+                result.data?.getParcelableArrayListExtra(Constants.INTENT_NIGHT_COMMANDS)!!
+            makeDecisionForNightCommands(nightCommands)
+            nightStepIndex++;
+        }
+        // Don't allow user to cancel.
         decideNextNightSteps()
     }
 
@@ -91,6 +104,7 @@ class MainGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main_game)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -109,6 +123,8 @@ class MainGameActivity : AppCompatActivity() {
         textViewNumMafiasDead = findViewById(R.id.textViewNumMafiasDead)
         textViewNumCitizensDead = findViewById(R.id.textViewNumCitizensDead)
         textViewNumNeutralsDead = findViewById(R.id.textViewNumNeutralsDead)
+        buttonViewBullets = findViewById(R.id.buttonViewBullets)
+        buttonViewBombs = findViewById(R.id.buttonViewBombs)
         attachEvents()
 
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
@@ -119,6 +135,7 @@ class MainGameActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         updateUI()
     }
 
@@ -174,6 +191,8 @@ class MainGameActivity : AppCompatActivity() {
             .setMessage(resultString)
             .setPositiveButton(getString(R.string.ok), { dialog, _ -> dialog.dismiss() })
         alertDialogEvents.show()
+
+        updateUI()
     }
 
     private fun attachEvents()
@@ -197,6 +216,32 @@ class MainGameActivity : AppCompatActivity() {
             buttonShowHideRoles.foreground = if(arePlayersVisible) AppCompatResources.getDrawable(this@MainGameActivity, R.drawable.icon_show_roles)
                 else AppCompatResources.getDrawable(this@MainGameActivity, R.drawable.icon_hide_roles)
             updateUI()
+        }
+        buttonViewBombs.setOnClickListener {
+            val stringBuilder = StringBuilder()
+            for(bomb in gameSession.bombsActive)
+            {
+                stringBuilder.appendLine(getString(R.string.report_bomb, bomb.bomber.name, bomb.target.name, bomb.bombCode.toString()))
+            }
+            val alertDialogBombs = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setTitle(getString(R.string.report_game_bombs))
+                .setMessage(stringBuilder.toString())
+                .setPositiveButton(R.string.ok, { dialog, _ -> dialog.dismiss() })
+            alertDialogBombs.show()
+        }
+        buttonViewBullets.setOnClickListener {
+            val stringBuilder = StringBuilder()
+            for(player in gameSession.players.filter { it.nightStatus.hasWarBullet || it.nightStatus.hasDummyBullet })
+            {
+                stringBuilder.appendLine(getString(R.string.report_bullet, player.name,
+                    AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.name),
+                    if(player.nightStatus.hasDummyBullet) getString(R.string.bullet_dummy) else getString(R.string.bullet_war)))
+            }
+            val alertDialogBullets = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setTitle(getString(R.string.report_game_bullets))
+                .setMessage(stringBuilder.toString())
+                .setPositiveButton(R.string.ok, { dialog, _ -> dialog.dismiss() })
+            alertDialogBullets.show()
         }
     }
 
@@ -382,11 +427,11 @@ class MainGameActivity : AppCompatActivity() {
 
             NightStepsInOrder.GODFATHER_DOES_WHAT ->
             {
-                if(gameSession.players.filter { it.role.isMafia == true }.isEmpty())
+                if(gameSession.players.none { it.role.isMafia == true })
                     bypassNightDecision()
                 val roleLocalName = getString(R.string.role_mafia)
                 val verbString = getString(R.string.does_what)
-                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.GODFATHER }
+                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.isMafia == true }
                 val missions = getPossibleMissionsForRole(RoleTypes.GODFATHER)
                 val targetPlayers = gameSession.players.filter { !it.isDead && it.role.isMafia != true }
                 nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_godfather, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
@@ -695,6 +740,10 @@ class MainGameActivity : AppCompatActivity() {
         textViewGameTurn.text = getGameTurnText()
         playersListAdapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
         listViewPlayers.adapter = playersListAdapter
+
+        buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
+            View.INVISIBLE else View.VISIBLE
+        buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
 
         updateStats()
     }

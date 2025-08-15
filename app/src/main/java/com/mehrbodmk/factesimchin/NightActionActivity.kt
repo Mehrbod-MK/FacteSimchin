@@ -194,6 +194,13 @@ class NightActionActivity : AppCompatActivity() {
             additionalInfoStringBuilder.append("(${AssignRoleCards.getRoleLocalName(this@NightActionActivity, nightCommand.natoGuessedRole.roleName)}) ")
         if(nightCommand.bombCode != null)
             additionalInfoStringBuilder.append("(${nightCommand.bombCode}) ")
+        if(nightCommand.mission == Missions.DETECTIVE_ACKNOWLEDGES_PLAYER)
+        {
+            val isPositive: Boolean = (nightCommand.targetPlayer.role.isMafia == true
+                    && nightCommand.targetPlayer.role.type != RoleTypes.GODFATHER)
+            additionalInfoStringBuilder.append(getString(R.string.acknowledge_result,
+                if(isPositive) getString(R.string.positive) else getString(R.string.negative) ))
+        }
 
         return getString(R.string.night_command_item, nightCommands.size,
             nightCommand.sourcePlayer.name, getMissionLocalName(nightCommand.mission), nightCommand.targetPlayer.name,

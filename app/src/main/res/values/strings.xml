@@ -86,4 +86,13 @@
     <string name="say_goodbye_to">خداحافظی می کنیم با %1$s</string>
     <string name="congratulations_sniper">عجب اسنایپری داره این شهر، مافیا %1$s رو زد!</string>
     <string name="day_events_title">رخدادهای شب گدشته</string>
+    <string name="acknowledge_result">استعلام: %1$s</string>
+    <string name="positive">مثبت</string>
+    <string name="negative">منفی</string>
+    <string name="report_game_bombs">بمب های این دست</string>
+    <string name="report_game_bullets">تیر های این دست</string>
+    <string name="report_bullet">بازیکن %1$s با نقش %2$s، تیر %3$s دارد.</string>
+    <string name="bullet_war">جنگی</string>
+    <string name="bullet_dummy">مشقی</string>
+    <string name="report_bomb">بمب %1$s جلوی بازیکن %2$s با کد %3$s فعال است.</string>
 </resources>
