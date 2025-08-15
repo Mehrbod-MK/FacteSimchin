@@ -58,4 +58,20 @@
     <string name="mission">عملیات:</string>
     <string name="source_player">بازیکن مبدأ:</string>
     <string name="wake_up_everyone">روز میشه.\nهمه بیدار شن! 🥱</string>
+    <string name="does_what">چی کار میکنه؟</string>
+    <string name="action_godfather_shoot">شلیک تیر شب</string>
+    <string name="action_godfather_nato">ناتویی</string>
+    <string name="action_bomber_bomb">بمب گذاری</string>
+    <string name="action_detective_acknowledge">استعلام</string>
+    <string name="action_doctor_heal">نجات دادن</string>
+    <string name="action_sniper_shoot">شلیک تیر</string>
+    <string name="action_gunner_dummy_bullet">تیر مشقی</string>
+    <string name="action_gunner_war_bullet">تیر جنگی</string>
+    <string name="action_detonator_detonate">خنثی کردن بمب</string>
+    <string name="choose_source_player">انتخاب بازیکن مبدأ</string>
+    <string name="choose_mission">انتخاب عملیات</string>
+    <string name="choose_target_player">انتخاب بازیکن هدف</string>
+    <string name="cancel">لغو</string>
+    <string name="choose">انتخاب کنید…</string>
+    <string name="players_do_what">%1$s\n%2$s\n%3$s</string>
 </resources>

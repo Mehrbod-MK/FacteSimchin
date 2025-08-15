@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class Role(
     val name: String,
     val localName: String,
-    val isMafia: Boolean?
+    val isMafia: Boolean?,
+    val type: RoleTypes
 ) : Parcelable

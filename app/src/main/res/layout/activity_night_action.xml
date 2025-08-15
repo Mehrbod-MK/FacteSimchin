@@ -54,12 +54,16 @@
                 android:text="@string/source_player"
                 />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/spinnerSourcePlayer"
-                android:backgroundTint="#ffffff"
+                android:layout_height="50dp"
+                android:id="@+id/buttonChooseSourcePlayer"
+                android:background="@drawable/button_selector"
+                android:backgroundTint="#59142C"
                 android:foregroundTint="#ffffff"
+                android:text="@string/choose"
+                android:textColor="#ffffffff"
+                android:textSize="25sp"
                 />
 
             <Space
@@ -75,12 +79,16 @@
                 android:text="@string/mission"
                 />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/spinnerMission"
-                android:backgroundTint="#ffffff"
+                android:layout_height="50dp"
+                android:id="@+id/buttonChooseMission"
+                android:background="@drawable/button_selector"
+                android:backgroundTint="#59142C"
                 android:foregroundTint="#ffffff"
+                android:text="@string/choose"
+                android:textColor="#ffffffff"
+                android:textSize="25sp"
                 />
 
             <Space
@@ -96,12 +104,16 @@
                 android:text="@string/target_player"
                 />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/spinnerTargetPlayer"
-                android:backgroundTint="#ffffff"
+                android:layout_height="50dp"
+                android:id="@+id/buttonChooseTargetPlayer"
+                android:background="@drawable/button_selector"
+                android:backgroundTint="#59142C"
                 android:foregroundTint="#ffffff"
+                android:text="@string/choose"
+                android:textColor="#ffffffff"
+                android:textSize="25sp"
                 />
 
             <Space
@@ -117,6 +129,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/buttonAddNightCommand"
                     android:backgroundTint="#2C8906"
                     android:text="@string/add"
                     android:textColor="#ffffffff"
@@ -126,6 +139,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/buttonRemoveAllNightCommands"
                     android:backgroundTint="#890606"
                     android:text="@string/remove_all"
                     android:textColor="#ffffffff"
@@ -143,7 +157,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewListMissions"
             android:background="#00000000"
-            android:text="@string/everyone_sleep"
             android:textColor="#ffffffff"
             android:textAlignment="center"
             android:textSize="35sp"

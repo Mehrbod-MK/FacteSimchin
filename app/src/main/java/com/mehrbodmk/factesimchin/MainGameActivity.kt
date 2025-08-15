@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatCheckBox
@@ -22,8 +21,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
+import com.mehrbodmk.factesimchin.models.Missions
+import com.mehrbodmk.factesimchin.models.NightAction
 import com.mehrbodmk.factesimchin.models.NightStepsInOrder
 import com.mehrbodmk.factesimchin.models.Player
+import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.models.commands.SleepOrWakeSomeoneCommand
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
@@ -235,6 +237,25 @@ class MainGameActivity : AppCompatActivity() {
                 stopGodFatherWaltzMusic()
                 sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_day, getString(R.string.wake_up_everyone)))
             }
+
+            NightStepsInOrder.GODFATHER_DOES_WHAT ->
+            {
+                val roleLocalName = getString(R.string.role_godfather)
+                val verbString = getString(R.string.does_what)
+                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.name == Constants.ROLE_NAME_GODFATHER }
+                val missions = getPossibleMissionsForRole(RoleTypes.GODFATHER)
+                val targetPlayers = gameSession.players.filter { !it.isDead && it.role.isMafia != true }
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+            }
+            NightStepsInOrder.BOMBER_BOMBS_WHO ->
+            {
+
+            }
+            NightStepsInOrder.DOCTOR_SAVES_WHO -> TODO()
+            NightStepsInOrder.DETECTIVE_ACKNOWLEDGES_WHO -> TODO()
+            NightStepsInOrder.SNIPER_SHOOTS_WHO -> TODO()
+            NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO -> TODO()
+            NightStepsInOrder.DETONATOR_DETONATES_WHO -> TODO()
         }
 
         // Simple wake/sleep.
@@ -359,12 +380,63 @@ class MainGameActivity : AppCompatActivity() {
                 stopGodFatherWaltzMusic()
                 sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_day, getString(R.string.wake_up_everyone)))
             }
+
+            NightStepsInOrder.GODFATHER_DOES_WHAT -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.BOMBER_BOMBS_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.DOCTOR_SAVES_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.DETECTIVE_ACKNOWLEDGES_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.SNIPER_SHOOTS_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecisionFirstRound()
         }
 
         // Simple wake/sleep.
         if(sleepOrWakeIntent.extras != null && sleepOrWakeIntent.extras?.size()!! > 0)
         {
             getSleepOrWakeResultFirstRound.launch(sleepOrWakeIntent)
+        }
+    }
+
+    private fun getPossibleMissionsForRole(role: RoleTypes) : ArrayList<Missions>
+    {
+        return when(role)
+        {
+            RoleTypes.GODFATHER ->
+            {
+                arrayListOf(Missions.GODFATHER_SHOOTS_PLAYER, Missions.GODFATHER_NATOS_PLAYER)
+            }
+            RoleTypes.MAFIA ->
+            {
+                arrayListOf()
+            }
+            RoleTypes.BOMBER ->
+            {
+                arrayListOf(Missions.BOMBER_BOMBS_PLAYER)
+            }
+            RoleTypes.CITIZEN ->
+            {
+                arrayListOf()
+            }
+            RoleTypes.DETECTIVE ->
+            {
+                arrayListOf(Missions.DETECTIVE_ACKNOWLEDGES_PLAYER)
+            }
+            RoleTypes.DOCTOR ->
+            {
+                arrayListOf(Missions.DOCTOR_HEALS_PLAYER)
+            }
+            RoleTypes.SNIPER ->
+            {
+                arrayListOf(Missions.SNIPER_SHOOTS_PLAYER)
+            }
+            RoleTypes.GUNNER ->
+            {
+                arrayListOf(Missions.GUNNER_GIVES_DUMMY_BULLET, Missions.GUNNER_GIVES_WAR_BULLET)
+            }
+            RoleTypes.DETONATOR ->
+            {
+                arrayListOf(Missions.DETONATOR_DETONATES)
+            }
         }
     }
 

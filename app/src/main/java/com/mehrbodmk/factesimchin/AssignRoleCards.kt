@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mehrbodmk.factesimchin.models.Player
 import com.mehrbodmk.factesimchin.models.Role
 import com.mehrbodmk.factesimchin.models.RoleNameAndCount
+import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
 
@@ -61,15 +62,15 @@ class AssignRoleCards : AppCompatActivity() {
         {
             return when(roleName)
             {
-                Constants.ROLE_NAME_GODFATHER -> Role(Constants.ROLE_NAME_GODFATHER, getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_MAFIA -> Role(Constants.ROLE_NAME_MAFIA, getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_BOMBER -> Role(Constants.ROLE_NAME_BOMBER, getRoleLocalName(context, roleName), true)
-                Constants.ROLE_NAME_CITIZEN -> Role(Constants.ROLE_NAME_CITIZEN, getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DETECTIVE -> Role(Constants.ROLE_NAME_DETECTIVE, getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DOCTOR -> Role(Constants.ROLE_NAME_DOCTOR, getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_SNIPER -> Role(Constants.ROLE_NAME_SNIPER, getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_GUNNER -> Role(Constants.ROLE_NAME_GUNNER, getRoleLocalName(context, roleName), false)
-                Constants.ROLE_NAME_DETONATOR -> Role(Constants.ROLE_NAME_DETONATOR, getRoleLocalName(context, roleName), false)
+                Constants.ROLE_NAME_GODFATHER -> Role(Constants.ROLE_NAME_GODFATHER, getRoleLocalName(context, roleName), true, RoleTypes.GODFATHER)
+                Constants.ROLE_NAME_MAFIA -> Role(Constants.ROLE_NAME_MAFIA, getRoleLocalName(context, roleName), true, RoleTypes.MAFIA)
+                Constants.ROLE_NAME_BOMBER -> Role(Constants.ROLE_NAME_BOMBER, getRoleLocalName(context, roleName), true, RoleTypes.BOMBER)
+                Constants.ROLE_NAME_CITIZEN -> Role(Constants.ROLE_NAME_CITIZEN, getRoleLocalName(context, roleName), false, RoleTypes.CITIZEN)
+                Constants.ROLE_NAME_DETECTIVE -> Role(Constants.ROLE_NAME_DETECTIVE, getRoleLocalName(context, roleName), false, RoleTypes.DETECTIVE)
+                Constants.ROLE_NAME_DOCTOR -> Role(Constants.ROLE_NAME_DOCTOR, getRoleLocalName(context, roleName), false, RoleTypes.DOCTOR)
+                Constants.ROLE_NAME_SNIPER -> Role(Constants.ROLE_NAME_SNIPER, getRoleLocalName(context, roleName), false, RoleTypes.SNIPER)
+                Constants.ROLE_NAME_GUNNER -> Role(Constants.ROLE_NAME_GUNNER, getRoleLocalName(context, roleName), false, RoleTypes.GUNNER)
+                Constants.ROLE_NAME_DETONATOR -> Role(Constants.ROLE_NAME_DETONATOR, getRoleLocalName(context, roleName), false, RoleTypes.DETONATOR)
                 else -> throw Exception("Invalid player role name: $roleName")
             }
         }

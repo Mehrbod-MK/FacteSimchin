@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class NightAction(
     val roleLocalName: String,
     val verbString: String,
-    val candidateSourcePlayers: ArrayList<Player>,
+    val candidateSourcePlayers: List<Player>,
     val missions: ArrayList<Missions>,
-    val candidateTargetPlayers: ArrayList<Player>,
+    val candidateTargetPlayers: List<Player>,
 ) : Parcelable
