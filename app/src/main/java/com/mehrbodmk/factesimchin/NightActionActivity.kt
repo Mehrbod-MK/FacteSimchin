@@ -274,32 +274,38 @@ class NightActionActivity : AppCompatActivity() {
 
         // Special roles.
         linearLayoutGodfatherNato.visibility = View.GONE
-        when(selectedMissionIndex)
+        linearLayoutBomberBomb.visibility = View.GONE
+        if(selectedMissionIndex >= 0)
         {
-            Missions.entries.indexOf(Missions.GODFATHER_NATOS_PLAYER) ->
+            when(nightAction.missions[selectedMissionIndex])
             {
-                linearLayoutGodfatherNato.visibility = View.VISIBLE
-                if(selectedNatoGuessedRoleIndex >= 0)
+                Missions.GODFATHER_NATOS_PLAYER ->
                 {
-                    buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex].roleName)
+                    linearLayoutGodfatherNato.visibility = View.VISIBLE
+                    if(selectedNatoGuessedRoleIndex >= 0)
+                    {
+                        buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex].roleName)
+                    }
+                    else
+                    {
+                        buttonChooseGodfatherNatoGuessedRole.text = chooseString
+                    }
                 }
-                else
-                {
-                    buttonChooseGodfatherNatoGuessedRole.text = chooseString
-                }
-            }
 
-            Missions.entries.indexOf(Missions.BOMBER_BOMBS_PLAYER) ->
-            {
-                linearLayoutBomberBomb.visibility = View.VISIBLE
-                if(selectedBombCodeIndex >= 0)
+                Missions.BOMBER_BOMBS_PLAYER ->
                 {
-                    buttonChooseBomberBombCode.text = "${selectedBombCodeIndex + 1}"
+                    linearLayoutBomberBomb.visibility = View.VISIBLE
+                    if(selectedBombCodeIndex >= 0)
+                    {
+                        buttonChooseBomberBombCode.text = "${selectedBombCodeIndex + 1}"
+                    }
+                    else
+                    {
+                        buttonChooseBomberBombCode.text = chooseString
+                    }
                 }
-                else
-                {
-                    buttonChooseGodfatherNatoGuessedRole.text = chooseString
-                }
+
+                else -> { /* Do nothing. */ }
             }
         }
     }

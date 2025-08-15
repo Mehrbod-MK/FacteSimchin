@@ -101,6 +101,21 @@ class AssignRoleCards : AppCompatActivity() {
                 else -> throw Exception("Invalid player role name: $roleName")
             }
         }
+
+        fun getRoleImageThumbnailResource(role: RoleTypes) : Int {
+            return when(role)
+            {
+                RoleTypes.GODFATHER -> R.drawable.role_godfather
+                RoleTypes.MAFIA -> R.drawable.role_mafia
+                RoleTypes.BOMBER -> R.drawable.role_bomber
+                RoleTypes.CITIZEN -> R.drawable.role_citizen
+                RoleTypes.DETECTIVE -> R.drawable.role_detective
+                RoleTypes.DOCTOR -> R.drawable.role_doctor
+                RoleTypes.SNIPER -> R.drawable.role_sniper
+                RoleTypes.GUNNER -> R.drawable.role_gunner
+                RoleTypes.DETONATOR -> R.drawable.role_detonator
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,8 +186,7 @@ class AssignRoleCards : AppCompatActivity() {
 
     private fun assignNewRoleToCurrentPlayer()
     {
-        roleNamesAndCount.shuffle()
-        val pickedRole = roleNamesAndCount.find { it.count > 0 }!!
+        val pickedRole = roleNamesAndCount.filter { it.count > 0 }.random()
         currentPlayerRole = getRole(this, pickedRole.roleName)
         pickedRole.count--;
         if(pickedRole.count <= 0)

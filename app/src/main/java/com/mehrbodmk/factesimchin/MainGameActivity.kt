@@ -2,8 +2,10 @@ package com.mehrbodmk.factesimchin
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +18,11 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.transition.Visibility
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
 import com.mehrbodmk.factesimchin.models.Missions
@@ -38,10 +42,19 @@ class MainGameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
 
+    private lateinit var playersListAdapter: PlayersListAdapter
+
     private lateinit var textViewGameTurn: TextView
     private lateinit var listViewPlayers: ListView
     private lateinit var buttonGoNight: FloatingActionButton
     private lateinit var buttonTimer: FloatingActionButton
+    private lateinit var buttonShowHideRoles: FloatingActionButton
+    private lateinit var textViewNumMafiasAlive: TextView
+    private lateinit var textViewNumCitizensAlive: TextView
+    private lateinit var textViewNumNeutralsAlive: TextView
+    private lateinit var textViewNumMafiasDead: TextView
+    private lateinit var textViewNumCitizensDead: TextView
+    private lateinit var textViewNumNeutralsDead: TextView
 
     private var nightStepIndex : Int = 0
 
@@ -89,11 +102,78 @@ class MainGameActivity : AppCompatActivity() {
         listViewPlayers = findViewById(R.id.listViewGamePlayers)
         buttonGoNight = findViewById(R.id.buttonGoNight)
         buttonTimer = findViewById(R.id.buttonTimer)
+        buttonShowHideRoles = findViewById(R.id.buttonShowHideRoles)
+        textViewNumMafiasAlive = findViewById(R.id.textViewNumMafiasAlive)
+        textViewNumCitizensAlive = findViewById(R.id.textViewNumCitizensAlive)
+        textViewNumNeutralsAlive = findViewById(R.id.textViewNumNeutralsAlive)
+        textViewNumMafiasDead = findViewById(R.id.textViewNumMafiasDead)
+        textViewNumCitizensDead = findViewById(R.id.textViewNumCitizensDead)
+        textViewNumNeutralsDead = findViewById(R.id.textViewNumNeutralsDead)
         attachEvents()
 
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
         createGameSession(players)
+
         updateUI()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateUI()
+    }
+
+    private fun decideNewDayEvents()
+    {
+        val dayEventsStringBuilder: StringBuilder = StringBuilder()
+
+        for(player in gameSession.players)
+        {
+            // Player is shot by Godfather.
+            if(!player.isDead && player.nightStatus.isShotByGodfather)
+            {
+                // Player is saved by doctor, so they won't die.
+                if(player.nightStatus.isSavedByDoctor)
+                {
+                    dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player, player.name))
+                }
+                // Player was not saved, kill them.
+                else
+                {
+                    player.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, player.name))
+                }
+            }
+            // Player is natoed.
+            if(!player.isDead && player.nightStatus.isNatoed && player.nightStatus.guessedNatoRole == player.role.type)
+            {
+                player.isDead = true
+                dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, player.name))
+            }
+            // Check if player was sniped.
+            if(!player.isDead && player.nightStatus.snipedBy != null)
+            {
+                // If player was a mafia, congratulate sniper and kill the mafia!
+                if(player.role.isMafia == true)
+                {
+                    player.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
+                }
+                // Else if it was a citizen, then dismiss the sniper instead.
+                else if(player.role.isMafia == false)
+                {
+                    val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
+                    sniperPlayer!!.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, sniperPlayer.name))
+                }
+            }
+        }
+
+        val resultString = dayEventsStringBuilder.toString()
+        val alertDialogEvents = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.day_events_title))
+            .setMessage(resultString)
+            .setPositiveButton(getString(R.string.ok), { dialog, _ -> dialog.dismiss() })
+        alertDialogEvents.show()
     }
 
     private fun attachEvents()
@@ -109,6 +189,14 @@ class MainGameActivity : AppCompatActivity() {
                 getString(R.string.question), getString(R.string.are_you_sure_go_night),
                 getString(R.string.yes), getString(R.string.no),
                 R.raw.dialog_show, R.raw.dialog_hide, { goNight() }, { })
+        }
+        buttonShowHideRoles.setOnClickListener {
+            val arePlayersVisible = gameSession.players[0].showRole
+            for(player in gameSession.players)
+                player.showRole = !arePlayersVisible
+            buttonShowHideRoles.foreground = if(arePlayersVisible) AppCompatResources.getDrawable(this@MainGameActivity, R.drawable.icon_show_roles)
+                else AppCompatResources.getDrawable(this@MainGameActivity, R.drawable.icon_hide_roles)
+            updateUI()
         }
     }
 
@@ -294,9 +382,9 @@ class MainGameActivity : AppCompatActivity() {
 
             NightStepsInOrder.GODFATHER_DOES_WHAT ->
             {
-                if(gameSession.players.filter { it.role.type == RoleTypes.GODFATHER }.isEmpty())
+                if(gameSession.players.filter { it.role.isMafia == true }.isEmpty())
                     bypassNightDecision()
-                val roleLocalName = getString(R.string.role_godfather)
+                val roleLocalName = getString(R.string.role_mafia)
                 val verbString = getString(R.string.does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.GODFATHER }
                 val missions = getPossibleMissionsForRole(RoleTypes.GODFATHER)
@@ -359,6 +447,7 @@ class MainGameActivity : AppCompatActivity() {
                 nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_gunner, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecision()
+            NightStepsInOrder.DISPLAY_EVENTS -> decideNewDayEvents()
         }
 
         // Simple wake/sleep.
@@ -491,6 +580,7 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.SNIPER_SHOOTS_WHO -> bypassNightDecisionFirstRound()
             NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO -> bypassNightDecisionFirstRound()
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.DISPLAY_EVENTS -> bypassNightDecisionFirstRound()
         }
 
         // Simple wake/sleep.
@@ -603,7 +693,20 @@ class MainGameActivity : AppCompatActivity() {
     private fun updateUI()
     {
         textViewGameTurn.text = getGameTurnText()
-        listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
+        playersListAdapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
+        listViewPlayers.adapter = playersListAdapter
+
+        updateStats()
+    }
+
+    private fun updateStats()
+    {
+        textViewNumMafiasAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == true }.toString()
+        textViewNumMafiasDead.text = gameSession.players.count { it.isDead && it.role.isMafia == true }.toString()
+        textViewNumCitizensAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == false }.toString()
+        textViewNumCitizensDead.text = gameSession.players.count { it.isDead && it.role.isMafia == false }.toString()
+        textViewNumNeutralsAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == null }.toString()
+        textViewNumNeutralsDead.text = gameSession.players.count { it.isDead && it.role.isMafia == null }.toString()
     }
 
     private fun getGameTurnText() : String
@@ -633,7 +736,7 @@ class MainGameActivity : AppCompatActivity() {
                     playerRole = view.findViewById(R.id.textViewPlayerRole),
                     playerRoleImage = view.findViewById(R.id.imageViewRole),
                     checkBoxSelect = view.findViewById(R.id.checkBoxSelectPlayer),
-                    isDead = view.findViewById(R.id.checkBoxPlayerIsDead)
+                    isDeadCheckBox = view.findViewById(R.id.checkBoxPlayerIsDead)
                 )
                 view.tag = viewHolder
             } else {
@@ -641,8 +744,19 @@ class MainGameActivity : AppCompatActivity() {
                 viewHolder = view.tag as PlayerViewHolder
             }
 
+            val item = getItem(position)!!
             viewHolder.playerNumber.text = (position + 1).toString()
-            viewHolder.playerName.text = mObjects[position].name
+            viewHolder.playerName.text = item.name
+            viewHolder.playerRole.text = item.role.localName
+            viewHolder.playerRoleImage.setImageResource(AssignRoleCards.getRoleImageThumbnailResource(item.role.type))
+            viewHolder.playerRole.visibility = if(item.showRole) View.VISIBLE else View.INVISIBLE
+            viewHolder.playerRoleImage.visibility = if(item.showRole) View.VISIBLE else View.INVISIBLE
+            viewHolder.isDeadCheckBox.setOnCheckedChangeListener(null)
+            viewHolder.isDeadCheckBox.isChecked = item.isDead
+            viewHolder.isDeadCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                item.isDead = isChecked
+                (context as? MainGameActivity)?.updateStats()
+            }
 
             return view
         }
@@ -653,7 +767,7 @@ class MainGameActivity : AppCompatActivity() {
             val playerRole: TextView,
             val playerRoleImage: ImageView,
             val checkBoxSelect: AppCompatCheckBox,
-            val isDead: AppCompatCheckBox
+            val isDeadCheckBox: AppCompatCheckBox
         )
     }
 }

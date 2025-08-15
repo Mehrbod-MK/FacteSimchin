@@ -49,7 +49,7 @@
     <string name="question">سؤال</string>
     <string name="are_you_sure_go_night">آیا واقعاً می خواهید شب شود؟\nمطمئن شوید تمامی بازیکنان صحبت کرده باشند و رای گیری ها انجام شده باشد.</string>
     <string name="has_died">مُرده</string>
-    <string name="wake_up">%1$s بیدار شن!\n\n%2$s</string>
+    <string name="wake_up">%1$s بیدار شه!\n\n%2$s</string>
     <string name="show_like">%1$s لایک نشون بده!\n\n%2$s</string>
     <string name="sleep">%1$s بخوابه...!\n\n%2$s</string>
     <string name="remove_all">حذف همه</string>
@@ -82,4 +82,8 @@
     <string name="detective_does_what">استعلام کیو میگیره؟</string>
     <string name="sniper_does_what">به کی شلیک میکنه؟</string>
     <string name="gunner_does_what">به کیا تیر میده؟</string>
+    <string name="doctor_saved_player">دکتر، بازیکن %1$s را نجات داد.</string>
+    <string name="say_goodbye_to">خداحافظی می کنیم با %1$s</string>
+    <string name="congratulations_sniper">عجب اسنایپری داره این شهر، مافیا %1$s رو زد!</string>
+    <string name="day_events_title">رخدادهای شب گدشته</string>
 </resources>

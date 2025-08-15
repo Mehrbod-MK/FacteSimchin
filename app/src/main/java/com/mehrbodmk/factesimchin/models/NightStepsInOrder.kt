@@ -26,4 +26,6 @@ enum class NightStepsInOrder {
     SLEEP_DETONATOR,
 
     WAKE_UP_EVERYONE,
+
+    DISPLAY_EVENTS,
 }
