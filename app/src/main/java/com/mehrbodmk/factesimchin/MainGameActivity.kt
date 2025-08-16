@@ -28,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
 import com.mehrbodmk.factesimchin.models.Missions
 import com.mehrbodmk.factesimchin.models.NightAction
+import com.mehrbodmk.factesimchin.models.NightStatus
 import com.mehrbodmk.factesimchin.models.NightStepsInOrder
 import com.mehrbodmk.factesimchin.models.Player
 import com.mehrbodmk.factesimchin.models.RoleTypes
@@ -145,6 +146,23 @@ class MainGameActivity : AppCompatActivity() {
 
         for(player in gameSession.players)
         {
+            // Check if player was sniped.
+            if(!player.isDead && player.nightStatus.snipedBy != null)
+            {
+                // If player was a mafia, congratulate sniper and kill the mafia!
+                if(player.role.isMafia == true)
+                {
+                    player.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
+                }
+                // Else if it was a citizen, then dismiss the sniper instead.
+                else if(player.role.isMafia == false)
+                {
+                    val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
+                    sniperPlayer!!.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, sniperPlayer.name))
+                }
+            }
             // Player is shot by Godfather.
             if(!player.isDead && player.nightStatus.isShotByGodfather)
             {
@@ -166,23 +184,6 @@ class MainGameActivity : AppCompatActivity() {
                 player.isDead = true
                 dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, player.name))
             }
-            // Check if player was sniped.
-            if(!player.isDead && player.nightStatus.snipedBy != null)
-            {
-                // If player was a mafia, congratulate sniper and kill the mafia!
-                if(player.role.isMafia == true)
-                {
-                    player.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
-                }
-                // Else if it was a citizen, then dismiss the sniper instead.
-                else if(player.role.isMafia == false)
-                {
-                    val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
-                    sniperPlayer!!.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, sniperPlayer.name))
-                }
-            }
         }
 
         val resultString = dayEventsStringBuilder.toString()
@@ -192,7 +193,19 @@ class MainGameActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.ok), { dialog, _ -> dialog.dismiss() })
         alertDialogEvents.show()
 
+        removeNightFlags()
         updateUI()
+    }
+
+    private fun removeNightFlags()
+    {
+        for(player in gameSession.players)
+        {
+            player.nightStatus = NightStatus(
+                hasDummyBullet = player.nightStatus.hasDummyBullet,
+                hasWarBullet = player.nightStatus.hasWarBullet,
+            )
+        }
     }
 
     private fun attachEvents()
@@ -281,11 +294,11 @@ class MainGameActivity : AppCompatActivity() {
             }
             Missions.GUNNER_GIVES_DUMMY_BULLET ->
             {
-                foundSourcePlayer.nightStatus.hasDummyBullet = true
+                foundTargetPlayer.nightStatus.hasDummyBullet = true
             }
             Missions.GUNNER_GIVES_WAR_BULLET ->
             {
-                foundSourcePlayer.nightStatus.hasWarBullet = true
+                foundTargetPlayer.nightStatus.hasWarBullet = true
             }
             Missions.DETONATOR_DETONATES -> throw InvalidObjectException("Detonator is not allowed to detonate bombs at night...!")
         }
@@ -428,7 +441,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.GODFATHER_DOES_WHAT ->
             {
                 if(gameSession.players.none { it.role.isMafia == true })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_mafia)
                 val verbString = getString(R.string.does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.isMafia == true }
@@ -439,7 +455,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.BOMBER_BOMBS_WHO ->
             {
                 if(gameSession.players.none { it.role.type == RoleTypes.BOMBER })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_bomber)
                 val verbString = getString(R.string.bomber_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.BOMBER }
@@ -450,7 +469,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.DOCTOR_SAVES_WHO ->
             {
                 if(gameSession.players.none { it.role.type == RoleTypes.DOCTOR })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_doctor)
                 val verbString = getString(R.string.doctor_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.DOCTOR }
@@ -461,7 +483,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.DETECTIVE_ACKNOWLEDGES_WHO ->
             {
                 if(gameSession.players.none { it.role.type == RoleTypes.DETECTIVE })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_detective)
                 val verbString = getString(R.string.detective_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.DETECTIVE }
@@ -472,7 +497,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.SNIPER_SHOOTS_WHO ->
             {
                 if(gameSession.players.none { it.role.type == RoleTypes.SNIPER })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_sniper)
                 val verbString = getString(R.string.sniper_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.SNIPER }
@@ -483,7 +511,10 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO ->
             {
                 if(gameSession.players.none { it.role.type == RoleTypes.GUNNER })
+                {
                     bypassNightDecision()
+                    return
+                }
                 val roleLocalName = getString(R.string.role_gunner)
                 val verbString = getString(R.string.gunner_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.GUNNER }
@@ -723,7 +754,7 @@ class MainGameActivity : AppCompatActivity() {
         for(player in playersWithRole)
         {
             stringBuilder.append(player.name)
-            stringBuilder.append(if(player.isDead) getString(R.string.is_dead) else "")
+            stringBuilder.append(if(player.isDead) getString(R.string.died) else "")
             stringBuilder.append("\n")
         }
         return stringBuilder.toString()
