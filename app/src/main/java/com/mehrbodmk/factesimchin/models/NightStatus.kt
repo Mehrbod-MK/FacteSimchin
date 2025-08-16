@@ -13,4 +13,5 @@ data class NightStatus(
     var snipedBy: Snipe? = null,
     var hasDummyBullet: Boolean = false,
     var hasWarBullet: Boolean = false,
+    var isTalkedIntoMafia: Boolean = false,
 ) : Parcelable

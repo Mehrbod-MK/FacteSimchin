@@ -82,8 +82,8 @@
     <string name="detective_does_what">استعلام کیو میگیره؟</string>
     <string name="sniper_does_what">به کی شلیک میکنه؟</string>
     <string name="gunner_does_what">به کیا تیر میده؟</string>
-    <string name="doctor_saved_player">دکتر، بازیکن %1$s را نجات داد.</string>
-    <string name="say_goodbye_to">خداحافظی می کنیم با %1$s</string>
+    <string name="doctor_saved_player_from_godfather">دکتر، بازیکن %1$s را از شر تیر مافیا نجات داد.</string>
+    <string name="say_goodbye_to_because_mafia_shot">خداحافظی می کنیم با %1$s، چون مافیا بهش تیر زد.</string>
     <string name="congratulations_sniper">عجب اسنایپری داره این شهر، مافیا %1$s رو زد!</string>
     <string name="day_events_title">رخدادهای شب گدشته</string>
     <string name="acknowledge_result">استعلام: %1$s</string>
@@ -97,4 +97,10 @@
     <string name="report_bomb">بمب %1$s جلوی بازیکن %2$s با کد %3$s فعال است.</string>
     <string name="died"> (مرده)</string>
     <string name="please_choose_roles">لطفاً نقش‌ها را انتخاب کنید:</string>
+    <string name="mafia_talk">مذاکره</string>
+    <string name="talk_failed_because">مذاکره با بازیکن %1$s انجام نشد چون نقش ایشان %2$s بود.</string>
+    <string name="talk_success">مذاکره با بازیکن %1$s با موفقیت انجام شد و الان، یک مافیای جدید داریم.</string>
+    <string name="say_goodbye_to_because_wrong_snipe">خداحافظی می کنیم با %1$s، چون اسنایپر بود و یه شهروند رو زد.</string>
+    <string name="say_goodbye_to_because_natoed">خداحافظی می کنیم با %1$s، چون نقشش %2$s بود و ناتویی شد.</string>
+    <string name="nato_failed">بازیکن %1$s ناتویی نشد، چون نقشش %2$s بود، نه %3$s.</string>
 </resources>

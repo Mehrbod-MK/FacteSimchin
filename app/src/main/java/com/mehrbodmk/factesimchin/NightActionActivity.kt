@@ -340,6 +340,7 @@ class NightActionActivity : AppCompatActivity() {
             Missions.GUNNER_GIVES_DUMMY_BULLET -> getString(R.string.action_gunner_dummy_bullet)
             Missions.GUNNER_GIVES_WAR_BULLET -> getString(R.string.action_gunner_war_bullet)
             Missions.DETONATOR_DETONATES -> getString(R.string.action_detonator_detonate)
+            Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN -> getString(R.string.mafia_talk)
         }
     }
 }

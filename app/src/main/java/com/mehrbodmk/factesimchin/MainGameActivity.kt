@@ -146,6 +146,24 @@ class MainGameActivity : AppCompatActivity() {
 
         for(player in gameSession.players)
         {
+            // Check if player is talked into being mafia.
+            if(!player.isDead && player.nightStatus.isTalkedIntoMafia)
+            {
+                // If the player has a special role other than citizen, reject it.
+                if(player.role.type != RoleTypes.CITIZEN)
+                {
+                    dayEventsStringBuilder.appendLine(getString(R.string.talk_failed_because,
+                        player.name,
+                        AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
+                }
+                // Otherwise, turn the player into simple mafia.
+                else
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
+                    dayEventsStringBuilder.appendLine(getString(R.string.talk_success,
+                        player.name))
+                }
+            }
             // Check if player was sniped.
             if(!player.isDead && player.nightStatus.snipedBy != null)
             {
@@ -160,7 +178,7 @@ class MainGameActivity : AppCompatActivity() {
                 {
                     val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
                     sniperPlayer!!.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, sniperPlayer.name))
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_wrong_snipe, sniperPlayer.name))
                 }
             }
             // Player is shot by Godfather.
@@ -169,21 +187,34 @@ class MainGameActivity : AppCompatActivity() {
                 // Player is saved by doctor, so they won't die.
                 if(player.nightStatus.isSavedByDoctor)
                 {
-                    dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player, player.name))
+                    dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player_from_godfather, player.name))
                 }
                 // Player was not saved, kill them.
                 else
                 {
                     player.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, player.name))
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_mafia_shot, player.name))
                 }
             }
-            // Player is natoed.
-            if(!player.isDead && player.nightStatus.isNatoed && player.nightStatus.guessedNatoRole == player.role.type)
+            // Player is attempted to being natoed.
+            if(!player.isDead && player.nightStatus.isNatoed)
             {
-                player.isDead = true
-                dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to, player.name))
+                // Citizen's role was correctly guessed by mafia.
+                if(player.nightStatus.guessedNatoRole == player.role.type)
+                {
+                    player.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_natoed,
+                        player.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
+                }
+                // Role guess was wrong.
+                else
+                {
+                    dayEventsStringBuilder.appendLine(getString(R.string.nato_failed,
+                        player.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type),
+                        AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.nightStatus.guessedNatoRole!!)))
+                }
             }
+            dayEventsStringBuilder.appendLine()
         }
 
         val resultString = dayEventsStringBuilder.toString()
@@ -205,6 +236,15 @@ class MainGameActivity : AppCompatActivity() {
                 hasDummyBullet = player.nightStatus.hasDummyBullet,
                 hasWarBullet = player.nightStatus.hasWarBullet,
             )
+        }
+    }
+
+    private fun resetAllNightStats()
+    {
+        for(player in gameSession.players)
+        {
+            player.nightStatus = NightStatus()
+            gameSession.bombsActive = arrayListOf()
         }
     }
 
@@ -301,12 +341,17 @@ class MainGameActivity : AppCompatActivity() {
                 foundTargetPlayer.nightStatus.hasWarBullet = true
             }
             Missions.DETONATOR_DETONATES -> throw InvalidObjectException("Detonator is not allowed to detonate bombs at night...!")
+            Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN ->
+            {
+                foundTargetPlayer.nightStatus.isTalkedIntoMafia = true
+            }
         }
     }
 
     private fun goNight()
     {
         nightStepIndex = 0
+        resetAllNightStats()
         if(gameSession.round == 1)
             decideNextNightStepsForFirstRound()
         else
@@ -672,7 +717,8 @@ class MainGameActivity : AppCompatActivity() {
         {
             RoleTypes.GODFATHER ->
             {
-                arrayListOf(Missions.GODFATHER_SHOOTS_PLAYER, Missions.GODFATHER_NATOS_PLAYER)
+                arrayListOf(Missions.GODFATHER_SHOOTS_PLAYER, Missions.GODFATHER_NATOS_PLAYER,
+                    Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN)
             }
             RoleTypes.MAFIA ->
             {
