@@ -103,4 +103,6 @@
     <string name="say_goodbye_to_because_wrong_snipe">خداحافظی می کنیم با %1$s، چون اسنایپر بود و یه شهروند رو زد.</string>
     <string name="say_goodbye_to_because_natoed">خداحافظی می کنیم با %1$s، چون نقشش %2$s بود و ناتویی شد.</string>
     <string name="nato_failed">بازیکن %1$s ناتویی نشد، چون نقشش %2$s بود، نه %3$s.</string>
+    <string name="touch"> (لمس کنید)</string>
+    <string name="dont_touch"> (لمس نکنید)</string>
 </resources>

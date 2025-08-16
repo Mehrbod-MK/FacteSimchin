@@ -201,6 +201,11 @@ class NightActionActivity : AppCompatActivity() {
             additionalInfoStringBuilder.append(getString(R.string.acknowledge_result,
                 if(isPositive) getString(R.string.positive) else getString(R.string.negative) ))
         }
+        if(nightCommand.mission == Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN)
+        {
+            val touchPlayer = nightCommand.targetPlayer.role.type == RoleTypes.CITIZEN
+            additionalInfoStringBuilder.append(if(touchPlayer) getString(R.string.touch) else getString(R.string.dont_touch))
+        }
 
         return getString(R.string.night_command_item, nightCommands.size,
             nightCommand.sourcePlayer.name, getMissionLocalName(nightCommand.mission), nightCommand.targetPlayer.name,

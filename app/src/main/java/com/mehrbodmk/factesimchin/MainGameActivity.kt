@@ -156,7 +156,7 @@ class MainGameActivity : AppCompatActivity() {
                         player.name,
                         AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
                 }
-                // Otherwise, turn the player into simple mafia.
+                // Otherwise, turn the simple citizen into simple mafia.
                 else
                 {
                     player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
