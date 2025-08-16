@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,439 +7,447 @@
     android:layout_height="match_parent"
     tools:context=".ChooseRolesActivity"
     android:padding="7dp"
-    android:layout_marginTop="30dp">
+    android:layout_marginTop="30dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="20dp"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineChooseRoles1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineChooseRoles2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
-    
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guidelineChooseRoles1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textColor="#ffffff"
         android:background="#00000000"
-        android:text="لطفاً نقش‌ها را انتخاب کنید:"
+        android:text="@string/please_choose_roles"
         android:gravity="center"
         android:textSize="20sp"
         />
     
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineChooseRoles1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guidelineChooseRoles2">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00000000">
+            android:orientation="vertical"
+            android:background="#00000000"
+            android:layoutDirection="rtl">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineRolesList1"
-                android:layout_width="wrap_content"
+            <!-- ROLE: Godfather -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.26" />
+                android:orientation="horizontal"
+                android:background="#00000000">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineRolesList2"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/imageViewRoleGodFather"
+                    android:src="@drawable/role_godfather"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleGodFather"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_godfather"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumGodFathers"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Mafia -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.70" />
+                android:orientation="horizontal"
+                android:background="#00000000">
 
-            <!-- ROLE:  GodFather -->
-            <ImageView
-                android:id="@+id/imageViewRoleGodFather"
-                android:src="@drawable/role_godfather"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="#00000000" />
+                <ImageView
+                    android:id="@+id/imageViewRoleMafia"
+                    android:src="@drawable/role_mafia"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
 
-            <TextView
-                android:id="@+id/textViewRoleGodFather"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_godfather"
-                android:textSize="37sp"
-                />
+                <TextView
+                    android:id="@+id/textViewRoleMafia"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_mafia"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
 
-            <NumberPicker
-                android:id="@+id/numberPickerNumGodFathers"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
+                <NumberPicker
+                    android:id="@+id/numberPickerNumMafias"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
             <!-- ********************************** -->
 
-            <!-- ROLE:  Simple Mafia -->
-            <ImageView
-                android:id="@+id/imageViewRoleMafia"
-                android:src="@drawable/role_mafia"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
+            <!-- ROLE: Bomber -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleBomber"
+                    android:src="@drawable/role_bomber"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleBomber"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_bomber"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumBombers"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Citizen -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleCitizen"
+                    android:src="@drawable/role_citizen"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleCitizen"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_citizen"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumCitizens"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Detective -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleDetective"
+                    android:src="@drawable/role_detective"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleDetective"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_detective"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumDetectives"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Doctor -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleDoctor"
+                    android:src="@drawable/role_doctor"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleDoctor"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_doctor"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumDoctors"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Sniper -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleSniper"
+                    android:src="@drawable/role_sniper"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleSniper"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_sniper"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumSnipers"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Gunner -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleGunner"
+                    android:src="@drawable/role_gunner"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleGunner"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_gunner"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumGunners"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <!-- ROLE: Detonator -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#00000000">
+
+                <ImageView
+                    android:id="@+id/imageViewRoleDetonator"
+                    android:src="@drawable/role_detonator"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_gravity="start|center"/>
+
+                <TextView
+                    android:id="@+id/textViewRoleDetonator"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:layout_margin="7dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:background="#00000000"
+                    android:text="@string/role_detonator"
+                    android:textSize="30sp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    />
+
+                <NumberPicker
+                    android:id="@+id/numberPickerNumDetonators"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="100dp"
+                    android:background="#00000000"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:theme="@style/AppTheme.Picker"
+                    />
+
+            </LinearLayout>
+            <!-- ********************************** -->
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonAcceptRolesCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleGodFather"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guidelineChooseRoles2"
+                android:background="@drawable/button_selector"
+                android:textColor="#ffffff"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleMafia"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleGodFather"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_mafia"
-                android:textSize="37sp"
+                android:text="@string/accept"
+                android:textSize="30sp"
                 />
 
-            <NumberPicker
-                android:id="@+id/numberPickerNumMafias"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumGodFathers"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_margin="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE:  Bomber -->
-            <ImageView
-                android:id="@+id/imageViewRoleBomber"
-                android:src="@drawable/role_bomber"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleMafia"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleBomber"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleMafia"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_bomber"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumBombers"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumMafias"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Citizen  -->
-            <ImageView
-                android:id="@+id/imageViewRoleCitizen"
-                android:src="@drawable/role_citizen"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleBomber"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleCitizen"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleBomber"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_citizen"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumCitizens"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumBombers"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Detective  -->
-            <ImageView
-                android:id="@+id/imageViewRoleDetective"
-                android:src="@drawable/role_detective"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleCitizen"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleDetective"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleCitizen"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_detective"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumDetectives"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumCitizens"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Doctor  -->
-            <ImageView
-                android:id="@+id/imageViewRoleDoctor"
-                android:src="@drawable/role_doctor"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleDetective"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleDoctor"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleDetective"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_doctor"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumDoctors"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumDetectives"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Sniper  -->
-            <ImageView
-                android:id="@+id/imageViewRoleSniper"
-                android:src="@drawable/role_sniper"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleDoctor"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleSniper"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleDoctor"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_sniper"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumSnipers"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumDoctors"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Gunner  -->
-            <ImageView
-                android:id="@+id/imageViewRoleGunner"
-                android:src="@drawable/role_gunner"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleSniper"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleGunner"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleSniper"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_gunner"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumGunners"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumSnipers"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-            <!-- ROLE: Detonator  -->
-            <ImageView
-                android:id="@+id/imageViewRoleDetonator"
-                android:src="@drawable/role_detonator"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/imageViewRoleGunner"
-                android:layout_marginTop="10dp"
-                android:background="#00000000" />
-
-            <TextView
-                android:id="@+id/textViewRoleDetonator"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="7dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList2"
-                app:layout_constraintTop_toBottomOf="@id/textViewRoleGunner"
-                app:layout_constraintStart_toEndOf="@id/guidelineRolesList1"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:background="#00000000"
-                android:text="@string/role_detonator"
-                android:textSize="37sp"
-                />
-
-            <NumberPicker
-                android:id="@+id/numberPickerNumDetonators"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/numberPickerNumGunners"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRolesList1"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="5dp"
-                android:theme="@style/AppTheme.Picker"
-                />
-            <!-- ********************************** -->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </ScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonAcceptRolesCount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelineChooseRoles2"
-        android:background="@drawable/button_selector"
-        android:textColor="#ffffff"
-        android:layout_marginHorizontal="10dp"
-        android:text="@string/accept"
-        android:textSize="30sp"
-        />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

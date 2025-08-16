@@ -96,4 +96,5 @@
     <string name="bullet_dummy">مشقی</string>
     <string name="report_bomb">بمب %1$s جلوی بازیکن %2$s با کد %3$s فعال است.</string>
     <string name="died"> (مرده)</string>
+    <string name="please_choose_roles">لطفاً نقش‌ها را انتخاب کنید:</string>
 </resources>
