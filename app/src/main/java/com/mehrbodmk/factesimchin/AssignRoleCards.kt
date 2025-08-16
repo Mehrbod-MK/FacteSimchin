@@ -50,6 +50,7 @@ class AssignRoleCards : AppCompatActivity() {
         const val ROLE_NAME_DOCTOR = "Doctor"
         const val ROLE_NAME_SNIPER = "Sniper"
         const val ROLE_NAME_GUNNER = "Gunner"
+        const val ROLE_NAME_HARDLIVING = "HardLiving"
         const val ROLE_NAME_DETONATOR = "Detonator"
 
         fun getRolesLocalNames(context: Context, roles: Iterable<RoleTypes>) : ArrayList<String>
@@ -74,6 +75,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.SNIPER -> context.getString(R.string.role_sniper)
                 RoleTypes.GUNNER -> context.getString(R.string.role_gunner)
                 RoleTypes.DETONATOR -> context.getString(R.string.role_detonator)
+                RoleTypes.HARDLIVING -> context.getString(R.string.role_hardliving)
             }
         }
 
@@ -89,6 +91,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.SNIPER -> ROLE_NAME_SNIPER
                 RoleTypes.GUNNER -> ROLE_NAME_GUNNER
                 RoleTypes.DETONATOR -> ROLE_NAME_DETONATOR
+                RoleTypes.HARDLIVING -> ROLE_NAME_HARDLIVING
             }
         }
 
@@ -105,6 +108,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.SNIPER    -> Role(ROLE_NAME_SNIPER, getRoleLocalName(context, roleType), false, RoleTypes.SNIPER)
                 RoleTypes.GUNNER    -> Role(ROLE_NAME_GUNNER, getRoleLocalName(context, roleType), false, RoleTypes.GUNNER)
                 RoleTypes.DETONATOR -> Role(ROLE_NAME_DETONATOR, getRoleLocalName(context, roleType), false, RoleTypes.DETONATOR)
+                RoleTypes.HARDLIVING -> Role(ROLE_NAME_HARDLIVING, getRoleLocalName(context, roleType), false, RoleTypes.HARDLIVING)
             }
         }
 
@@ -121,6 +125,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.SNIPER      -> R.drawable.card_sniper
                 RoleTypes.GUNNER      -> R.drawable.card_gunner
                 RoleTypes.DETONATOR   -> R.drawable.card_detonator
+                RoleTypes.HARDLIVING -> R.drawable.card_hardliving
             }
         }
 
@@ -136,6 +141,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.SNIPER -> R.drawable.role_sniper
                 RoleTypes.GUNNER -> R.drawable.role_gunner
                 RoleTypes.DETONATOR -> R.drawable.role_detonator
+                RoleTypes.HARDLIVING -> R.drawable.role_hardliving
             }
         }
     }

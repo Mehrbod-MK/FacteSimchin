@@ -187,7 +187,15 @@ class MainGameActivity : AppCompatActivity() {
                 // Player is saved by doctor, so they won't die.
                 if(player.nightStatus.isSavedByDoctor)
                 {
-                    dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player_from_godfather, player.name))
+                    dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player_from_godfather,
+                        player.name))
+                }
+                // Player is hard-living, drop its shield by turning it into simple citizen.
+                else if(player.role.type == RoleTypes.HARDLIVING)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.CITIZEN)
+                    dayEventsStringBuilder.appendLine(getString(R.string.hardliving_shield_dropped,
+                        player.name))
                 }
                 // Player was not saved, kill them.
                 else
@@ -221,7 +229,7 @@ class MainGameActivity : AppCompatActivity() {
         val alertDialogEvents = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.day_events_title))
             .setMessage(resultString)
-            .setPositiveButton(getString(R.string.ok), { dialog, _ -> dialog.dismiss() })
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         alertDialogEvents.show()
 
         removeNightFlags()
@@ -279,7 +287,7 @@ class MainGameActivity : AppCompatActivity() {
             val alertDialogBombs = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.report_game_bombs))
                 .setMessage(stringBuilder.toString())
-                .setPositiveButton(R.string.ok, { dialog, _ -> dialog.dismiss() })
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
             alertDialogBombs.show()
         }
         buttonViewBullets.setOnClickListener {
@@ -293,7 +301,7 @@ class MainGameActivity : AppCompatActivity() {
             val alertDialogBullets = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.report_game_bullets))
                 .setMessage(stringBuilder.toString())
-                .setPositiveButton(R.string.ok, { dialog, _ -> dialog.dismiss() })
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
             alertDialogBullets.show()
         }
     }
@@ -446,11 +454,7 @@ class MainGameActivity : AppCompatActivity() {
                 prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.wake_up, R.string.role_gunner)
             }
-            NightStepsInOrder.WAKE_DETONATOR ->
-            {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
-                    R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
-            }
+            NightStepsInOrder.WAKE_DETONATOR -> bypassNightDecision()
             NightStepsInOrder.SLEEP_DOCTOR ->
             {
                 prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DOCTOR,
@@ -471,12 +475,7 @@ class MainGameActivity : AppCompatActivity() {
                 prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.sleep, R.string.role_gunner)
             }
-            NightStepsInOrder.SLEEP_DETONATOR ->
-            {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
-                    R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
-            }
-
+            NightStepsInOrder.SLEEP_DETONATOR -> bypassNightDecision()
             NightStepsInOrder.WAKE_UP_EVERYONE ->
             {
                 stopGodFatherWaltzMusic()
@@ -569,6 +568,8 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecision()
             NightStepsInOrder.DISPLAY_EVENTS -> decideNewDayEvents()
+            NightStepsInOrder.WAKE_HARDLIVING -> bypassNightDecision()
+            NightStepsInOrder.SLEEP_HARDLIVING -> bypassNightDecision()
         }
 
         // Simple wake/sleep.
@@ -702,6 +703,16 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO -> bypassNightDecisionFirstRound()
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecisionFirstRound()
             NightStepsInOrder.DISPLAY_EVENTS -> bypassNightDecisionFirstRound()
+            NightStepsInOrder.WAKE_HARDLIVING ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.HARDLIVING,
+                    R.drawable.card_hardliving, R.string.wake_up, R.string.role_hardliving)
+            }
+            NightStepsInOrder.SLEEP_HARDLIVING ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.HARDLIVING,
+                    R.drawable.card_hardliving, R.string.sleep, R.string.role_hardliving)
+            }
         }
 
         // Simple wake/sleep.
@@ -751,6 +762,10 @@ class MainGameActivity : AppCompatActivity() {
             RoleTypes.DETONATOR ->
             {
                 arrayListOf(Missions.DETONATOR_DETONATES)
+            }
+            RoleTypes.HARDLIVING ->
+            {
+                arrayListOf()
             }
         }
     }
@@ -837,10 +852,10 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun getGameTurnText() : String
     {
-        if(gameSession.round == 1)
-            return getString(R.string.game_turn, gameSession.round, getString(R.string.introductory_turn))
+        return if(gameSession.round == 1)
+            getString(R.string.game_turn, gameSession.round, getString(R.string.introductory_turn))
         else
-            return getString(R.string.game_turn, gameSession.round, "")
+            getString(R.string.game_turn, gameSession.round, "")
     }
 
     private class PlayersListAdapter(
@@ -880,8 +895,19 @@ class MainGameActivity : AppCompatActivity() {
             viewHolder.isDeadCheckBox.setOnCheckedChangeListener(null)
             viewHolder.isDeadCheckBox.isChecked = item.isDead
             viewHolder.isDeadCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                item.isDead = isChecked
-                (context as? MainGameActivity)?.updateStats()
+                val mainGameActivity = (context as? MainGameActivity)
+                // Check special condition for Hard-Living.
+                if(item.role.type == RoleTypes.HARDLIVING)
+                {
+                    // Turn it into simple citizen.
+                    item.role = AssignRoleCards.getRole(context, RoleTypes.CITIZEN)
+                    mainGameActivity?.updateUI()
+                }
+                else
+                {
+                    item.isDead = isChecked
+                    mainGameActivity?.updateStats()
+                }
             }
 
             return view

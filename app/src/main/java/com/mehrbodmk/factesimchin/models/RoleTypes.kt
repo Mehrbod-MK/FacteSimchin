@@ -12,5 +12,6 @@ enum class RoleTypes(val roleName: String) {
     DOCTOR(AssignRoleCards.ROLE_NAME_DOCTOR),
     SNIPER(AssignRoleCards.ROLE_NAME_SNIPER),
     GUNNER(AssignRoleCards.ROLE_NAME_GUNNER),
+    HARDLIVING(AssignRoleCards.ROLE_NAME_HARDLIVING),
     DETONATOR(AssignRoleCards.ROLE_NAME_DETONATOR),
 }

@@ -21,6 +21,7 @@
     <string name="role_sniper">اسنایپر</string>
     <string name="role_gunner">تفنگ‌دار</string>
     <string name="role_detonator">نگهبان</string>
+    <string name="role_hardliving">روئین‌تن</string>
     <string name="accept">تأیید</string>
     <string name="assign_roles_please_click">تعیین نقش بازیکنان\nنامبرده بر روی کارت خود کلیک کند.</string>
     <string name="player_name">نام بازیکن</string>
@@ -105,4 +106,5 @@
     <string name="nato_failed">بازیکن %1$s ناتویی نشد، چون نقشش %2$s بود، نه %3$s.</string>
     <string name="touch"> (لمس کنید)</string>
     <string name="dont_touch"> (لمس نکنید)</string>
+    <string name="hardliving_shield_dropped">زره %1$s افتاد و او حالا یک شهروند است.</string>
 </resources>
