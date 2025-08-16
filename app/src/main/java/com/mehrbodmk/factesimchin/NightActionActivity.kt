@@ -191,7 +191,7 @@ class NightActionActivity : AppCompatActivity() {
     {
         val additionalInfoStringBuilder: StringBuilder = StringBuilder()
         if(nightCommand.natoGuessedRole != null)
-            additionalInfoStringBuilder.append("(${AssignRoleCards.getRoleLocalName(this@NightActionActivity, nightCommand.natoGuessedRole.roleName)}) ")
+            additionalInfoStringBuilder.append("(${AssignRoleCards.getRoleLocalName(this@NightActionActivity, nightCommand.natoGuessedRole)}) ")
         if(nightCommand.bombCode != null)
             additionalInfoStringBuilder.append("(${nightCommand.bombCode}) ")
         if(nightCommand.mission == Missions.DETECTIVE_ACKNOWLEDGES_PLAYER)
@@ -291,7 +291,7 @@ class NightActionActivity : AppCompatActivity() {
                     linearLayoutGodfatherNato.visibility = View.VISIBLE
                     if(selectedNatoGuessedRoleIndex >= 0)
                     {
-                        buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex].roleName)
+                        buttonChooseGodfatherNatoGuessedRole.text = AssignRoleCards.getRoleLocalName(this@NightActionActivity, RoleTypes.entries[selectedNatoGuessedRoleIndex])
                     }
                     else
                     {

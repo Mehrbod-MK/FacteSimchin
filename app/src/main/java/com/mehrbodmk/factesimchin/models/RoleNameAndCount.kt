@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RoleNameAndCount(
-    val roleName: String,
+data class RoleTypeAndCount(
+    val roleType: RoleTypes,
     var count: Int
 ) : Parcelable

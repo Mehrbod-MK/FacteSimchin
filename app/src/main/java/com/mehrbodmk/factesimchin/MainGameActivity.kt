@@ -247,7 +247,7 @@ class MainGameActivity : AppCompatActivity() {
             for(player in gameSession.players.filter { it.nightStatus.hasWarBullet || it.nightStatus.hasDummyBullet })
             {
                 stringBuilder.appendLine(getString(R.string.report_bullet, player.name,
-                    AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.name),
+                    AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type),
                     if(player.nightStatus.hasDummyBullet) getString(R.string.bullet_dummy) else getString(R.string.bullet_war)))
             }
             val alertDialogBullets = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
@@ -347,9 +347,9 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.WAKE_ALL_MAFIAS ->
             {
-                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
-                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
-                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
+                val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
+                val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val allMafias = godfathers + '\n' + mafias + '\n' + bombers
                 if(allMafias.isBlank())
                 {
@@ -369,9 +369,9 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.SLEEP_MAFIA ->
             {
-                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
-                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
-                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
+                val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
+                val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val allMafias = godfathers + '\n' + mafias + '\n' + bombers
                 if(allMafias.isBlank())
                 {
@@ -383,52 +383,52 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.WAKE_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DOCTOR,
                     R.drawable.card_doctor, R.string.wake_up, R.string.role_doctor)
             }
             NightStepsInOrder.WAKE_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETECTIVE,
                     R.drawable.card_detective, R.string.wake_up, R.string.role_detective)
             }
             NightStepsInOrder.WAKE_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.SNIPER,
                     R.drawable.card_sniper, R.string.wake_up, R.string.role_sniper)
             }
             NightStepsInOrder.WAKE_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.wake_up, R.string.role_gunner)
             }
             NightStepsInOrder.WAKE_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
                     R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
             }
             NightStepsInOrder.SLEEP_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DOCTOR,
                     R.drawable.card_doctor, R.string.sleep, R.string.role_doctor)
             }
             NightStepsInOrder.SLEEP_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETECTIVE,
                     R.drawable.card_detective, R.string.sleep, R.string.role_detective)
             }
             NightStepsInOrder.SLEEP_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.SNIPER,
                     R.drawable.card_sniper, R.string.sleep, R.string.role_sniper)
             }
             NightStepsInOrder.SLEEP_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.sleep, R.string.role_gunner)
             }
             NightStepsInOrder.SLEEP_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
                     R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
             }
 
@@ -556,9 +556,9 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.WAKE_ALL_MAFIAS ->
             {
-                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
-                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
-                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
+                val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
+                val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val allMafias = godfathers + '\n' + mafias + '\n' + bombers
                 if(allMafias.isBlank())
                 {
@@ -570,19 +570,19 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.GODFATHER_SHOW_LIKE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_GODFATHER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.GODFATHER,
                     R.drawable.card_godfather, R.string.show_like, R.string.role_godfather)
             }
             NightStepsInOrder.BOMBER_SHOW_LIKE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_BOMBER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.BOMBER,
                     R.drawable.card_bomber, R.string.show_like, R.string.role_bomber)
             }
             NightStepsInOrder.SLEEP_MAFIA ->
             {
-                val godfathers = getPlayerNamesByRole(Constants.ROLE_NAME_GODFATHER)
-                val mafias = getPlayerNamesByRole(Constants.ROLE_NAME_MAFIA)
-                val bombers = getPlayerNamesByRole(Constants.ROLE_NAME_BOMBER)
+                val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
+                val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
+                val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val allMafias = godfathers + '\n' + mafias + '\n' + bombers
                 if(allMafias.isBlank())
                 {
@@ -594,52 +594,52 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.WAKE_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DOCTOR,
                     R.drawable.card_doctor, R.string.wake_up, R.string.role_doctor)
             }
             NightStepsInOrder.WAKE_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETECTIVE,
                     R.drawable.card_detective, R.string.wake_up, R.string.role_detective)
             }
             NightStepsInOrder.WAKE_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.SNIPER,
                     R.drawable.card_sniper, R.string.wake_up, R.string.role_sniper)
             }
             NightStepsInOrder.WAKE_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.wake_up, R.string.role_gunner)
             }
             NightStepsInOrder.WAKE_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETONATOR,
                     R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
             }
             NightStepsInOrder.SLEEP_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DOCTOR,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DOCTOR,
                     R.drawable.card_doctor, R.string.sleep, R.string.role_doctor)
             }
             NightStepsInOrder.SLEEP_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETECTIVE,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETECTIVE,
                     R.drawable.card_detective, R.string.sleep, R.string.role_detective)
             }
             NightStepsInOrder.SLEEP_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_SNIPER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.SNIPER,
                     R.drawable.card_sniper, R.string.sleep, R.string.role_sniper)
             }
             NightStepsInOrder.SLEEP_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_GUNNER,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.GUNNER,
                     R.drawable.card_gunner, R.string.sleep, R.string.role_gunner)
             }
             NightStepsInOrder.SLEEP_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, Constants.ROLE_NAME_DETONATOR,
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETONATOR,
                     R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
             }
 
@@ -721,9 +721,9 @@ class MainGameActivity : AppCompatActivity() {
         decideNextNightSteps()
     }
 
-    private fun prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent: Intent, roleName: String, cardResId: Int, messageStringId: Int, roleStringResId: Int)
+    private fun prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent: Intent, roleType: RoleTypes, cardResId: Int, messageStringId: Int, roleStringResId: Int)
     {
-        val players = getPlayerNamesByRole(roleName)
+        val players = getPlayerNamesByRole(roleType)
         if(players.isBlank())
         {
             bypassNightDecision()
@@ -733,9 +733,9 @@ class MainGameActivity : AppCompatActivity() {
         sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, sleepOrWakeCommand)
     }
 
-    private fun prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent: Intent, roleName: String, cardResId: Int, messageStringId: Int, roleStringResId: Int)
+    private fun prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent: Intent, roleType: RoleTypes, cardResId: Int, messageStringId: Int, roleStringResId: Int)
     {
-        val players = getPlayerNamesByRole(roleName)
+        val players = getPlayerNamesByRole(roleType)
         if(players.isBlank())
         {
             bypassNightDecisionFirstRound()
@@ -745,9 +745,9 @@ class MainGameActivity : AppCompatActivity() {
         sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, sleepOrWakeCommand)
     }
 
-    private fun getPlayerNamesByRole(roleName: String) : String
+    private fun getPlayerNamesByRole(roleType: RoleTypes) : String
     {
-        val playersWithRole = gameSession.players.filter { player -> player.role.name == roleName }
+        val playersWithRole = gameSession.players.filter { player -> player.role.type == roleType }
         val stringBuilder: StringBuilder = StringBuilder()
         if(!playersWithRole.any())
             return ""

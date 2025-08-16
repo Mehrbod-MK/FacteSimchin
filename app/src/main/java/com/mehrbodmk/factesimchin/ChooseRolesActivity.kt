@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.mehrbodmk.factesimchin.models.RoleNameAndCount
+import com.mehrbodmk.factesimchin.models.RoleTypeAndCount
+import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
 
@@ -73,18 +74,18 @@ class ChooseRolesActivity : AppCompatActivity() {
         return true
     }
 
-    private fun getListOfRoleNamesAndCount() : ArrayList<RoleNameAndCount>
+    private fun getListOfRoleNamesAndCount() : ArrayList<RoleTypeAndCount>
     {
-        val result: ArrayList<RoleNameAndCount> = arrayListOf()
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_GODFATHER, findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_MAFIA, findViewById<NumberPicker>(R.id.numberPickerNumMafias).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_BOMBER, findViewById<NumberPicker>(R.id.numberPickerNumBombers).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_CITIZEN, findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_DETECTIVE, findViewById<NumberPicker>(R.id.numberPickerNumDetectives).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_DOCTOR, findViewById<NumberPicker>(R.id.numberPickerNumDoctors).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_SNIPER, findViewById<NumberPicker>(R.id.numberPickerNumSnipers).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_GUNNER, findViewById<NumberPicker>(R.id.numberPickerNumGunners).value))
-        result.add(RoleNameAndCount(Constants.ROLE_NAME_DETONATOR, findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value))
+        val result: ArrayList<RoleTypeAndCount> = arrayListOf()
+        result.add(RoleTypeAndCount(RoleTypes.GODFATHER, findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value))
+        result.add(RoleTypeAndCount(RoleTypes.MAFIA, findViewById<NumberPicker>(R.id.numberPickerNumMafias).value))
+        result.add(RoleTypeAndCount(RoleTypes.BOMBER, findViewById<NumberPicker>(R.id.numberPickerNumBombers).value))
+        result.add(RoleTypeAndCount(RoleTypes.CITIZEN, findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value))
+        result.add(RoleTypeAndCount(RoleTypes.DETECTIVE, findViewById<NumberPicker>(R.id.numberPickerNumDetectives).value))
+        result.add(RoleTypeAndCount(RoleTypes.DOCTOR, findViewById<NumberPicker>(R.id.numberPickerNumDoctors).value))
+        result.add(RoleTypeAndCount(RoleTypes.SNIPER, findViewById<NumberPicker>(R.id.numberPickerNumSnipers).value))
+        result.add(RoleTypeAndCount(RoleTypes.GUNNER, findViewById<NumberPicker>(R.id.numberPickerNumGunners).value))
+        result.add(RoleTypeAndCount(RoleTypes.DETONATOR, findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value))
         return result
     }
 }

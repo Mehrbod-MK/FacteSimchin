@@ -16,7 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.mehrbodmk.factesimchin.models.Player
 import com.mehrbodmk.factesimchin.models.Role
-import com.mehrbodmk.factesimchin.models.RoleNameAndCount
+import com.mehrbodmk.factesimchin.models.RoleTypeAndCount
 import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
@@ -26,7 +26,7 @@ class AssignRoleCards : AppCompatActivity() {
     private var players: ArrayList<Player> = arrayListOf()
 
     private lateinit var playerNames: ArrayList<String>
-    private lateinit var roleNamesAndCount: ArrayList<RoleNameAndCount>
+    private lateinit var roleTypesAndCount: ArrayList<RoleTypeAndCount>
 
     private lateinit var textViewPlayerName:  TextView
     private lateinit var textViewPlayerRole: TextView
@@ -42,63 +42,85 @@ class AssignRoleCards : AppCompatActivity() {
 
     companion object
     {
+        const val ROLE_NAME_GODFATHER = "GodFather"
+        const val ROLE_NAME_MAFIA = "Mafia"
+        const val ROLE_NAME_BOMBER = "Bomber"
+        const val ROLE_NAME_CITIZEN = "Citizen"
+        const val ROLE_NAME_DETECTIVE = "Detective"
+        const val ROLE_NAME_DOCTOR = "Doctor"
+        const val ROLE_NAME_SNIPER = "Sniper"
+        const val ROLE_NAME_GUNNER = "Gunner"
+        const val ROLE_NAME_DETONATOR = "Detonator"
+
         fun getRolesLocalNames(context: Context, roles: Iterable<RoleTypes>) : ArrayList<String>
         {
             val result: ArrayList<String> = arrayListOf()
             for(roleType in roles)
             {
-                result.add(getRoleLocalName(context, roleType.roleName))
+                result.add(getRoleLocalName(context, roleType))
             }
             return result
         }
 
-        fun getRoleLocalName(context: Context, roleName: String) : String
+        fun getRoleLocalName(context: Context, role: RoleTypes) : String
         {
-            return when (roleName) {
-                Constants.ROLE_NAME_GODFATHER -> context.getString(R.string.role_godfather)
-                Constants.ROLE_NAME_MAFIA -> context.getString(R.string.role_mafia)
-                Constants.ROLE_NAME_BOMBER -> context.getString(R.string.role_bomber)
-                Constants.ROLE_NAME_CITIZEN -> context.getString(R.string.role_citizen)
-                Constants.ROLE_NAME_DETECTIVE -> context.getString(R.string.role_detective)
-                Constants.ROLE_NAME_DOCTOR -> context.getString(R.string.role_doctor)
-                Constants.ROLE_NAME_SNIPER -> context.getString(R.string.role_sniper)
-                Constants.ROLE_NAME_GUNNER -> context.getString(R.string.role_gunner)
-                Constants.ROLE_NAME_DETONATOR -> context.getString(R.string.role_detonator)
-                else -> ""
+            return when (role) {
+                RoleTypes.GODFATHER -> context.getString(R.string.role_godfather)
+                RoleTypes.MAFIA -> context.getString(R.string.role_mafia)
+                RoleTypes.BOMBER -> context.getString(R.string.role_bomber)
+                RoleTypes.CITIZEN -> context.getString(R.string.role_citizen)
+                RoleTypes.DETECTIVE -> context.getString(R.string.role_detective)
+                RoleTypes.DOCTOR -> context.getString(R.string.role_doctor)
+                RoleTypes.SNIPER -> context.getString(R.string.role_sniper)
+                RoleTypes.GUNNER -> context.getString(R.string.role_gunner)
+                RoleTypes.DETONATOR -> context.getString(R.string.role_detonator)
             }
         }
 
-        fun getRole(context: Context, roleName: String) : Role
-        {
-            return when(roleName)
+        fun getRoleName(context: Context, roleType: RoleTypes) : String {
+            return when(roleType)
             {
-                Constants.ROLE_NAME_GODFATHER -> Role(Constants.ROLE_NAME_GODFATHER, getRoleLocalName(context, roleName), true, RoleTypes.GODFATHER)
-                Constants.ROLE_NAME_MAFIA -> Role(Constants.ROLE_NAME_MAFIA, getRoleLocalName(context, roleName), true, RoleTypes.MAFIA)
-                Constants.ROLE_NAME_BOMBER -> Role(Constants.ROLE_NAME_BOMBER, getRoleLocalName(context, roleName), true, RoleTypes.BOMBER)
-                Constants.ROLE_NAME_CITIZEN -> Role(Constants.ROLE_NAME_CITIZEN, getRoleLocalName(context, roleName), false, RoleTypes.CITIZEN)
-                Constants.ROLE_NAME_DETECTIVE -> Role(Constants.ROLE_NAME_DETECTIVE, getRoleLocalName(context, roleName), false, RoleTypes.DETECTIVE)
-                Constants.ROLE_NAME_DOCTOR -> Role(Constants.ROLE_NAME_DOCTOR, getRoleLocalName(context, roleName), false, RoleTypes.DOCTOR)
-                Constants.ROLE_NAME_SNIPER -> Role(Constants.ROLE_NAME_SNIPER, getRoleLocalName(context, roleName), false, RoleTypes.SNIPER)
-                Constants.ROLE_NAME_GUNNER -> Role(Constants.ROLE_NAME_GUNNER, getRoleLocalName(context, roleName), false, RoleTypes.GUNNER)
-                Constants.ROLE_NAME_DETONATOR -> Role(Constants.ROLE_NAME_DETONATOR, getRoleLocalName(context, roleName), false, RoleTypes.DETONATOR)
-                else -> throw Exception("Invalid player role name: $roleName")
+                RoleTypes.GODFATHER -> ROLE_NAME_GODFATHER
+                RoleTypes.MAFIA -> ROLE_NAME_MAFIA
+                RoleTypes.BOMBER -> ROLE_NAME_BOMBER
+                RoleTypes.CITIZEN -> ROLE_NAME_CITIZEN
+                RoleTypes.DETECTIVE -> ROLE_NAME_DETECTIVE
+                RoleTypes.DOCTOR -> ROLE_NAME_DOCTOR
+                RoleTypes.SNIPER -> ROLE_NAME_SNIPER
+                RoleTypes.GUNNER -> ROLE_NAME_GUNNER
+                RoleTypes.DETONATOR -> ROLE_NAME_DETONATOR
             }
         }
 
-        fun getRoleImageCardResource(roleName: String) : Int
+        fun getRole(context: Context, roleType: RoleTypes) : Role
         {
-            return when(roleName)
+            return when(roleType)
             {
-                Constants.ROLE_NAME_GODFATHER -> R.drawable.card_godfather
-                Constants.ROLE_NAME_MAFIA -> R.drawable.card_mafia
-                Constants.ROLE_NAME_BOMBER -> R.drawable.card_bomber
-                Constants.ROLE_NAME_CITIZEN -> R.drawable.card_citizen
-                Constants.ROLE_NAME_DETECTIVE -> R.drawable.card_detective
-                Constants.ROLE_NAME_DOCTOR -> R.drawable.card_doctor
-                Constants.ROLE_NAME_SNIPER -> R.drawable.card_sniper
-                Constants.ROLE_NAME_GUNNER -> R.drawable.card_gunner
-                Constants.ROLE_NAME_DETONATOR -> R.drawable.card_detonator
-                else -> throw Exception("Invalid player role name: $roleName")
+                RoleTypes.GODFATHER -> Role(ROLE_NAME_GODFATHER, getRoleLocalName(context, roleType), true, RoleTypes.GODFATHER)
+                RoleTypes.MAFIA     -> Role(ROLE_NAME_MAFIA, getRoleLocalName(context, roleType), true, RoleTypes.MAFIA)
+                RoleTypes.BOMBER    -> Role(ROLE_NAME_BOMBER, getRoleLocalName(context, roleType), true, RoleTypes.BOMBER)
+                RoleTypes.CITIZEN   -> Role(ROLE_NAME_CITIZEN, getRoleLocalName(context, roleType), false, RoleTypes.CITIZEN)
+                RoleTypes.DETECTIVE -> Role(ROLE_NAME_DETECTIVE, getRoleLocalName(context, roleType), false, RoleTypes.DETECTIVE)
+                RoleTypes.DOCTOR    -> Role(ROLE_NAME_DOCTOR, getRoleLocalName(context, roleType), false, RoleTypes.DOCTOR)
+                RoleTypes.SNIPER    -> Role(ROLE_NAME_SNIPER, getRoleLocalName(context, roleType), false, RoleTypes.SNIPER)
+                RoleTypes.GUNNER    -> Role(ROLE_NAME_GUNNER, getRoleLocalName(context, roleType), false, RoleTypes.GUNNER)
+                RoleTypes.DETONATOR -> Role(ROLE_NAME_DETONATOR, getRoleLocalName(context, roleType), false, RoleTypes.DETONATOR)
+            }
+        }
+
+        fun getRoleImageCardResource(roleType: RoleTypes) : Int
+        {
+            return when(roleType)
+            {
+                RoleTypes.GODFATHER   -> R.drawable.card_godfather
+                RoleTypes.MAFIA       -> R.drawable.card_mafia
+                RoleTypes.BOMBER      -> R.drawable.card_bomber
+                RoleTypes.CITIZEN     -> R.drawable.card_citizen
+                RoleTypes.DETECTIVE   -> R.drawable.card_detective
+                RoleTypes.DOCTOR      -> R.drawable.card_doctor
+                RoleTypes.SNIPER      -> R.drawable.card_sniper
+                RoleTypes.GUNNER      -> R.drawable.card_gunner
+                RoleTypes.DETONATOR   -> R.drawable.card_detonator
             }
         }
 
@@ -128,7 +150,7 @@ class AssignRoleCards : AppCompatActivity() {
             insets
         }
 
-        roleNamesAndCount = IntentCompat.getParcelableArrayListExtra(intent, Constants.INTENT_ROLE_NAMES_AND_COUNT_LIST, RoleNameAndCount::class.java)!!
+        roleTypesAndCount = IntentCompat.getParcelableArrayListExtra(intent, Constants.INTENT_ROLE_NAMES_AND_COUNT_LIST, RoleTypeAndCount::class.java)!!
         playerNames = intent.getStringArrayListExtra(Constants.INTENT_PLAYERS_NAMES_LIST)!!
 
         textViewPlayerName = findViewById(R.id.textViewPlayerName)
@@ -186,15 +208,15 @@ class AssignRoleCards : AppCompatActivity() {
 
     private fun assignNewRoleToCurrentPlayer()
     {
-        val pickedRole = roleNamesAndCount.filter { it.count > 0 }.random()
-        currentPlayerRole = getRole(this, pickedRole.roleName)
+        val pickedRole = roleTypesAndCount.filter { it.count > 0 }.random()
+        currentPlayerRole = getRole(this@AssignRoleCards, pickedRole.roleType)
         pickedRole.count--;
         if(pickedRole.count <= 0)
         {
-            roleNamesAndCount.remove(roleNamesAndCount.find { it.roleName == pickedRole.roleName }!!)
+            roleTypesAndCount.remove(roleTypesAndCount.find { it.roleType == pickedRole.roleType }!!)
         }
-        textViewPlayerRole.text = getRoleLocalName(this, pickedRole.roleName)
-        imageViewCard.setImageResource(getRoleImageCardResource(pickedRole.roleName))
+        textViewPlayerRole.text = getRoleLocalName(this, pickedRole.roleType)
+        imageViewCard.setImageResource(getRoleImageCardResource(pickedRole.roleType))
 
         cardAnimator = ObjectAnimator.ofFloat(imageViewCard, "rotationY", 90f, 0f)
         cardAnimator.duration = 1000
