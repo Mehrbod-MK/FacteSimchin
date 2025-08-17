@@ -6,5 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RoleTypeAndCount(
     val roleType: RoleTypes,
-    var count: Int
+    var count: Int,
+    var isMafia: Boolean?,
 ) : Parcelable

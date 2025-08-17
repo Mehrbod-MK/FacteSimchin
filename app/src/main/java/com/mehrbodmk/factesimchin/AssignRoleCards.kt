@@ -176,7 +176,7 @@ class AssignRoleCards : AppCompatActivity() {
             isCardEnable = false
 
             cardAnimator = ObjectAnimator.ofFloat(imageViewCard, "rotationY", 0f, 90f)
-            cardAnimator.duration = 1000
+            cardAnimator.duration = 250
             cardAnimator.start()
             cardAnimator.doOnEnd {
                 assignNewRoleToCurrentPlayer()
@@ -225,7 +225,7 @@ class AssignRoleCards : AppCompatActivity() {
         imageViewCard.setImageResource(getRoleImageCardResource(pickedRole.roleType))
 
         cardAnimator = ObjectAnimator.ofFloat(imageViewCard, "rotationY", 90f, 0f)
-        cardAnimator.duration = 1000
+        cardAnimator.duration = 250
         cardAnimator.start()
         cardAnimator.doOnEnd {
             buttonRoleOK.visibility = View.VISIBLE

@@ -67,8 +67,14 @@ class PlayersActivity : AppCompatActivity() {
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
         buttonGoToRoles.setOnClickListener {
-            if(playersPresenceList.isEmpty()) {
+            if(playersPresenceList.count { it.isPresent } == 0) {
                 Toast.makeText(this@PlayersActivity, R.string.no_players_available, Toast.LENGTH_SHORT).show()
+                Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
+                return@setOnClickListener
+            }
+            if(playersPresenceList.count { it.isPresent } < 5)
+            {
+                Toast.makeText(this@PlayersActivity, R.string.at_least_5_players, Toast.LENGTH_SHORT).show()
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
