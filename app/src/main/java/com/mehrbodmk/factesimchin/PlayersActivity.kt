@@ -1,5 +1,6 @@
 package com.mehrbodmk.factesimchin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,18 +17,19 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.mehrbodmk.factesimchin.models.PlayerPresence
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
 import java.io.File
 
 class PlayersActivity : AppCompatActivity() {
 
-    private var playersList : ArrayList<String> = ArrayList()
+    private var playersPresenceList : ArrayList<PlayerPresence> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +46,8 @@ class PlayersActivity : AppCompatActivity() {
         val editTextPlayerName = findViewById<EditText>(R.id.editTextPlayerName)
         if(checkIfPlayersListFileExists())
         {
-            playersList = ReadPlayersListFromLocalStorage()
-            listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
+            playersPresenceList = readPlayersListFromLocalStorage()
+            listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersPresenceList)
         }
         buttonAddPlayer.setOnClickListener {
             val newPlayerName = editTextPlayerName.text.toString().trim()
@@ -54,26 +56,26 @@ class PlayersActivity : AppCompatActivity() {
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
-            else if(playersList.contains(newPlayerName)) {
+            else if(playersPresenceList.any { it.playerName == newPlayerName }) {
                 Toast.makeText(this@PlayersActivity, R.string.player_already_exists, Toast.LENGTH_SHORT).show()
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
-            playersList.add(newPlayerName)
+            playersPresenceList.add(PlayerPresence(newPlayerName, true))
             editTextPlayerName.setText("")
-            listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersList)
-            android.util.Log.i("tag", playersList.count().toString())
+            listViewPlayers.adapter = MyListAdapter(this, R.layout.player_list_item, playersPresenceList)
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
         buttonGoToRoles.setOnClickListener {
-            if(playersList.isEmpty()) {
+            if(playersPresenceList.isEmpty()) {
                 Toast.makeText(this@PlayersActivity, R.string.no_players_available, Toast.LENGTH_SHORT).show()
                 Helpers.playSoundEffect(this@PlayersActivity, R.raw.event_bad)
                 return@setOnClickListener
             }
-            WritePlayersListToLocalStorage()
+            writePlayersListToLocalStorage()
             val rolesActivityIntent = Intent(this@PlayersActivity, ChooseRolesActivity::class.java)
-            rolesActivityIntent.putExtra(Constants.INTENT_PLAYERS_NAMES_LIST, playersList)
+            val playerNames : ArrayList<String> = ArrayList(playersPresenceList.filter { it.isPresent }.map { it.playerName })
+            rolesActivityIntent.putExtra(Constants.INTENT_PLAYERS_NAMES_LIST, playerNames)
             startActivity(rolesActivityIntent)
             Helpers.playSoundEffect(this@PlayersActivity, R.raw.button)
         }
@@ -86,19 +88,25 @@ class PlayersActivity : AppCompatActivity() {
         return file.exists()
     }
 
-    private fun ReadPlayersListFromLocalStorage() : ArrayList<String>
+    private fun readPlayersListFromLocalStorage() : ArrayList<PlayerPresence>
     {
-        val fileName = Constants.FILENAME_PLAYERS_LIST
-        val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
-        val type = object : TypeToken<ArrayList<String>>() {}.type
-        val myList: ArrayList<String> = Gson().fromJson(fileContents, type)
-        return myList
+        try {
+            val fileName = Constants.FILENAME_PLAYERS_LIST
+            val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
+            val type = object : TypeToken<ArrayList<PlayerPresence>>() {}.type
+            val myList: ArrayList<PlayerPresence> = Gson().fromJson(fileContents, type)
+            return myList
+        }
+        catch(ex: Exception) {
+            writePlayersListToLocalStorage()
+            return arrayListOf()
+        }
     }
 
-    private fun WritePlayersListToLocalStorage()
+    private fun writePlayersListToLocalStorage()
     {
         val fileName = Constants.FILENAME_PLAYERS_LIST
-        val fileContents = Gson().toJson(playersList)
+        val fileContents = Gson().toJson(playersPresenceList)
         this.openFileOutput(fileName, Context.MODE_PRIVATE).use {
             it.write(fileContents.toByteArray())
         }
@@ -107,8 +115,8 @@ class PlayersActivity : AppCompatActivity() {
     private class MyListAdapter(
         context: Context,
         private val layout: Int,
-        private val mObjects: MutableList<String>
-    ) : ArrayAdapter<String>(context, layout, mObjects) {
+        private val mObjects: MutableList<PlayerPresence>
+    ) : ArrayAdapter<PlayerPresence>(context, layout, mObjects) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val viewHolder: ViewHolder
@@ -117,7 +125,7 @@ class PlayersActivity : AppCompatActivity() {
             if (convertView == null) {
                 view = LayoutInflater.from(context).inflate(layout, parent, false)
                 viewHolder = ViewHolder(
-                    thumbnail = null,
+                    selectPlayerName = view.findViewById(R.id.buttonSelectPlayerNameItem),
                     title = view.findViewById(R.id.list_item_text),
                     button = view.findViewById(R.id.list_item_removeButton)
                 )
@@ -132,14 +140,22 @@ class PlayersActivity : AppCompatActivity() {
                 mObjects.removeAt(position)
                 notifyDataSetChanged()
             }
+            viewHolder.selectPlayerName.setOnClickListener {
+                mObjects[position].isPresent = !mObjects[position].isPresent
+                Helpers.playSoundEffect(this.context, if(mObjects[position].isPresent) R.raw.checkbox_on else R.raw.checkbox_off)
+                notifyDataSetChanged()
+            }
 
-            viewHolder.title.text = getItem(position)
+            val item = getItem(position)
+            viewHolder.title.text =item!!.playerName
+            viewHolder.selectPlayerName.text = if(item.isPresent) context.getString(R.string.present) else context.getString(R.string.absent)
+            viewHolder.selectPlayerName.backgroundTintList = ContextCompat.getColorStateList(context, if(item.isPresent) R.color.present else R.color.absent)
 
             return view
         }
 
         data class ViewHolder(
-            val thumbnail: ImageView?,
+            val selectPlayerName: AppCompatButton,
             val title: TextView,
             val button: Button
         )

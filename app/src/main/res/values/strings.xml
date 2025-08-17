@@ -107,4 +107,6 @@
     <string name="touch"> (لمس کنید)</string>
     <string name="dont_touch"> (لمس نکنید)</string>
     <string name="hardliving_shield_dropped">زره %1$s افتاد و او حالا یک شهروند است.</string>
+    <string name="present">حاضر</string>
+    <string name="absent">غایب</string>
 </resources>
