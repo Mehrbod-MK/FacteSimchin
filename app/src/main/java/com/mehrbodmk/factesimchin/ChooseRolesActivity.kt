@@ -41,9 +41,10 @@ class ChooseRolesActivity : AppCompatActivity() {
         allPickers.forEach { picker ->
             picker.minValue = 0
             picker.maxValue = players.size
+            picker.value = 0
             picker.setWrapSelectorWheel(true)
         }
-        initiateDefaultValues()
+        distributePlayers()
         updateStats()
         allPickers.forEach { picker -> picker.setOnValueChangedListener { _, _, _ ->
             updateStats()
@@ -62,6 +63,39 @@ class ChooseRolesActivity : AppCompatActivity() {
             assignRolesIntent.putStringArrayListExtra(Constants.INTENT_PLAYERS_NAMES_LIST, players)
             startActivity(assignRolesIntent)
         }
+    }
+
+    private fun distributePlayers()
+    {
+        var numPlayers = players.count()
+        var roleIndex = 0
+        while(numPlayers-- > 0)
+        {
+            if(roleIndex >= RoleTypes.entries.count())
+            {
+                numPlayers++
+                break
+            }
+            when(RoleTypes.entries[roleIndex++])
+            {
+                RoleTypes.GODFATHER -> findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value++
+                RoleTypes.MAFIA -> findViewById<NumberPicker>(R.id.numberPickerNumMafias).value++
+                RoleTypes.BOMBER ->
+                {
+                    findViewById<NumberPicker>(R.id.numberPickerNumBombers).value++
+                    findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value++
+                }
+                RoleTypes.CITIZEN -> findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value++
+                RoleTypes.DETECTIVE -> findViewById<NumberPicker>(R.id.numberPickerNumDetectives).value++
+                RoleTypes.DOCTOR -> findViewById<NumberPicker>(R.id.numberPickerNumDoctors).value++
+                RoleTypes.SNIPER -> findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value++
+                RoleTypes.GUNNER -> findViewById<NumberPicker>(R.id.numberPickerNumGunners).value++
+                RoleTypes.HARDLIVING -> findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value++
+                RoleTypes.DETONATOR -> { /* Do nothing. */ }
+            }
+        }
+        if(numPlayers > 0)
+            findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value += numPlayers
     }
 
     private fun findAllNumberPickers(root: ViewGroup): List<NumberPicker> {
@@ -86,7 +120,7 @@ class ChooseRolesActivity : AppCompatActivity() {
         val numCitizens = roles.filter { it.isMafia == false }.sumOf { it.count }
         val numNeutrals = roles.filter { it.isMafia == null }.sumOf { it.count }
         textViewChosenRoleStats.text = getString(R.string.chosen_role_stats, numMafias, numCitizens,
-            numNeutrals, players.count())
+            numNeutrals, numMafias + numCitizens + numNeutrals, players.count())
     }
 
     private fun checkRolesCount() : Boolean
@@ -94,6 +128,7 @@ class ChooseRolesActivity : AppCompatActivity() {
         val roleTypes = getListOfRoleNamesAndCount()
         val numMafias = roleTypes.filter { it.isMafia == true }.sumOf { it.count }
         val numCitizens = roleTypes.filter { it.isMafia == false }.sumOf { it.count }
+        val numNeutrals = roleTypes.filter { it.isMafia == null }.sumOf { it.count }
         if(numMafias == 0)
         {
             Toast.makeText(this@ChooseRolesActivity, R.string.why_no_mafias, Toast.LENGTH_SHORT).show()
@@ -106,27 +141,13 @@ class ChooseRolesActivity : AppCompatActivity() {
             Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
             return false
         }
-        return true
-    }
-
-    private fun initiateDefaultValues()
-    {
-        for(role in RoleTypes.entries)
+        else if((numMafias + numCitizens + numNeutrals) > players.count())
         {
-            when(role)
-            {
-                RoleTypes.GODFATHER -> findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value = 1
-                RoleTypes.MAFIA -> findViewById<NumberPicker>(R.id.numberPickerNumMafias).value = 1
-                RoleTypes.BOMBER -> findViewById<NumberPicker>(R.id.numberPickerNumBombers).value = 1
-                RoleTypes.CITIZEN -> findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value = 1
-                RoleTypes.DETECTIVE -> findViewById<NumberPicker>(R.id.numberPickerNumDetectives).value = 1
-                RoleTypes.DOCTOR -> findViewById<NumberPicker>(R.id.numberPickerNumDoctors).value = 1
-                RoleTypes.SNIPER -> findViewById<NumberPicker>(R.id.numberPickerNumSnipers).value = 1
-                RoleTypes.GUNNER -> findViewById<NumberPicker>(R.id.numberPickerNumGunners).value = 1
-                RoleTypes.HARDLIVING -> findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value = 1
-                RoleTypes.DETONATOR -> findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value = 1
-            }
+            Toast.makeText(this@ChooseRolesActivity, R.string.too_many_roles, Toast.LENGTH_SHORT).show()
+            Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
+            return false
         }
+        return true
     }
 
     private fun getListOfRoleNamesAndCount() : ArrayList<RoleTypeAndCount>

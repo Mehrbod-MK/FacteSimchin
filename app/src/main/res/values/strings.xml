@@ -15,7 +15,8 @@
     <string name="at_least_5_players">‌حداقل 5 بازیکن برای بازی نیاز است.</string>
     <string name="why_no_mafias">شهر بدون مافیا نمیشه که…</string>
     <string name="mafia_always_wins">اینطوری که همیشه مافیا برنده اس…</string>
-    <string name="chosen_role_stats">مافیا:  %1$d |  شهروند:  %2$d | خنثی:  %3$d\nتعداد کل بازیکنان:  %4$d</string>
+    <string name="too_many_roles">تعداد نقش ها بیشتر از تعداد کل بازیکنان است.</string>
+    <string name="chosen_role_stats">مافیا:  %1$d |  شهروند:  %2$d | خنثی:  %3$d\nتعداد کل انتخابی:  %4$d\nتعداد کل بازیکنان:  %5$d</string>
     <string name="role_godfather">پدرخوانده</string>
     <string name="role_mafia">مافیا</string>
     <string name="role_bomber">بمب‌گذار</string>
