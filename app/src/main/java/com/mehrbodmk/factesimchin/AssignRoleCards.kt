@@ -44,6 +44,7 @@ class AssignRoleCards : AppCompatActivity() {
     {
         const val ROLE_NAME_GODFATHER = "GodFather"
         const val ROLE_NAME_MAFIA = "Mafia"
+        const val ROLE_NAME_NEGOTIATOR = "Mafia"
         const val ROLE_NAME_BOMBER = "Bomber"
         const val ROLE_NAME_CITIZEN = "Citizen"
         const val ROLE_NAME_DETECTIVE = "Detective"
@@ -76,6 +77,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.GUNNER -> context.getString(R.string.role_gunner)
                 RoleTypes.DETONATOR -> context.getString(R.string.role_detonator)
                 RoleTypes.HARDLIVING -> context.getString(R.string.role_hardliving)
+                RoleTypes.NEGOTIATOR -> context.getString(R.string.role_negotiator)
             }
         }
 
@@ -92,6 +94,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.GUNNER -> ROLE_NAME_GUNNER
                 RoleTypes.DETONATOR -> ROLE_NAME_DETONATOR
                 RoleTypes.HARDLIVING -> ROLE_NAME_HARDLIVING
+                RoleTypes.NEGOTIATOR -> ROLE_NAME_NEGOTIATOR
             }
         }
 
@@ -109,6 +112,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.GUNNER    -> Role(ROLE_NAME_GUNNER, getRoleLocalName(context, roleType), false, RoleTypes.GUNNER)
                 RoleTypes.DETONATOR -> Role(ROLE_NAME_DETONATOR, getRoleLocalName(context, roleType), false, RoleTypes.DETONATOR)
                 RoleTypes.HARDLIVING -> Role(ROLE_NAME_HARDLIVING, getRoleLocalName(context, roleType), false, RoleTypes.HARDLIVING)
+                RoleTypes.NEGOTIATOR -> Role(ROLE_NAME_NEGOTIATOR, getRoleLocalName(context, roleType), true, RoleTypes.NEGOTIATOR)
             }
         }
 
@@ -126,6 +130,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.GUNNER      -> R.drawable.card_gunner
                 RoleTypes.DETONATOR   -> R.drawable.card_detonator
                 RoleTypes.HARDLIVING -> R.drawable.card_hardliving
+                RoleTypes.NEGOTIATOR -> R.drawable.card_negotiator
             }
         }
 
@@ -142,6 +147,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.GUNNER -> R.drawable.role_gunner
                 RoleTypes.DETONATOR -> R.drawable.role_detonator
                 RoleTypes.HARDLIVING -> R.drawable.role_hardliving
+                RoleTypes.NEGOTIATOR -> R.drawable.role_negotiator
             }
         }
     }

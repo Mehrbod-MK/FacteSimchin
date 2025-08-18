@@ -507,7 +507,7 @@ class MainGameActivity : AppCompatActivity() {
                 val verbString = getString(R.string.bomber_does_what)
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.BOMBER }
                 val missions = getPossibleMissionsForRole(RoleTypes.BOMBER)
-                val targetPlayers = gameSession.players.filter { !it.isDead && it.role.isMafia != true }
+                val targetPlayers = gameSession.players.filter { !it.isDead }
                 nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_bomber, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DOCTOR_SAVES_WHO ->
@@ -611,7 +611,8 @@ class MainGameActivity : AppCompatActivity() {
                 val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -634,8 +635,9 @@ class MainGameActivity : AppCompatActivity() {
             {
                 val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
+                val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -722,8 +724,8 @@ class MainGameActivity : AppCompatActivity() {
 
             NightStepsInOrder.NEGOTIATOR_SHOW_LIKE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.MAFIA,
-                    R.drawable.card_mafia, R.string.show_like, R.string.role_negotiator)
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.NEGOTIATOR,
+                    R.drawable.card_negotiator, R.string.show_like, R.string.role_negotiator)
             }
         }
 
@@ -776,6 +778,10 @@ class MainGameActivity : AppCompatActivity() {
                 arrayListOf(Missions.DETONATOR_DETONATES)
             }
             RoleTypes.HARDLIVING ->
+            {
+                arrayListOf()
+            }
+            RoleTypes.NEGOTIATOR ->
             {
                 arrayListOf()
             }

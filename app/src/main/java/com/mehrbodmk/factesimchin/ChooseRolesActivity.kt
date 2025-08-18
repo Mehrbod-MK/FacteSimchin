@@ -92,6 +92,7 @@ class ChooseRolesActivity : AppCompatActivity() {
                 RoleTypes.GUNNER -> findViewById<NumberPicker>(R.id.numberPickerNumGunners).value++
                 RoleTypes.HARDLIVING -> findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value++
                 RoleTypes.DETONATOR -> { /* Do nothing. */ }
+                RoleTypes.NEGOTIATOR -> findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value++
             }
         }
         if(numPlayers > 0)

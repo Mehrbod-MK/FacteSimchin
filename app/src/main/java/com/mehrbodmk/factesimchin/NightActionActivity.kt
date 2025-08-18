@@ -101,9 +101,10 @@ class NightActionActivity : AppCompatActivity() {
                 selectedSourcePlayerItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedSourcePlayerIndex =
-                    selectedSourcePlayerItem; dialog.dismiss()
+                selectedSourcePlayerIndex = selectedSourcePlayerItem
+                dialog.dismiss()
                 updateUI()
+                selectMissionDialog()
             }
             .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
         alertDialogSelectSourcePlayer.show()
@@ -118,8 +119,10 @@ class NightActionActivity : AppCompatActivity() {
                 selectedMission = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedMissionIndex =
-                    selectedMission; dialog.dismiss(); updateUI()
+                selectedMissionIndex = selectedMission
+                dialog.dismiss()
+                updateUI()
+                selectTargetPlayerDialog()
             }
             .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
         alertDialogSelectMission.show()
@@ -134,8 +137,9 @@ class NightActionActivity : AppCompatActivity() {
                 selectedTargetPlayerItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedTargetPlayerIndex =
-                    selectedTargetPlayerItem; dialog.dismiss(); updateUI()
+                selectedTargetPlayerIndex = selectedTargetPlayerItem
+                dialog.dismiss()
+                updateUI()
             }
             .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
         alertDialogSelectTargetPlayer.show()
@@ -150,8 +154,9 @@ class NightActionActivity : AppCompatActivity() {
                 selectedNatoGuessedRoleItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedNatoGuessedRoleIndex =
-                    selectedNatoGuessedRoleItem; dialog.dismiss(); updateUI()
+                selectedNatoGuessedRoleIndex = selectedNatoGuessedRoleItem
+                dialog.dismiss()
+                updateUI()
             }
             .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
         alertDialogChooseGodFatherNatoGuessedRole.show()
@@ -166,8 +171,9 @@ class NightActionActivity : AppCompatActivity() {
                 selectedBombCodeItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedBombCodeIndex =
-                    selectedBombCodeItem; dialog.dismiss(); updateUI()
+                selectedBombCodeIndex = selectedBombCodeItem
+                dialog.dismiss()
+                updateUI()
             }
             .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
         alertDialogChooseBombCode.show()

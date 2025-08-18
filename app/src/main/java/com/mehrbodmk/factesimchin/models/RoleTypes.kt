@@ -6,6 +6,7 @@ import com.mehrbodmk.factesimchin.utils.Constants
 enum class RoleTypes(val roleName: String) {
     GODFATHER(AssignRoleCards.ROLE_NAME_GODFATHER),
     MAFIA(AssignRoleCards.ROLE_NAME_MAFIA),
+    NEGOTIATOR(AssignRoleCards.ROLE_NAME_NEGOTIATOR),
     BOMBER(AssignRoleCards.ROLE_NAME_BOMBER),
     CITIZEN(AssignRoleCards.ROLE_NAME_CITIZEN),
     DETECTIVE(AssignRoleCards.ROLE_NAME_DETECTIVE),
