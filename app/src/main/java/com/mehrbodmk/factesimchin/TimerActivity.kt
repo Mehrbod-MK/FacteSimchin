@@ -49,6 +49,8 @@ class TimerActivity : AppCompatActivity() {
 
         gameSession = intent.extras?.getParcelable(Constants.INTENT_GAME_SESSION)!!
 
+        gameSession.timerValue = gameSession.initialTimerValue
+
         textViewTimerValue = findViewById(R.id.textViewTimerValue)
         textViewTimerText = findViewById(R.id.textViewTimerText)
         buttonTimerAddTime = findViewById(R.id.buttonTimerAddTime)

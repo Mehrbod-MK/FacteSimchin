@@ -19,6 +19,7 @@
     <string name="chosen_role_stats">مافیا:  %1$d |  شهروند:  %2$d | خنثی:  %3$d\nتعداد کل انتخابی:  %4$d\nتعداد کل بازیکنان:  %5$d</string>
     <string name="role_godfather">پدرخوانده</string>
     <string name="role_mafia">مافیا</string>
+    <string name="role_negotiator">مذاکره کننده</string>
     <string name="role_bomber">بمب‌گذار</string>
     <string name="role_citizen">شهروند</string>
     <string name="role_detective">کارآگاه</string>
@@ -114,4 +115,5 @@
     <string name="hardliving_shield_dropped">زره %1$s افتاد و او حالا یک شهروند است.</string>
     <string name="present">حاضر</string>
     <string name="absent">غایب</string>
+    <string name="player_name_and_role_format">%1$s (%2$s)</string>
 </resources>

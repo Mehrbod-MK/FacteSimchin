@@ -567,9 +567,15 @@ class MainGameActivity : AppCompatActivity() {
                 nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_gunner, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecision()
-            NightStepsInOrder.DISPLAY_EVENTS -> decideNewDayEvents()
+            NightStepsInOrder.DISPLAY_EVENTS ->
+            {
+                decideNewDayEvents()
+                bypassNightDecision()
+                return
+            }
             NightStepsInOrder.WAKE_HARDLIVING -> bypassNightDecision()
             NightStepsInOrder.SLEEP_HARDLIVING -> bypassNightDecision()
+            NightStepsInOrder.NEGOTIATOR_SHOW_LIKE -> bypassNightDecision()
         }
 
         // Simple wake/sleep.
@@ -640,53 +646,53 @@ class MainGameActivity : AppCompatActivity() {
             }
             NightStepsInOrder.WAKE_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DOCTOR,
-                    R.drawable.card_doctor, R.string.wake_up, R.string.role_doctor)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.WAKE_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETECTIVE,
-                    R.drawable.card_detective, R.string.wake_up, R.string.role_detective)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.WAKE_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.SNIPER,
-                    R.drawable.card_sniper, R.string.wake_up, R.string.role_sniper)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.WAKE_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.GUNNER,
-                    R.drawable.card_gunner, R.string.wake_up, R.string.role_gunner)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.WAKE_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETONATOR,
-                    R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_DOCTOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DOCTOR,
-                    R.drawable.card_doctor, R.string.sleep, R.string.role_doctor)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_DETECTIVE ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETECTIVE,
-                    R.drawable.card_detective, R.string.sleep, R.string.role_detective)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_SNIPER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.SNIPER,
-                    R.drawable.card_sniper, R.string.sleep, R.string.role_sniper)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_GUNNER ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.GUNNER,
-                    R.drawable.card_gunner, R.string.sleep, R.string.role_gunner)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_DETONATOR ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.DETONATOR,
-                    R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
+                bypassNightDecisionFirstRound()
+                return
             }
 
             NightStepsInOrder.WAKE_UP_EVERYONE ->
@@ -705,13 +711,19 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.DISPLAY_EVENTS -> bypassNightDecisionFirstRound()
             NightStepsInOrder.WAKE_HARDLIVING ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.HARDLIVING,
-                    R.drawable.card_hardliving, R.string.wake_up, R.string.role_hardliving)
+                bypassNightDecisionFirstRound()
+                return
             }
             NightStepsInOrder.SLEEP_HARDLIVING ->
             {
-                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.HARDLIVING,
-                    R.drawable.card_hardliving, R.string.sleep, R.string.role_hardliving)
+                bypassNightDecisionFirstRound()
+                return
+            }
+
+            NightStepsInOrder.NEGOTIATOR_SHOW_LIKE ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.MAFIA,
+                    R.drawable.card_mafia, R.string.show_like, R.string.role_negotiator)
             }
         }
 

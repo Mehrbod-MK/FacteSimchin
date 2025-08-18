@@ -93,7 +93,7 @@ class NightActionActivity : AppCompatActivity() {
         buttonSourcePlayers.setOnClickListener {
             val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.choose_source_player))
-                .setSingleChoiceItems(nightAction.candidateSourcePlayers.map { it.name }.toTypedArray(), selectedSourcePlayerItem) { _, which ->
+                .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers).toTypedArray(), selectedSourcePlayerItem) { _, which ->
                     selectedSourcePlayerItem = which
                 }
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
@@ -119,7 +119,7 @@ class NightActionActivity : AppCompatActivity() {
         buttonTargetPlayers.setOnClickListener {
             val alertDialogSelectTargetPlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.choose_target_player))
-                .setSingleChoiceItems(nightAction.candidateTargetPlayers.map { it.name }.toTypedArray(), selectedTargetPlayerItem) { _, which ->
+                .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers).toTypedArray(), selectedTargetPlayerItem) { _, which ->
                     selectedTargetPlayerItem = which
                 }
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
@@ -174,6 +174,17 @@ class NightActionActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, answerIntent)
             finish()
         }
+    }
+
+    private fun getPlayerNamesAndRoleNames(players: Iterable<Player>) : ArrayList<String>
+    {
+        val result: ArrayList<String> = arrayListOf()
+        for(player in players)
+        {
+            result.add(getString(R.string.player_name_and_role_format, player.name,
+                AssignRoleCards.getRoleLocalName(this@NightActionActivity, player.role.type)))
+        }
+        return result
     }
 
     private fun resetNightUI()
