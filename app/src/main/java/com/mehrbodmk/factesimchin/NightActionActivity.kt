@@ -79,83 +79,121 @@ class NightActionActivity : AppCompatActivity() {
 
         imageViewNightActionCard.setImageResource(nightAction.cardResId)
         attachEvents()
+        updateUI()
+    }
+
+    private fun fastUISelection()
+    {
+        if(nightAction.candidateSourcePlayers.size == 1)
+            selectedSourcePlayerIndex = 0
+        if(nightAction.missions.size == 1)
+            selectedMissionIndex = 0
+        if(nightAction.candidateTargetPlayers.size == 1)
+            selectedTargetPlayerIndex = 0
+    }
+
+    private fun selectSourcePlayerItemDialog()
+    {
+        var selectedSourcePlayerItem = 0
+        val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.choose_source_player))
+            .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers).toTypedArray(), selectedSourcePlayerItem) { _, which ->
+                selectedSourcePlayerItem = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                selectedSourcePlayerIndex =
+                    selectedSourcePlayerItem; dialog.dismiss()
+                updateUI()
+            }
+            .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+        alertDialogSelectSourcePlayer.show()
+    }
+
+    private fun selectMissionDialog()
+    {
+        var selectedMission = 0
+        val alertDialogSelectMission = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.choose_mission))
+            .setSingleChoiceItems(getMissionsLocalNames(nightAction.missions), selectedMission) { _, which ->
+                selectedMission = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                selectedMissionIndex =
+                    selectedMission; dialog.dismiss(); updateUI()
+            }
+            .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+        alertDialogSelectMission.show()
+    }
+
+    private fun selectTargetPlayerDialog()
+    {
+        var selectedTargetPlayerItem = 0
+        val alertDialogSelectTargetPlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.choose_target_player))
+            .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers).toTypedArray(), selectedTargetPlayerItem) { _, which ->
+                selectedTargetPlayerItem = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                selectedTargetPlayerIndex =
+                    selectedTargetPlayerItem; dialog.dismiss(); updateUI()
+            }
+            .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+        alertDialogSelectTargetPlayer.show()
+    }
+
+    private fun selectNatoGuessedRoleDialog()
+    {
+        var selectedNatoGuessedRoleItem = 0
+        val alertDialogChooseGodFatherNatoGuessedRole = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.choose_godfahter_nato))
+            .setSingleChoiceItems(AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries).toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
+                selectedNatoGuessedRoleItem = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                selectedNatoGuessedRoleIndex =
+                    selectedNatoGuessedRoleItem; dialog.dismiss(); updateUI()
+            }
+            .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+        alertDialogChooseGodFatherNatoGuessedRole.show()
+    }
+
+    private fun selectBombCodeDialog()
+    {
+        var selectedBombCodeItem = 0
+        val alertDialogChooseBombCode = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.choose_bomb_code))
+            .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), selectedBombCodeItem) { _, which ->
+                selectedBombCodeItem = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                selectedBombCodeIndex =
+                    selectedBombCodeItem; dialog.dismiss(); updateUI()
+            }
+            .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
+        alertDialogChooseBombCode.show()
     }
 
     @SuppressLint("SetTextI18n")
     private fun attachEvents()
     {
-        var selectedSourcePlayerItem = 0
-        var selectedMission = 0
-        var selectedTargetPlayerItem = 0
-        var selectedNatoGuessedRoleItem = 0
-        var selectedBombCodeItem = 0
-
         buttonSourcePlayers.setOnClickListener {
-            val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.choose_source_player))
-                .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers).toTypedArray(), selectedSourcePlayerItem) { _, which ->
-                    selectedSourcePlayerItem = which
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    selectedSourcePlayerIndex =
-                        selectedSourcePlayerItem; dialog.dismiss(); updateUI()
-                }
-                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
-            alertDialogSelectSourcePlayer.show()
+            selectSourcePlayerItemDialog()
         }
+
         buttonMissions.setOnClickListener {
-            val alertDialogSelectMission = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.choose_mission))
-                .setSingleChoiceItems(getMissionsLocalNames(nightAction.missions), selectedMission) { _, which ->
-                    selectedMission = which
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    selectedMissionIndex =
-                        selectedMission; dialog.dismiss(); updateUI()
-                }
-                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
-            alertDialogSelectMission.show()
+            selectMissionDialog()
         }
+
         buttonTargetPlayers.setOnClickListener {
-            val alertDialogSelectTargetPlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.choose_target_player))
-                .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers).toTypedArray(), selectedTargetPlayerItem) { _, which ->
-                    selectedTargetPlayerItem = which
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    selectedTargetPlayerIndex =
-                        selectedTargetPlayerItem; dialog.dismiss(); updateUI()
-                }
-                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
-            alertDialogSelectTargetPlayer.show()
+            selectTargetPlayerDialog()
         }
 
         // Special Roles Action Buttons.
         buttonChooseGodfatherNatoGuessedRole.setOnClickListener {
-            val alertDialogChooseGodFatherNatoGuessedRole = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.choose_godfahter_nato))
-                .setSingleChoiceItems(AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries).toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
-                    selectedNatoGuessedRoleItem = which
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    selectedNatoGuessedRoleIndex =
-                        selectedNatoGuessedRoleItem; dialog.dismiss(); updateUI()
-                }
-                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
-            alertDialogChooseGodFatherNatoGuessedRole.show()
+            selectNatoGuessedRoleDialog()
         }
         buttonChooseBomberBombCode.setOnClickListener {
-            val alertDialogChooseBombCode = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.choose_bomb_code))
-                .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), selectedBombCodeItem) { _, which ->
-                    selectedBombCodeItem = which
-                }
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                    selectedBombCodeIndex =
-                        selectedBombCodeItem; dialog.dismiss(); updateUI()
-                }
-                .setNegativeButton(getString(R.string.cancel), { dialog, _ -> dialog.dismiss(); })
-            alertDialogChooseBombCode.show()
+            selectBombCodeDialog()
         }
 
         buttonAddNightCommand.setOnClickListener {
@@ -173,6 +211,12 @@ class NightActionActivity : AppCompatActivity() {
             answerIntent.putParcelableArrayListExtra(Constants.INTENT_NIGHT_COMMANDS, nightCommands)
             setResult(Activity.RESULT_OK, answerIntent)
             finish()
+        }
+
+        buttonRemoveAllNightCommands.setOnClickListener {
+            nightCommands.clear()
+            textViewlistMissions.text = ""
+            updateUI()
         }
     }
 
@@ -269,6 +313,7 @@ class NightActionActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateUI()
     {
+        fastUISelection()
         val chooseString = getString(R.string.choose)
         if(selectedSourcePlayerIndex >= 0)
         {
