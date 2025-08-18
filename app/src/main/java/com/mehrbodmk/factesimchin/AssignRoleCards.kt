@@ -220,7 +220,7 @@ class AssignRoleCards : AppCompatActivity() {
 
     private fun assignNewRoleToCurrentPlayer()
     {
-        val pickedRole = roleTypesAndCount.filter { it.count > 0 }.random()
+        val pickedRole = roleTypesAndCount.filter { it.count > 0 }.shuffled().first()
         currentPlayerRole = getRole(this@AssignRoleCards, pickedRole.roleType)
         pickedRole.count--;
         if(pickedRole.count <= 0)

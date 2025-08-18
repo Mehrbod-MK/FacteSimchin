@@ -11,4 +11,5 @@ data class Player(
     var isDead: Boolean = false,
     var nightStatus: NightStatus = NightStatus(),
     var showRole: Boolean = false,
+    var playerState: PlayerStates = PlayerStates.NORMAL
 ) : Parcelable

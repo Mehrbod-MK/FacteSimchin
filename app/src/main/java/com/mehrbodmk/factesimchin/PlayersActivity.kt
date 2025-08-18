@@ -124,6 +124,7 @@ class PlayersActivity : AppCompatActivity() {
         private val mObjects: MutableList<PlayerPresence>
     ) : ArrayAdapter<PlayerPresence>(context, layout, mObjects) {
 
+        @SuppressLint("SetTextI18n")
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val viewHolder: ViewHolder
             val view: View
@@ -153,7 +154,7 @@ class PlayersActivity : AppCompatActivity() {
             }
 
             val item = getItem(position)
-            viewHolder.title.text =item!!.playerName
+            viewHolder.title.text ="${position + 1}-  ${item!!.playerName}"
             viewHolder.selectPlayerName.text = if(item.isPresent) context.getString(R.string.present) else context.getString(R.string.absent)
             viewHolder.selectPlayerName.backgroundTintList = ContextCompat.getColorStateList(context, if(item.isPresent) R.color.present else R.color.absent)
 

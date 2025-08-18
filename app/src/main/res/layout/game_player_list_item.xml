@@ -1,117 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinePlayerNumber"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9" />
+        android:orientation="horizontal"
+        android:background="#00000000">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinePlayerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/textViewPlayerNumber"
+            android:textColor="#f0f0f0"
+            android:background="#00000000"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/role_mafia"
+            />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinePlayerButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/textViewPlayerName"
+            android:textColor="#ffffff"
+            android:background="#00000000"
+            android:gravity="center"
+            android:layout_marginHorizontal="7dp"
+            android:textSize="20sp"
+            android:text="@string/role_mafia"
+            />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinePlayerButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.3" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/textViewPlayerRole"
+            android:textColor="#ffffff"
+            android:background="#00000000"
+            android:gravity="center"
+            android:layout_marginHorizontal="7dp"
+            android:textSize="17sp"
+            android:text="@string/role_mafia"
+            />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinePlayerButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:id="@+id/imageViewRole"
+            android:background="#00000000"
+            />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:id="@+id/textViewPlayerNumber"
-        app:layout_constraintStart_toStartOf="@id/guidelinePlayerNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#f0f0f0"
-        android:background="#00000000"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:id="@+id/buttonSetPlayerGeneralStatus"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:backgroundTint="#3F51B5"
+            android:textColor="#ffffff"
+            android:text="@string/present"
+            android:textSize="15sp"
+            />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:id="@+id/textViewPlayerName"
-        app:layout_constraintStart_toStartOf="@id/guidelinePlayerName"
-        app:layout_constraintEnd_toEndOf="@id/guidelinePlayerNumber"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#ffffff"
-        android:background="#00000000"
-        android:gravity="center"
-        android:layout_marginHorizontal="7dp"
-        android:textSize="20sp"
-        />
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:id="@+id/buttonSetPlayerDeadStatus"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:backgroundTint="#3F51B5"
+            android:textColor="#ffffff"
+            android:text="@string/present"
+            android:textSize="17sp"
+            />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:id="@+id/textViewPlayerRole"
-        app:layout_constraintStart_toStartOf="@id/guidelinePlayerButton1"
-        app:layout_constraintEnd_toEndOf="@id/guidelinePlayerName"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#ffffff"
-        android:background="#00000000"
-        android:gravity="center"
-        android:layout_marginHorizontal="7dp"
-        android:textSize="20sp"
-        />
+    </LinearLayout>
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        app:layout_constraintStart_toStartOf="@id/guidelinePlayerButton2"
-        app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton1"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/imageViewRole"
-        android:background="#00000000"
-        />
-
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:id="@+id/checkBoxSelectPlayer"
-        app:layout_constraintStart_toStartOf="@id/guidelinePlayerButton3"
-        app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:buttonTint="#00BCD4"
-        />
-
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:id="@+id/checkBoxPlayerIsDead"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelinePlayerButton3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:buttonTint="#ff0000"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:text="@string/is_dead"
-        android:textSize="12sp"
-        />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

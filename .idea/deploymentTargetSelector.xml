@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="facte-simchin">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-08-16T18:25:28.231711800Z">
+        <DropdownSelection timestamp="2025-08-18T21:45:37.611182900Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Asus\.android\avd\Pixel_9.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCWA0FRCXM" />
             </handle>
           </Target>
         </DropdownSelection>

@@ -7,4 +7,9 @@
     <color name="red">#FF0000</color>
     <color name="present">#3A853D</color>
     <color name="absent">#853A3A</color>
+    <color name="state_normal">#454545</color>
+    <color name="state_got_challenge">#9C27B0</color>
+    <color name="state_voted">#857A1F</color>
+    <color name="state_bookmarked">#344294</color>
+    <color name="state_kicked">#A22D25</color>
 </resources>

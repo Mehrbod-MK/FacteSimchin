@@ -15,8 +15,8 @@
     <string name="at_least_5_players">‌حداقل 5 بازیکن برای بازی نیاز است.</string>
     <string name="why_no_mafias">شهر بدون مافیا نمیشه که…</string>
     <string name="mafia_always_wins">اینطوری که همیشه مافیا برنده اس…</string>
-    <string name="too_many_roles">تعداد نقش ها بیشتر از تعداد کل بازیکنان است.</string>
-    <string name="chosen_role_stats">مافیا:  %1$d |  شهروند:  %2$d | خنثی:  %3$d\nتعداد کل انتخابی:  %4$d\nتعداد کل بازیکنان:  %5$d</string>
+    <string name="incorrect_number_of_roles">نقش ها باید با تعداد بازیکنان برابر باشد.</string>
+    <string name="chosen_role_stats">مافیا:  %1$d |  شهروند:  %2$d | خنثی:  %3$d\nتعداد کل نقش ها:  %4$d\nتعداد کل بازیکنان:  %5$d</string>
     <string name="role_godfather">پدرخوانده</string>
     <string name="role_mafia">مافیا</string>
     <string name="role_negotiator">مذاکره کننده</string>
@@ -116,4 +116,12 @@
     <string name="present">حاضر</string>
     <string name="absent">غایب</string>
     <string name="player_name_and_role_format">%1$s (%2$s)</string>
+    <string name="dead">مرده</string>
+    <string name="alive">زنده</string>
+    <string name="player_state_normal">عادی</string>
+    <string name="player_state_got_challenge">چالش</string>
+    <string name="player_state_voted">رأی</string>
+    <string name="player_state_bookmarked">مهم</string>
+    <string name="player_state_kicked">اخراج</string>
+    <string name="citizen_abbreviation">شهر</string>
 </resources>

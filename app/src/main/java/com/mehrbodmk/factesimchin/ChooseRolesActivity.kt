@@ -130,7 +130,13 @@ class ChooseRolesActivity : AppCompatActivity() {
         val numMafias = roleTypes.filter { it.isMafia == true }.sumOf { it.count }
         val numCitizens = roleTypes.filter { it.isMafia == false }.sumOf { it.count }
         val numNeutrals = roleTypes.filter { it.isMafia == null }.sumOf { it.count }
-        if(numMafias == 0)
+        if((numMafias + numCitizens + numNeutrals) != players.count())
+        {
+            Toast.makeText(this@ChooseRolesActivity, R.string.incorrect_number_of_roles, Toast.LENGTH_SHORT).show()
+            Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
+            return false
+        }
+        else if(numMafias == 0)
         {
             Toast.makeText(this@ChooseRolesActivity, R.string.why_no_mafias, Toast.LENGTH_SHORT).show()
             Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
@@ -139,12 +145,6 @@ class ChooseRolesActivity : AppCompatActivity() {
         else if(numMafias >= numCitizens)
         {
             Toast.makeText(this@ChooseRolesActivity, R.string.mafia_always_wins, Toast.LENGTH_SHORT).show()
-            Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
-            return false
-        }
-        else if((numMafias + numCitizens + numNeutrals) > players.count())
-        {
-            Toast.makeText(this@ChooseRolesActivity, R.string.too_many_roles, Toast.LENGTH_SHORT).show()
             Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
             return false
         }

@@ -20,10 +20,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.transition.Visibility
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
 import com.mehrbodmk.factesimchin.models.Missions
@@ -31,6 +31,7 @@ import com.mehrbodmk.factesimchin.models.NightAction
 import com.mehrbodmk.factesimchin.models.NightStatus
 import com.mehrbodmk.factesimchin.models.NightStepsInOrder
 import com.mehrbodmk.factesimchin.models.Player
+import com.mehrbodmk.factesimchin.models.PlayerStates
 import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.models.commands.NightCommand
 import com.mehrbodmk.factesimchin.models.commands.SleepOrWakeSomeoneCommand
@@ -130,6 +131,9 @@ class MainGameActivity : AppCompatActivity() {
 
         val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
         createGameSession(players)
+
+        playersListAdapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
+        listViewPlayers.adapter = playersListAdapter
 
         updateUI()
     }
@@ -845,12 +849,13 @@ class MainGameActivity : AppCompatActivity() {
         Helpers.stopMainMenuMusic()
     }
 
-    private fun updateUI()
+    private fun updateUI(signalDataChange: Boolean = true)
     {
+        if(signalDataChange)
+            listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity,
+                R.layout.game_player_list_item,
+                gameSession.players)
         textViewGameTurn.text = getGameTurnText()
-        playersListAdapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
-        listViewPlayers.adapter = playersListAdapter
-
         buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
             View.INVISIBLE else View.VISIBLE
         buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
@@ -876,6 +881,13 @@ class MainGameActivity : AppCompatActivity() {
             getString(R.string.game_turn, gameSession.round, "")
     }
 
+    override fun onResume() {
+        super.onResume()
+        listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity,
+            R.layout.game_player_list_item,
+            gameSession.players)  // Rebind if needed
+    }
+
     private class PlayersListAdapter(
         context: Context,
         private val layout: Int,
@@ -894,8 +906,8 @@ class MainGameActivity : AppCompatActivity() {
                     playerName = view.findViewById(R.id.textViewPlayerName),
                     playerRole = view.findViewById(R.id.textViewPlayerRole),
                     playerRoleImage = view.findViewById(R.id.imageViewRole),
-                    checkBoxSelect = view.findViewById(R.id.checkBoxSelectPlayer),
-                    isDeadCheckBox = view.findViewById(R.id.checkBoxPlayerIsDead)
+                    buttonSetPlayerGeneralStatus = view.findViewById(R.id.buttonSetPlayerGeneralStatus),
+                    buttonSetPlayerDeadStatus = view.findViewById(R.id.buttonSetPlayerDeadStatus)
                 )
                 view.tag = viewHolder
             } else {
@@ -910,25 +922,75 @@ class MainGameActivity : AppCompatActivity() {
             viewHolder.playerRoleImage.setImageResource(AssignRoleCards.getRoleImageThumbnailResource(item.role.type))
             viewHolder.playerRole.visibility = if(item.showRole) View.VISIBLE else View.INVISIBLE
             viewHolder.playerRoleImage.visibility = if(item.showRole) View.VISIBLE else View.INVISIBLE
-            viewHolder.isDeadCheckBox.setOnCheckedChangeListener(null)
-            viewHolder.isDeadCheckBox.isChecked = item.isDead
-            viewHolder.isDeadCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            viewHolder.buttonSetPlayerGeneralStatus.setOnClickListener(null)
+            viewHolder.buttonSetPlayerDeadStatus.setOnClickListener(null)
+            viewHolder.buttonSetPlayerGeneralStatus.setOnClickListener {
+                item.playerState = PlayerStates.entries[(PlayerStates.entries.indexOf(item.playerState) + 1) % PlayerStates.entries.count()]
+                notifyDataSetChanged()
+            }
+            viewHolder.buttonSetPlayerDeadStatus.setOnClickListener {
                 val mainGameActivity = (context as? MainGameActivity)
                 // Check special condition for Hard-Living.
                 if(item.role.type == RoleTypes.HARDLIVING)
                 {
                     // Turn it into simple citizen.
                     item.role = AssignRoleCards.getRole(context, RoleTypes.CITIZEN)
-                    mainGameActivity?.updateUI()
+                    mainGameActivity?.updateUI(false)
                 }
                 else
                 {
-                    item.isDead = isChecked
+                    item.isDead = !item.isDead
                     mainGameActivity?.updateStats()
                 }
+                notifyDataSetChanged()
             }
+            viewHolder.buttonSetPlayerDeadStatus.backgroundTintList = ContextCompat.getColorStateList(context, if(item.isDead) R.color.absent else R.color.present)
+            viewHolder.buttonSetPlayerDeadStatus.text = if(item.isDead) context.getString(R.string.dead) else context.getString(R.string.alive)
+            setPlayerStatusOnButton(item, viewHolder.buttonSetPlayerGeneralStatus)
 
             return view
+        }
+
+        private fun setPlayerStatusOnButton(player: Player, button: AppCompatButton)
+        {
+            when(player.playerState)
+            {
+                PlayerStates.NORMAL ->
+                {
+                    button.text = context.getString(R.string.player_state_normal)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.state_normal)
+                }
+                PlayerStates.GOT_CHALLENGE ->
+                {
+                    button.text = context.getString(R.string.player_state_got_challenge)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.state_got_challenge)
+                }
+                PlayerStates.VOTED ->
+                {
+                    button.text = context.getString(R.string.player_state_voted)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.state_voted)
+                }
+                PlayerStates.BOOKMARKED ->
+                {
+                    button.text = context.getString(R.string.player_state_bookmarked)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.state_bookmarked)
+                }
+                PlayerStates.KICKED ->
+                {
+                    button.text = context.getString(R.string.player_state_kicked)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.state_kicked)
+                }
+                PlayerStates.CITIZEN ->
+                {
+                    button.text = context.getString(R.string.citizen_abbreviation)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.present)
+                }
+                PlayerStates.MAFIA ->
+                {
+                    button.text = context.getString(R.string.mafia)
+                    button.backgroundTintList = ContextCompat.getColorStateList(context, R.color.absent)
+                }
+            }
         }
 
         data class PlayerViewHolder(
@@ -936,8 +998,8 @@ class MainGameActivity : AppCompatActivity() {
             val playerName: TextView,
             val playerRole: TextView,
             val playerRoleImage: ImageView,
-            val checkBoxSelect: AppCompatCheckBox,
-            val isDeadCheckBox: AppCompatCheckBox
+            val buttonSetPlayerGeneralStatus: AppCompatButton,
+            val buttonSetPlayerDeadStatus: AppCompatButton,
         )
     }
 }

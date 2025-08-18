@@ -95,13 +95,15 @@ class NightActionActivity : AppCompatActivity() {
     private fun selectSourcePlayerItemDialog()
     {
         var selectedSourcePlayerItem = 0
+        val items = getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers)
         val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_source_player))
-            .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers).toTypedArray(), selectedSourcePlayerItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedSourcePlayerItem) { _, which ->
                 selectedSourcePlayerItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedSourcePlayerIndex = selectedSourcePlayerItem
+                if(selectedSourcePlayerItem >= 0 && selectedSourcePlayerItem < items.count())
+                    selectedSourcePlayerIndex = selectedSourcePlayerItem
                 dialog.dismiss()
                 updateUI()
                 selectMissionDialog()
@@ -113,13 +115,15 @@ class NightActionActivity : AppCompatActivity() {
     private fun selectMissionDialog()
     {
         var selectedMission = 0
+        val items = getMissionsLocalNames(nightAction.missions)
         val alertDialogSelectMission = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_mission))
-            .setSingleChoiceItems(getMissionsLocalNames(nightAction.missions), selectedMission) { _, which ->
+            .setSingleChoiceItems(items, selectedMission) { _, which ->
                 selectedMission = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedMissionIndex = selectedMission
+                if(selectedMission >= 0 && selectedMission < items.count())
+                    selectedMissionIndex = selectedMission
                 dialog.dismiss()
                 updateUI()
                 selectTargetPlayerDialog()
@@ -131,13 +135,15 @@ class NightActionActivity : AppCompatActivity() {
     private fun selectTargetPlayerDialog()
     {
         var selectedTargetPlayerItem = 0
+        val items = getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers)
         val alertDialogSelectTargetPlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_target_player))
-            .setSingleChoiceItems(getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers).toTypedArray(), selectedTargetPlayerItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedTargetPlayerItem) { _, which ->
                 selectedTargetPlayerItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedTargetPlayerIndex = selectedTargetPlayerItem
+                if(selectedTargetPlayerItem >= 0 && selectedTargetPlayerItem < items.count())
+                    selectedTargetPlayerIndex = selectedTargetPlayerItem
                 dialog.dismiss()
                 updateUI()
             }
@@ -148,13 +154,15 @@ class NightActionActivity : AppCompatActivity() {
     private fun selectNatoGuessedRoleDialog()
     {
         var selectedNatoGuessedRoleItem = 0
+        val items = AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries)
         val alertDialogChooseGodFatherNatoGuessedRole = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_godfahter_nato))
-            .setSingleChoiceItems(AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries).toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
                 selectedNatoGuessedRoleItem = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                selectedNatoGuessedRoleIndex = selectedNatoGuessedRoleItem
+                if(selectedNatoGuessedRoleItem >= 0 && selectedNatoGuessedRoleItem < items.count())
+                    selectedNatoGuessedRoleIndex = selectedNatoGuessedRoleItem
                 dialog.dismiss()
                 updateUI()
             }
