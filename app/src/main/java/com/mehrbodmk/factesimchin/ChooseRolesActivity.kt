@@ -164,6 +164,7 @@ class ChooseRolesActivity : AppCompatActivity() {
         result.add(RoleTypeAndCount(RoleTypes.GUNNER, findViewById<NumberPicker>(R.id.numberPickerNumGunners).value, false))
         result.add(RoleTypeAndCount(RoleTypes.HARDLIVING, findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value, false))
         result.add(RoleTypeAndCount(RoleTypes.DETONATOR, findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value, false))
+        result.add(RoleTypeAndCount(RoleTypes.NEGOTIATOR, findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value, true))
         return result
     }
 }
