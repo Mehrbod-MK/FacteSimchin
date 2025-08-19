@@ -98,10 +98,8 @@ class NightActionActivity : AppCompatActivity() {
         val items = getPlayerNamesAndRoleNames(nightAction.candidateSourcePlayers)
         val alertDialogSelectSourcePlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_source_player))
-            .setSingleChoiceItems(items.toTypedArray(), selectedSourcePlayerItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedSourcePlayerItem) { dialog, which ->
                 selectedSourcePlayerItem = which
-            }
-            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 if(selectedSourcePlayerItem >= 0 && selectedSourcePlayerItem < items.count())
                     selectedSourcePlayerIndex = selectedSourcePlayerItem
                 dialog.dismiss()
@@ -118,10 +116,8 @@ class NightActionActivity : AppCompatActivity() {
         val items = getMissionsLocalNames(nightAction.missions)
         val alertDialogSelectMission = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_mission))
-            .setSingleChoiceItems(items, selectedMission) { _, which ->
+            .setSingleChoiceItems(items, selectedMission) { dialog, which ->
                 selectedMission = which
-            }
-            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 if(selectedMission >= 0 && selectedMission < items.count())
                     selectedMissionIndex = selectedMission
                 dialog.dismiss()
@@ -138,10 +134,8 @@ class NightActionActivity : AppCompatActivity() {
         val items = getPlayerNamesAndRoleNames(nightAction.candidateTargetPlayers)
         val alertDialogSelectTargetPlayer = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_target_player))
-            .setSingleChoiceItems(items.toTypedArray(), selectedTargetPlayerItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedTargetPlayerItem) { dialog, which ->
                 selectedTargetPlayerItem = which
-            }
-            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 if(selectedTargetPlayerItem >= 0 && selectedTargetPlayerItem < items.count())
                     selectedTargetPlayerIndex = selectedTargetPlayerItem
                 dialog.dismiss()
@@ -157,10 +151,8 @@ class NightActionActivity : AppCompatActivity() {
         val items = AssignRoleCards.getRolesLocalNames(this@NightActionActivity, RoleTypes.entries)
         val alertDialogChooseGodFatherNatoGuessedRole = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_godfahter_nato))
-            .setSingleChoiceItems(items.toTypedArray(), selectedNatoGuessedRoleItem) { _, which ->
+            .setSingleChoiceItems(items.toTypedArray(), selectedNatoGuessedRoleItem) { dialog, which ->
                 selectedNatoGuessedRoleItem = which
-            }
-            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 if(selectedNatoGuessedRoleItem >= 0 && selectedNatoGuessedRoleItem < items.count())
                     selectedNatoGuessedRoleIndex = selectedNatoGuessedRoleItem
                 dialog.dismiss()
@@ -175,10 +167,8 @@ class NightActionActivity : AppCompatActivity() {
         var selectedBombCodeItem = 0
         val alertDialogChooseBombCode = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.choose_bomb_code))
-            .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), selectedBombCodeItem) { _, which ->
+            .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), selectedBombCodeItem) { dialog, which ->
                 selectedBombCodeItem = which
-            }
-            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 selectedBombCodeIndex = selectedBombCodeItem
                 dialog.dismiss()
                 updateUI()

@@ -159,6 +159,7 @@ class MainGameActivity : AppCompatActivity() {
                     dayEventsStringBuilder.appendLine(getString(R.string.talk_failed_because,
                         player.name,
                         AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
+                    dayEventsStringBuilder.appendLine()
                 }
                 // Otherwise, turn the simple citizen into simple mafia.
                 else
@@ -166,6 +167,7 @@ class MainGameActivity : AppCompatActivity() {
                     player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
                     dayEventsStringBuilder.appendLine(getString(R.string.talk_success,
                         player.name))
+                    dayEventsStringBuilder.appendLine()
                 }
             }
             // Check if player was sniped.
@@ -176,6 +178,7 @@ class MainGameActivity : AppCompatActivity() {
                 {
                     player.isDead = true
                     dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
+                    dayEventsStringBuilder.appendLine()
                 }
                 // Else if it was a citizen, then dismiss the sniper instead.
                 else if(player.role.isMafia == false)
@@ -183,6 +186,7 @@ class MainGameActivity : AppCompatActivity() {
                     val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
                     sniperPlayer!!.isDead = true
                     dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_wrong_snipe, sniperPlayer.name))
+                    dayEventsStringBuilder.appendLine()
                 }
             }
             // Player is shot by Godfather.
@@ -193,6 +197,7 @@ class MainGameActivity : AppCompatActivity() {
                 {
                     dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player_from_godfather,
                         player.name))
+                    dayEventsStringBuilder.appendLine()
                 }
                 // Player is hard-living, drop its shield by turning it into simple citizen.
                 else if(player.role.type == RoleTypes.HARDLIVING)
@@ -200,12 +205,14 @@ class MainGameActivity : AppCompatActivity() {
                     player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.CITIZEN)
                     dayEventsStringBuilder.appendLine(getString(R.string.hardliving_shield_dropped,
                         player.name))
+                    dayEventsStringBuilder.appendLine()
                 }
                 // Player was not saved, kill them.
                 else
                 {
                     player.isDead = true
                     dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_mafia_shot, player.name))
+                    dayEventsStringBuilder.appendLine()
                 }
             }
             // Player is attempted to being natoed.
@@ -217,6 +224,7 @@ class MainGameActivity : AppCompatActivity() {
                     player.isDead = true
                     dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_natoed,
                         player.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
+                    dayEventsStringBuilder.appendLine()
                 }
                 // Role guess was wrong.
                 else
@@ -224,9 +232,9 @@ class MainGameActivity : AppCompatActivity() {
                     dayEventsStringBuilder.appendLine(getString(R.string.nato_failed,
                         player.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type),
                         AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.nightStatus.guessedNatoRole!!)))
+                    dayEventsStringBuilder.appendLine()
                 }
             }
-            dayEventsStringBuilder.appendLine()
         }
 
         val resultString = dayEventsStringBuilder.toString()
