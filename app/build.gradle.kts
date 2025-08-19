@@ -12,8 +12,8 @@ android {
         applicationId = "com.mehrbodmk.factesimchin"
         minSdk = 28
         targetSdk = 36
-        versionCode = 5
-        versionName = "0.3.0.0"
+        versionCode = 6
+        versionName = "0.3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
