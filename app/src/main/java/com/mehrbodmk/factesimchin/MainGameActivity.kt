@@ -415,7 +415,8 @@ class MainGameActivity : AppCompatActivity() {
                 val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -437,7 +438,8 @@ class MainGameActivity : AppCompatActivity() {
                 val godfathers = getPlayerNamesByRole(RoleTypes.GODFATHER)
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers
+                val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
+                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -506,7 +508,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.isMafia == true }
                 val missions = getPossibleMissionsForRole(RoleTypes.GODFATHER)
                 val targetPlayers = gameSession.players.filter { !it.isDead && it.role.isMafia != true }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_godfather, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_godfather, roleLocalName, RoleTypes.GODFATHER, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.BOMBER_BOMBS_WHO ->
             {
@@ -520,7 +522,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.BOMBER }
                 val missions = getPossibleMissionsForRole(RoleTypes.BOMBER)
                 val targetPlayers = gameSession.players.filter { !it.isDead }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_bomber, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_bomber, roleLocalName, RoleTypes.BOMBER, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DOCTOR_SAVES_WHO ->
             {
@@ -534,7 +536,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.DOCTOR }
                 val missions = getPossibleMissionsForRole(RoleTypes.DOCTOR)
                 val targetPlayers = gameSession.players.filter { !it.isDead }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_doctor, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_doctor, roleLocalName, RoleTypes.DOCTOR, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DETECTIVE_ACKNOWLEDGES_WHO ->
             {
@@ -548,7 +550,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.DETECTIVE }
                 val missions = getPossibleMissionsForRole(RoleTypes.DETECTIVE)
                 val targetPlayers = gameSession.players.filter { !it.isDead }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_detective, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_detective, roleLocalName, RoleTypes.DETECTIVE, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.SNIPER_SHOOTS_WHO ->
             {
@@ -562,7 +564,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.SNIPER }
                 val missions = getPossibleMissionsForRole(RoleTypes.SNIPER)
                 val targetPlayers = gameSession.players.filter { !it.isDead }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_sniper, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_sniper, roleLocalName, RoleTypes.SNIPER, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.GUNNER_GIVES_BULLETS_TO_WHO ->
             {
@@ -576,7 +578,7 @@ class MainGameActivity : AppCompatActivity() {
                 val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.GUNNER }
                 val missions = getPossibleMissionsForRole(RoleTypes.GUNNER)
                 val targetPlayers = gameSession.players.filter { !it.isDead }
-                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_gunner, roleLocalName, verbString, sourcePlayers, missions, targetPlayers))
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_gunner, roleLocalName, RoleTypes.GUNNER, verbString, sourcePlayers, missions, targetPlayers))
             }
             NightStepsInOrder.DETONATOR_DETONATES_WHO -> bypassNightDecision()
             NightStepsInOrder.DISPLAY_EVENTS ->

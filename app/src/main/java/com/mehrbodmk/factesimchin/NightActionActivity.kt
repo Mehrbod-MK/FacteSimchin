@@ -32,11 +32,15 @@ class NightActionActivity : AppCompatActivity() {
     private lateinit var buttonTargetPlayers: AppCompatButton
     private lateinit var buttonAddNightCommand: AppCompatButton
     private lateinit var buttonRemoveAllNightCommands: AppCompatButton
-    private lateinit var textViewlistMissions: TextView
+    private lateinit var textViewListMissions: TextView
     private lateinit var buttonChooseGodfatherNatoGuessedRole: AppCompatButton
     private lateinit var buttonAcceptNightActions: AppCompatButton
     private lateinit var linearLayoutBomberBomb: LinearLayout
     private lateinit var buttonChooseBomberBombCode: AppCompatButton
+
+    private lateinit var linearLayoutSourcePlayer: LinearLayout
+    private lateinit var linearLayoutMission: LinearLayout
+    private lateinit var linearLayoutTargetPlayer: LinearLayout
 
     private lateinit var linearLayoutGodfatherNato: LinearLayout
 
@@ -70,12 +74,15 @@ class NightActionActivity : AppCompatActivity() {
         buttonTargetPlayers = findViewById(R.id.buttonChooseTargetPlayer)
         buttonAddNightCommand = findViewById(R.id.buttonAddNightCommand)
         buttonRemoveAllNightCommands = findViewById(R.id.buttonRemoveAllNightCommands)
-        textViewlistMissions = findViewById(R.id.textViewListMissions)
+        textViewListMissions = findViewById(R.id.textViewListMissions)
         linearLayoutGodfatherNato = findViewById(R.id.linearLayoutGodfatherNato)
         buttonChooseGodfatherNatoGuessedRole = findViewById(R.id.buttonChooseGodfatherNatoGuessedRole)
         buttonAcceptNightActions = findViewById(R.id.buttonAcceptNightActions)
         linearLayoutBomberBomb = findViewById(R.id.linearLayoutBomberBomb)
         buttonChooseBomberBombCode = findViewById(R.id.buttonChooseBomberBombCode)
+        linearLayoutSourcePlayer = findViewById(R.id.linearLayoutSourcePlayer)
+        linearLayoutMission = findViewById(R.id.linearLayoutMission)
+        linearLayoutTargetPlayer = findViewById(R.id.linearLayoutTargetPlayer)
 
         imageViewNightActionCard.setImageResource(nightAction.cardResId)
         attachEvents()
@@ -84,10 +91,46 @@ class NightActionActivity : AppCompatActivity() {
 
     private fun fastUISelection()
     {
+        // Reset UI status.
+        linearLayoutSourcePlayer.visibility = View.VISIBLE
+        linearLayoutMission.visibility = View.VISIBLE
+        linearLayoutTargetPlayer.visibility = View.VISIBLE
+        buttonAddNightCommand.visibility = View.VISIBLE
+        buttonRemoveAllNightCommands.visibility = View.VISIBLE
+
+        // If there are no source players available, hide the whole UI.
+        if(nightAction.candidateSourcePlayers.isEmpty())
+        {
+            linearLayoutSourcePlayer.visibility = View.GONE
+            linearLayoutMission.visibility = View.GONE
+            linearLayoutTargetPlayer.visibility = View.GONE
+            buttonAddNightCommand.visibility = View.GONE
+            buttonRemoveAllNightCommands.visibility = View.GONE
+            return
+        }
+
         if(nightAction.candidateSourcePlayers.size == 1)
+        {
             selectedSourcePlayerIndex = 0
+            linearLayoutSourcePlayer.visibility = View.GONE
+        }
+        else
+        {
+            // Check mafia status for UI.
+            if(nightAction.roleType == RoleTypes.GODFATHER)
+            {
+                // If GodFather is alive, select it by default.
+                // Otherwise, choose the next available mafia.
+                selectedSourcePlayerIndex = nightAction.candidateSourcePlayers.indexOfFirst { it.role.type == RoleTypes.GODFATHER }
+                if(selectedSourcePlayerIndex < 0)
+                    selectedSourcePlayerIndex = nightAction.candidateSourcePlayers.indexOfFirst { it.role.isMafia == true }
+            }
+        }
         if(nightAction.missions.size == 1)
+        {
             selectedMissionIndex = 0
+            linearLayoutMission.visibility = View.GONE
+        }
         if(nightAction.candidateTargetPlayers.size == 1)
             selectedTargetPlayerIndex = 0
     }
@@ -206,7 +249,7 @@ class NightActionActivity : AppCompatActivity() {
             if(newNightCommand != null)
             {
                 nightCommands.add(newNightCommand)
-                textViewlistMissions.text = "${textViewlistMissions.text}\n${getNightCommandString(newNightCommand)}"
+                textViewListMissions.text = "${textViewListMissions.text}\n${getNightCommandString(newNightCommand)}"
             }
         }
 
@@ -219,7 +262,7 @@ class NightActionActivity : AppCompatActivity() {
 
         buttonRemoveAllNightCommands.setOnClickListener {
             nightCommands.clear()
-            textViewlistMissions.text = ""
+            textViewListMissions.text = ""
             updateUI()
         }
     }
