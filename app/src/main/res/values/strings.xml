@@ -28,6 +28,7 @@
     <string name="role_gunner">تفنگ‌دار</string>
     <string name="role_detonator">نگهبان</string>
     <string name="role_hardliving">روئین‌تن</string>
+    <string name="role_joker">جوکر</string>
     <string name="accept">تأیید</string>
     <string name="assign_roles_please_click">تعیین نقش بازیکنان\nنامبرده بر روی کارت خود کلیک کند.</string>
     <string name="player_name">نام بازیکن</string>
@@ -124,4 +125,11 @@
     <string name="player_state_bookmarked">مهم</string>
     <string name="player_state_kicked">اخراج</string>
     <string name="citizen_abbreviation">شهر</string>
+    <string name="joker_turned_mafia">بازیکن %1$s جوکر بود و حالا مافیا شد، چون %2$s.</string>
+    <string name="joker_turned_citizen">بازیکن %1$s جوکر بود و حالا شهروند شد، چون %2$s.</string>
+    <string name="reason_mafia_negotiated">مافیا مذاکره کرد</string>
+    <string name="reason_sniper_shot">اسنایپر شلیک کرد</string>
+    <string name="reason_mafia_natoed">مافیا ناتویی کرد</string>
+    <string name="reason_mafia_shot">مافیا شلیک تیر شب کرد</string>
+    <string name="reason_doctor_saved">دکتر نجاتش داد</string>
 </resources>

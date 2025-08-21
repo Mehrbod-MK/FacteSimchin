@@ -150,50 +150,19 @@ class MainGameActivity : AppCompatActivity() {
 
         for(player in gameSession.players)
         {
-            // Check if player is talked into being mafia.
-            if(!player.isDead && player.nightStatus.isTalkedIntoMafia)
-            {
-                // If the player has a special role other than citizen, reject it.
-                if(player.role.type != RoleTypes.CITIZEN)
-                {
-                    dayEventsStringBuilder.appendLine(getString(R.string.talk_failed_because,
-                        player.name,
-                        AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
-                    dayEventsStringBuilder.appendLine()
-                }
-                // Otherwise, turn the simple citizen into simple mafia.
-                else
-                {
-                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
-                    dayEventsStringBuilder.appendLine(getString(R.string.talk_success,
-                        player.name))
-                    dayEventsStringBuilder.appendLine()
-                }
-            }
-            // Check if player was sniped.
-            if(!player.isDead && player.nightStatus.snipedBy != null)
-            {
-                // If player was a mafia, congratulate sniper and kill the mafia!
-                if(player.role.isMafia == true)
-                {
-                    player.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
-                    dayEventsStringBuilder.appendLine()
-                }
-                // Else if it was a citizen, then dismiss the sniper instead.
-                else if(player.role.isMafia == false)
-                {
-                    val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
-                    sniperPlayer!!.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_wrong_snipe, sniperPlayer.name))
-                    dayEventsStringBuilder.appendLine()
-                }
-            }
             // Player is shot by Godfather.
             if(!player.isDead && player.nightStatus.isShotByGodfather)
             {
+                // If player is a joker, turn it into mafia.
+                if(player.role.type == RoleTypes.JOKER)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
+                    dayEventsStringBuilder.appendLine(getString(R.string.joker_turned_mafia,
+                        player.name, getString(R.string.reason_mafia_shot)))
+                    dayEventsStringBuilder.appendLine()
+                }
                 // Player is saved by doctor, so they won't die.
-                if(player.nightStatus.isSavedByDoctor)
+                else if(player.nightStatus.isSavedByDoctor)
                 {
                     dayEventsStringBuilder.appendLine(getString(R.string.doctor_saved_player_from_godfather,
                         player.name))
@@ -215,9 +184,47 @@ class MainGameActivity : AppCompatActivity() {
                     dayEventsStringBuilder.appendLine()
                 }
             }
+
+            // Check if player is talked into being mafia.
+            if(!player.isDead && player.nightStatus.isTalkedIntoMafia)
+            {
+                // If player is a joker, turn it into mafia.
+                if(player.role.type == RoleTypes.JOKER)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
+                    dayEventsStringBuilder.appendLine(getString(R.string.joker_turned_mafia,
+                        player.name, getString(R.string.reason_mafia_negotiated)))
+                    dayEventsStringBuilder.appendLine()
+                }
+                // If the player has a special role other than citizen, reject it.
+                else if(player.role.type != RoleTypes.CITIZEN)
+                {
+                    dayEventsStringBuilder.appendLine(getString(R.string.talk_failed_because,
+                        player.name,
+                        AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type)))
+                    dayEventsStringBuilder.appendLine()
+                }
+                // Otherwise, turn the simple citizen into simple mafia.
+                else
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
+                    dayEventsStringBuilder.appendLine(getString(R.string.talk_success,
+                        player.name))
+                    dayEventsStringBuilder.appendLine()
+                }
+            }
+
             // Player is attempted to being natoed.
             if(!player.isDead && player.nightStatus.isNatoed)
             {
+                // If player is a joker, turn it into mafia.
+                if(player.role.type == RoleTypes.JOKER)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.MAFIA)
+                    dayEventsStringBuilder.appendLine(getString(R.string.joker_turned_mafia,
+                        player.name, getString(R.string.reason_mafia_natoed)))
+                    dayEventsStringBuilder.appendLine()
+                }
                 // Citizen's role was correctly guessed by mafia.
                 if(player.nightStatus.guessedNatoRole == player.role.type)
                 {
@@ -232,6 +239,47 @@ class MainGameActivity : AppCompatActivity() {
                     dayEventsStringBuilder.appendLine(getString(R.string.nato_failed,
                         player.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type),
                         AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.nightStatus.guessedNatoRole!!)))
+                    dayEventsStringBuilder.appendLine()
+                }
+            }
+
+            // Check if player was saved by doctor.
+            if(!player.isDead && player.nightStatus.isSavedByDoctor)
+            {
+                // If player is a joker, turn it into citizen.
+                if(player.role.type == RoleTypes.JOKER)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.CITIZEN)
+                    dayEventsStringBuilder.appendLine(getString(R.string.joker_turned_citizen,
+                        player.name, getString(R.string.reason_doctor_saved)))
+                    dayEventsStringBuilder.appendLine()
+                }
+            }
+
+            // Check if player was sniped.
+            if(player.nightStatus.snipedBy != null)
+            {
+                // If player is a joker, turn it into citizen.
+                if(player.role.type == RoleTypes.JOKER)
+                {
+                    player.role = AssignRoleCards.getRole(this@MainGameActivity, RoleTypes.CITIZEN)
+                    dayEventsStringBuilder.appendLine(getString(R.string.joker_turned_citizen,
+                        player.name, getString(R.string.reason_sniper_shot)))
+                    dayEventsStringBuilder.appendLine()
+                }
+                // If player was a mafia, congratulate sniper and kill the mafia!
+                else if(player.role.isMafia == true)
+                {
+                    player.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
+                    dayEventsStringBuilder.appendLine()
+                }
+                // Else if it was a citizen, then dismiss the sniper instead.
+                else if(player.role.isMafia == false)
+                {
+                    val sniperPlayer = gameSession.players.find { it.name == player.nightStatus.snipedBy!!.sniper.name }
+                    sniperPlayer!!.isDead = true
+                    dayEventsStringBuilder.appendLine(getString(R.string.say_goodbye_to_because_wrong_snipe, sniperPlayer.name))
                     dayEventsStringBuilder.appendLine()
                 }
             }
@@ -796,6 +844,10 @@ class MainGameActivity : AppCompatActivity() {
                 arrayListOf()
             }
             RoleTypes.NEGOTIATOR ->
+            {
+                arrayListOf()
+            }
+            RoleTypes.JOKER ->
             {
                 arrayListOf()
             }

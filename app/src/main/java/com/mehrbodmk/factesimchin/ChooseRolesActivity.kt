@@ -88,11 +88,12 @@ class ChooseRolesActivity : AppCompatActivity() {
                 RoleTypes.CITIZEN -> findViewById<NumberPicker>(R.id.numberPickerNumCitizens).value++
                 RoleTypes.DETECTIVE -> findViewById<NumberPicker>(R.id.numberPickerNumDetectives).value++
                 RoleTypes.DOCTOR -> findViewById<NumberPicker>(R.id.numberPickerNumDoctors).value++
-                RoleTypes.SNIPER -> findViewById<NumberPicker>(R.id.numberPickerNumGodFathers).value++
+                RoleTypes.SNIPER -> findViewById<NumberPicker>(R.id.numberPickerNumSnipers).value++
                 RoleTypes.GUNNER -> findViewById<NumberPicker>(R.id.numberPickerNumGunners).value++
                 RoleTypes.HARDLIVING -> findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value++
                 RoleTypes.DETONATOR -> { /* Do nothing. */ }
                 RoleTypes.NEGOTIATOR -> findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value++
+                RoleTypes.JOKER -> findViewById<NumberPicker>(R.id.numberPickerNumJokers).value++
             }
         }
         if(numPlayers > 0)
@@ -165,6 +166,7 @@ class ChooseRolesActivity : AppCompatActivity() {
         result.add(RoleTypeAndCount(RoleTypes.HARDLIVING, findViewById<NumberPicker>(R.id.numberPickerNumHardLivings).value, false))
         result.add(RoleTypeAndCount(RoleTypes.DETONATOR, findViewById<NumberPicker>(R.id.numberPickerNumDetonators).value, false))
         result.add(RoleTypeAndCount(RoleTypes.NEGOTIATOR, findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value, true))
+        result.add(RoleTypeAndCount(RoleTypes.JOKER, findViewById<NumberPicker>(R.id.numberPickerNumJokers).value, null))
         return result
     }
 }
