@@ -380,38 +380,72 @@ class MainGameActivity : AppCompatActivity() {
         {
             Missions.GODFATHER_SHOOTS_PLAYER ->
             {
-                foundTargetPlayer.nightStatus.isShotByGodfather = true
+                // If GodFather is not drunk, shoot player.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                    foundTargetPlayer.nightStatus.isShotByGodfather = true
             }
             Missions.GODFATHER_NATOS_PLAYER ->
             {
-                foundTargetPlayer.nightStatus.isNatoed = true
-                foundTargetPlayer.nightStatus.guessedNatoRole = nightCommand.natoGuessedRole
+                // If GodFather is not drunk, nato player.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.isNatoed = true
+                    foundTargetPlayer.nightStatus.guessedNatoRole = nightCommand.natoGuessedRole
+                }
             }
             Missions.BOMBER_BOMBS_PLAYER ->
             {
-                gameSession.bombsActive.add(Bomb(foundSourcePlayer, foundTargetPlayer, nightCommand.bombCode!!))
+                // If bomber is not drunk, plant bomb.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    gameSession.bombsActive.add(Bomb(foundSourcePlayer, foundTargetPlayer, nightCommand.bombCode!!))
+                }
             }
-            Missions.DETECTIVE_ACKNOWLEDGES_PLAYER -> { /* Do nothing. */ }
+            Missions.DETECTIVE_ACKNOWLEDGES_PLAYER -> { /* Do nothing. If the detective is drunk, their acknowledgements must be inverted in NightAction activity, */ }
             Missions.DOCTOR_HEALS_PLAYER ->
             {
-                foundTargetPlayer.nightStatus.isSavedByDoctor = true
+                // If doctor is not drunk, set save status.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.isSavedByDoctor = true
+                }
             }
             Missions.SNIPER_SHOOTS_PLAYER ->
             {
-                foundTargetPlayer.nightStatus.snipedBy = Snipe(foundSourcePlayer)
+                // If sniper is not drunk, set save status.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.snipedBy = Snipe(foundSourcePlayer)
+                }
             }
             Missions.GUNNER_GIVES_DUMMY_BULLET ->
             {
-                foundTargetPlayer.nightStatus.hasDummyBullet = true
+                // If gunner is not drunk, hand over the dummy bullet.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.hasDummyBullet = true
+                }
             }
             Missions.GUNNER_GIVES_WAR_BULLET ->
             {
-                foundTargetPlayer.nightStatus.hasWarBullet = true
+                // If gunner is not drunk, hand over the dummy bullet.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.hasWarBullet = true
+                }
             }
             Missions.DETONATOR_DETONATES -> throw InvalidObjectException("Detonator is not allowed to detonate bombs at night...!")
             Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN ->
             {
-                foundTargetPlayer.nightStatus.isTalkedIntoMafia = true
+                // If Godfather is not drunk, negotiate.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.isTalkedIntoMafia = true
+                }
+            }
+            Missions.BARTENDER_GIVES_DRINK ->
+            {
+                foundTargetPlayer.nightStatus.isDrunk = true
             }
         }
     }
@@ -464,7 +498,7 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
+                val allMafias = godfathers + mafias + bombers + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -487,7 +521,7 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
+                val allMafias = godfathers + mafias + bombers + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -638,6 +672,30 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.WAKE_HARDLIVING -> bypassNightDecision()
             NightStepsInOrder.SLEEP_HARDLIVING -> bypassNightDecision()
             NightStepsInOrder.NEGOTIATOR_SHOW_LIKE -> bypassNightDecision()
+            NightStepsInOrder.WAKE_BARTENDER ->
+            {
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.BARTENDER,
+                    R.drawable.card_bartender, R.string.wake_up, R.string.role_bartender)
+            }
+            NightStepsInOrder.BARTENDER_DOES_WHAT ->
+            {
+                if(gameSession.players.none { it.role.type == RoleTypes.BARTENDER })
+                {
+                    bypassNightDecision()
+                    return
+                }
+                val roleLocalName = getString(R.string.role_bartender)
+                val verbString = getString(R.string.bartender_does_what)
+                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.BARTENDER }
+                val missions = getPossibleMissionsForRole(RoleTypes.BARTENDER)
+                val targetPlayers = gameSession.players.filter { !it.isDead }
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_bartender, roleLocalName, RoleTypes.BARTENDER, verbString, sourcePlayers, missions, targetPlayers))
+            }
+            NightStepsInOrder.SLEEP_BARTENDER ->
+            {
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.BARTENDER,
+                    R.drawable.card_bartender, R.string.sleep, R.string.role_bartender)
+            }
         }
 
         // Simple wake/sleep.
@@ -674,7 +732,7 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
+                val allMafias = godfathers + mafias + bombers + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -699,7 +757,7 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + '\n' + mafias + '\n' + bombers + '\n' + negotiators
+                val allMafias = godfathers + mafias + bombers + negotiators
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -789,6 +847,22 @@ class MainGameActivity : AppCompatActivity() {
                 prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.NEGOTIATOR,
                     R.drawable.card_negotiator, R.string.show_like, R.string.role_negotiator)
             }
+
+            NightStepsInOrder.WAKE_BARTENDER ->
+            {
+                bypassNightDecisionFirstRound()
+                return
+            }
+            NightStepsInOrder.BARTENDER_DOES_WHAT ->
+            {
+                bypassNightDecisionFirstRound()
+                return
+            }
+            NightStepsInOrder.SLEEP_BARTENDER ->
+            {
+                bypassNightDecisionFirstRound()
+                return
+            }
         }
 
         // Simple wake/sleep.
@@ -850,6 +924,10 @@ class MainGameActivity : AppCompatActivity() {
             RoleTypes.JOKER ->
             {
                 arrayListOf()
+            }
+            RoleTypes.BARTENDER ->
+            {
+                arrayListOf(Missions.BARTENDER_GIVES_DRINK)
             }
         }
     }

@@ -3,6 +3,9 @@ package com.mehrbodmk.factesimchin.models
 enum class NightStepsInOrder {
     SLEEP_EVERYONE,
 
+    WAKE_BARTENDER,
+    BARTENDER_DOES_WHAT,
+    SLEEP_BARTENDER,
     WAKE_ALL_MAFIAS,
     GODFATHER_SHOW_LIKE,
     GODFATHER_DOES_WHAT,

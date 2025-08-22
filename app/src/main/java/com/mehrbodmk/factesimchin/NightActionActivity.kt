@@ -298,14 +298,20 @@ class NightActionActivity : AppCompatActivity() {
             additionalInfoStringBuilder.append("(${nightCommand.bombCode}) ")
         if(nightCommand.mission == Missions.DETECTIVE_ACKNOWLEDGES_PLAYER)
         {
-            val isPositive: Boolean = (nightCommand.targetPlayer.role.isMafia == true
+            var isPositive: Boolean = (nightCommand.targetPlayer.role.isMafia == true
                     && nightCommand.targetPlayer.role.type != RoleTypes.GODFATHER)
+            // If detective is drunk, reverse the acknowledgement result.
+            if(nightCommand.sourcePlayer.nightStatus.isDrunk)
+                isPositive = !isPositive
             additionalInfoStringBuilder.append(getString(R.string.acknowledge_result,
                 if(isPositive) getString(R.string.positive) else getString(R.string.negative) ))
         }
         if(nightCommand.mission == Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN)
         {
-            val touchPlayer = nightCommand.targetPlayer.role.type == RoleTypes.CITIZEN
+            var touchPlayer = nightCommand.targetPlayer.role.type == RoleTypes.CITIZEN
+            // If negotiator is drunk, then don't apply negotiation, no matter what.
+            if(nightCommand.sourcePlayer.nightStatus.isDrunk)
+                touchPlayer = false
             additionalInfoStringBuilder.append(if(touchPlayer) getString(R.string.touch) else getString(R.string.dont_touch))
         }
 
@@ -449,6 +455,7 @@ class NightActionActivity : AppCompatActivity() {
             Missions.GUNNER_GIVES_WAR_BULLET -> getString(R.string.action_gunner_war_bullet)
             Missions.DETONATOR_DETONATES -> getString(R.string.action_detonator_detonate)
             Missions.GODFATHER_TALKS_WITH_ROLED_CITIZEN -> getString(R.string.mafia_talk)
+            Missions.BARTENDER_GIVES_DRINK -> getString(R.string.bartender_gives_drink)
         }
     }
 }
