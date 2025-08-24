@@ -150,6 +150,13 @@ class MainGameActivity : AppCompatActivity() {
 
         for(player in gameSession.players)
         {
+            // If player was drunk last night, report it.
+            if(player.nightStatus.isDrunk)
+            {
+                dayEventsStringBuilder.appendLine(getString(R.string.player_was_drunk, player.name))
+                dayEventsStringBuilder.appendLine()
+            }
+
             // Player is shot by Godfather.
             if(!player.isDead && player.nightStatus.isShotByGodfather)
             {

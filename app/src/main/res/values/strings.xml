@@ -135,4 +135,5 @@
     <string name="reason_doctor_saved">دکتر نجاتش داد</string>
     <string name="bartender_gives_drink">مست کردن</string>
     <string name="bartender_does_what">کیو مست میکنه؟</string>
+    <string name="player_was_drunk">بازیکن %1$s دیشب مست بود و عملیاتش به درستی انجام نشد.</string>
 </resources>
