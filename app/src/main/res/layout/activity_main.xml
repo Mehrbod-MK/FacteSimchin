@@ -90,19 +90,19 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/textViewMordad1404"
+                app:layout_constraintBottom_toTopOf="@+id/textViewAppVersion"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonStartGame" />
 
             <TextView
-                android:id="@+id/textViewMordad1404"
+                android:id="@+id/textViewAppVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:background="#00000000"
-                android:text="@string/mordad_1404"
+                android:text="@string/mordad_1404_with_version"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp"

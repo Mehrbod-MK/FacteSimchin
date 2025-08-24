@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
 
+    private lateinit var textViewAppVersion: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        textViewAppVersion = findViewById(R.id.textViewAppVersion)
+        textViewAppVersion.text = getString(R.string.mordad_1404_with_version, getAppVersionString())
+
         animateMafiaIcon()
         Helpers.playMainMenuMusic(this@MainActivity)
 
@@ -37,6 +43,14 @@ class MainActivity : AppCompatActivity() {
             Helpers.playSoundEffect(this@MainActivity, R.raw.button)
             startActivity(Intent(this@MainActivity, PlayersActivity::class.java))
         }
+    }
+
+    private fun getAppVersionString(): String
+    {
+        val packageManager = this.packageManager
+        val packageName = this.packageName
+        val versionName = packageManager.getPackageInfo(packageName, 0).versionName
+        return versionName!!
     }
 
     private fun animateMafiaIcon()
