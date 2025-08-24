@@ -95,6 +95,7 @@ class ChooseRolesActivity : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value++
                 RoleTypes.JOKER -> findViewById<NumberPicker>(R.id.numberPickerNumJokers).value++
                 RoleTypes.BARTENDER -> findViewById<NumberPicker>(R.id.numberPickerNumBartenders).value++
+                RoleTypes.LECTER -> findViewById<NumberPicker>(R.id.numberPickerNumDrLecters).value++
             }
         }
         if(numPlayers > 0)
@@ -169,6 +170,7 @@ class ChooseRolesActivity : AppCompatActivity() {
         result.add(RoleTypeAndCount(RoleTypes.NEGOTIATOR, findViewById<NumberPicker>(R.id.numberPickerNumNegotiators).value, true))
         result.add(RoleTypeAndCount(RoleTypes.JOKER, findViewById<NumberPicker>(R.id.numberPickerNumJokers).value, null))
         result.add(RoleTypeAndCount(RoleTypes.BARTENDER, findViewById<NumberPicker>(R.id.numberPickerNumBartenders).value, null))
+        result.add(RoleTypeAndCount(RoleTypes.LECTER, findViewById<NumberPicker>(R.id.numberPickerNumDrLecters).value, true))
         return result
     }
 }

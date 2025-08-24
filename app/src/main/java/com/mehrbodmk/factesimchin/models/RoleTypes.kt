@@ -8,6 +8,7 @@ enum class RoleTypes(val roleName: String) {
     MAFIA(AssignRoleCards.ROLE_NAME_MAFIA),
     NEGOTIATOR(AssignRoleCards.ROLE_NAME_NEGOTIATOR),
     BOMBER(AssignRoleCards.ROLE_NAME_BOMBER),
+    LECTER(AssignRoleCards.ROLE_NAME_LECTER),
     CITIZEN(AssignRoleCards.ROLE_NAME_CITIZEN),
     DETECTIVE(AssignRoleCards.ROLE_NAME_DETECTIVE),
     DOCTOR(AssignRoleCards.ROLE_NAME_DOCTOR),

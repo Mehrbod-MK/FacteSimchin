@@ -30,6 +30,7 @@
     <string name="role_hardliving">روئین‌تن</string>
     <string name="role_joker">جوکر</string>
     <string name="role_bartender">ساقی</string>
+    <string name="role_lecter">دکتر لکتر</string>
     <string name="accept">تأیید</string>
     <string name="assign_roles_please_click">تعیین نقش بازیکنان\nنامبرده بر روی کارت خود کلیک کند.</string>
     <string name="player_name">نام بازیکن</string>
@@ -88,6 +89,7 @@
     <string name="bomber_does_what">بمب میذاره؟</string>
     <string name="choose_bomb_code">کد بمب:</string>
     <string name="doctor_does_what">کیو نجات میده؟</string>
+    <string name="lecter_does_what">کدوم مافیا رو نجات میده؟</string>
     <string name="detective_does_what">استعلام کیو میگیره؟</string>
     <string name="sniper_does_what">به کی شلیک میکنه؟</string>
     <string name="gunner_does_what">به کیا تیر میده؟</string>
@@ -136,4 +138,6 @@
     <string name="bartender_gives_drink">مست کردن</string>
     <string name="bartender_does_what">کیو مست میکنه؟</string>
     <string name="player_was_drunk">بازیکن %1$s دیشب مست بود و عملیاتش به درستی انجام نشد.</string>
+    <string name="lecter_saves_mafia">نجات مافیا</string>
+    <string name="lecter_saved_mafia_from_shot">دکتر لکتر تونست مافیا %1$s رو از تیر شهر نجات بده.</string>
 </resources>

@@ -274,12 +274,22 @@ class MainGameActivity : AppCompatActivity() {
                         player.name, getString(R.string.reason_sniper_shot)))
                     dayEventsStringBuilder.appendLine()
                 }
-                // If player was a mafia, congratulate sniper and kill the mafia!
+                // If player was a mafia, check if Dr. Lecter hadn't previously saved the mafia.
                 else if(player.role.isMafia == true)
                 {
-                    player.isDead = true
-                    dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
-                    dayEventsStringBuilder.appendLine()
+                    // If saved by dr. lecter, report it.
+                    if(player.nightStatus.isSavedByDrLecter)
+                    {
+                        dayEventsStringBuilder.appendLine(getString(R.string.lecter_saved_mafia_from_shot, player.name))
+                        dayEventsStringBuilder.appendLine()
+                    }
+                    // Otherwise, congratulate the citizens!
+                    else
+                    {
+                        player.isDead = true
+                        dayEventsStringBuilder.appendLine(getString(R.string.congratulations_sniper, player.name))
+                        dayEventsStringBuilder.appendLine()
+                    }
                 }
                 // Else if it was a citizen, then dismiss the sniper instead.
                 else if(player.role.isMafia == false)
@@ -454,6 +464,14 @@ class MainGameActivity : AppCompatActivity() {
             {
                 foundTargetPlayer.nightStatus.isDrunk = true
             }
+            Missions.DR_LECTER_SAVES_MAFIA ->
+            {
+                // If Dr. Lecter is not drunk, save mafia.
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    foundTargetPlayer.nightStatus.isSavedByDrLecter = true
+                }
+            }
         }
     }
 
@@ -505,7 +523,8 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + mafias + bombers + negotiators
+                val drLecters = getPlayerNamesByRole(RoleTypes.LECTER)
+                val allMafias = godfathers + mafias + bombers + negotiators + drLecters
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -528,7 +547,8 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + mafias + bombers + negotiators
+                val drLecters = getPlayerNamesByRole(RoleTypes.LECTER)
+                val allMafias = godfathers + mafias + bombers + negotiators + drLecters
                 if(allMafias.isBlank())
                 {
                     bypassNightDecision()
@@ -703,6 +723,22 @@ class MainGameActivity : AppCompatActivity() {
                 prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.BARTENDER,
                     R.drawable.card_bartender, R.string.sleep, R.string.role_bartender)
             }
+
+            NightStepsInOrder.DR_LECTER_SHOW_LIKE -> bypassNightDecision()
+            NightStepsInOrder.DR_LECTER_SAVES_WHO ->
+            {
+                if(gameSession.players.none { it.role.isMafia == true })
+                {
+                    bypassNightDecision()
+                    return
+                }
+                val roleLocalName = getString(R.string.role_lecter)
+                val verbString = getString(R.string.lecter_does_what)
+                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.LECTER }
+                val missions = getPossibleMissionsForRole(RoleTypes.LECTER)
+                val targetPlayers = gameSession.players.filter { !it.isDead && it.role.isMafia == true }
+                nightActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_lecter, roleLocalName, RoleTypes.LECTER, verbString, sourcePlayers, missions, targetPlayers))
+            }
         }
 
         // Simple wake/sleep.
@@ -739,7 +775,8 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
-                val allMafias = godfathers + mafias + bombers + negotiators
+                val drLecters = getPlayerNamesByRole(RoleTypes.LECTER)
+                val allMafias = godfathers + mafias + bombers + negotiators + drLecters
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -764,7 +801,8 @@ class MainGameActivity : AppCompatActivity() {
                 val mafias = getPlayerNamesByRole(RoleTypes.MAFIA)
                 val negotiators = getPlayerNamesByRole(RoleTypes.NEGOTIATOR)
                 val bombers = getPlayerNamesByRole(RoleTypes.BOMBER)
-                val allMafias = godfathers + mafias + bombers + negotiators
+                val drLecters = getPlayerNamesByRole(RoleTypes.LECTER)
+                val allMafias = godfathers + mafias + bombers + negotiators + drLecters
                 if(allMafias.isBlank())
                 {
                     bypassNightDecisionFirstRound()
@@ -870,6 +908,16 @@ class MainGameActivity : AppCompatActivity() {
                 bypassNightDecisionFirstRound()
                 return
             }
+            NightStepsInOrder.DR_LECTER_SHOW_LIKE ->
+            {
+                prepareSimpleSleepOrWakeCommandFirstRound(sleepOrWakeIntent, RoleTypes.LECTER,
+                    R.drawable.card_lecter, R.string.show_like, R.string.role_lecter)
+            }
+            NightStepsInOrder.DR_LECTER_SAVES_WHO ->
+            {
+                bypassNightDecisionFirstRound()
+                return
+            }
         }
 
         // Simple wake/sleep.
@@ -935,6 +983,10 @@ class MainGameActivity : AppCompatActivity() {
             RoleTypes.BARTENDER ->
             {
                 arrayListOf(Missions.BARTENDER_GIVES_DRINK)
+            }
+            RoleTypes.LECTER ->
+            {
+                arrayListOf(Missions.DR_LECTER_SAVES_MAFIA)
             }
         }
     }

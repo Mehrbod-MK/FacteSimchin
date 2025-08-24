@@ -46,6 +46,7 @@ class AssignRoleCards : AppCompatActivity() {
         const val ROLE_NAME_MAFIA = "Mafia"
         const val ROLE_NAME_NEGOTIATOR = "Mafia"
         const val ROLE_NAME_BOMBER = "Bomber"
+        const val ROLE_NAME_LECTER = "Dr. Lecter"
         const val ROLE_NAME_CITIZEN = "Citizen"
         const val ROLE_NAME_DETECTIVE = "Detective"
         const val ROLE_NAME_DOCTOR = "Doctor"
@@ -82,6 +83,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> context.getString(R.string.role_negotiator)
                 RoleTypes.JOKER -> context.getString(R.string.role_joker)
                 RoleTypes.BARTENDER -> context.getString(R.string.role_bartender)
+                RoleTypes.LECTER -> context.getString(R.string.role_lecter)
             }
         }
 
@@ -101,6 +103,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> ROLE_NAME_NEGOTIATOR
                 RoleTypes.JOKER -> ROLE_NAME_JOKER
                 RoleTypes.BARTENDER -> ROLE_NAME_BARTENDER
+                RoleTypes.LECTER -> ROLE_NAME_LECTER
             }
         }
 
@@ -121,6 +124,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> Role(ROLE_NAME_NEGOTIATOR, getRoleLocalName(context, roleType), true, RoleTypes.NEGOTIATOR)
                 RoleTypes.JOKER -> Role(ROLE_NAME_JOKER, getRoleLocalName(context, roleType), null, RoleTypes.JOKER)
                 RoleTypes.BARTENDER -> Role(ROLE_NAME_BARTENDER, getRoleLocalName(context, roleType), null, RoleTypes.BARTENDER)
+                RoleTypes.LECTER -> Role(ROLE_NAME_LECTER, getRoleLocalName(context, roleType), true, RoleTypes.LECTER)
             }
         }
 
@@ -141,6 +145,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> R.drawable.card_negotiator
                 RoleTypes.JOKER -> R.drawable.card_joker
                 RoleTypes.BARTENDER -> R.drawable.card_bartender
+                RoleTypes.LECTER -> R.drawable.card_lecter
             }
         }
 
@@ -160,6 +165,7 @@ class AssignRoleCards : AppCompatActivity() {
                 RoleTypes.NEGOTIATOR -> R.drawable.role_negotiator
                 RoleTypes.JOKER -> R.drawable.role_joker
                 RoleTypes.BARTENDER -> R.drawable.role_bartender
+                RoleTypes.LECTER -> R.drawable.role_lecter
             }
         }
     }
