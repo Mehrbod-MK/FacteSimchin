@@ -727,7 +727,7 @@ class MainGameActivity : AppCompatActivity() {
             NightStepsInOrder.DR_LECTER_SHOW_LIKE -> bypassNightDecision()
             NightStepsInOrder.DR_LECTER_SAVES_WHO ->
             {
-                if(gameSession.players.none { it.role.isMafia == true })
+                if(gameSession.players.none { it.role.type == RoleTypes.LECTER })
                 {
                     bypassNightDecision()
                     return
