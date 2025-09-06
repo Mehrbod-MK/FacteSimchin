@@ -216,6 +216,9 @@ class AssignRoleCards : AppCompatActivity() {
             players.add(Player(currentPlayerName, currentPlayerRole))
             if(!prepareNextRoleSelection())
             {
+                // Sort players by their names in aschending order.
+                players.sortBy { it.name }
+
                 mainGameIntent.putParcelableArrayListExtra(Constants.INTENT_PLAYERS_LIST, players)
                 finish()
                 startActivity(mainGameIntent)
