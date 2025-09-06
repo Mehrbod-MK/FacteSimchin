@@ -20,6 +20,7 @@ import com.mehrbodmk.factesimchin.models.RoleTypeAndCount
 import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.Helpers
+import kotlin.random.Random
 
 class AssignRoleCards : AppCompatActivity() {
 
@@ -216,7 +217,7 @@ class AssignRoleCards : AppCompatActivity() {
             players.add(Player(currentPlayerName, currentPlayerRole))
             if(!prepareNextRoleSelection())
             {
-                // Sort players by their names in aschending order.
+                // Sort players by their names in ascending order.
                 players.sortBy { it.name }
 
                 mainGameIntent.putParcelableArrayListExtra(Constants.INTENT_PLAYERS_LIST, players)
@@ -231,7 +232,8 @@ class AssignRoleCards : AppCompatActivity() {
         if(!playerNames.any())
             return false
 
-        currentPlayerName = playerNames.random()
+        val rng = Random(System.currentTimeMillis())
+        currentPlayerName = playerNames.shuffled().random(rng)
         playerNames.remove(currentPlayerName)
         textViewPlayerName.text = currentPlayerName
         textViewPlayerRole.text = ""
@@ -244,7 +246,8 @@ class AssignRoleCards : AppCompatActivity() {
 
     private fun assignNewRoleToCurrentPlayer()
     {
-        val pickedRole = roleTypesAndCount.filter { it.count > 0 }.shuffled().first()
+        val rng = Random(System.currentTimeMillis())
+        val pickedRole = roleTypesAndCount.filter { it.count > 0 }.shuffled().random()
         currentPlayerRole = getRole(this@AssignRoleCards, pickedRole.roleType)
         pickedRole.count--;
         if(pickedRole.count <= 0)
