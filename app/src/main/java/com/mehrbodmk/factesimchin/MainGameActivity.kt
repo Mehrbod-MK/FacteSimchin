@@ -391,8 +391,8 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun makeDecisionForNightCommand(nightCommand: NightCommand)
     {
-        val foundSourcePlayer = gameSession.players.find { it == nightCommand.sourcePlayer }!!
-        val foundTargetPlayer = gameSession.players.find { it == nightCommand.targetPlayer }!!
+        val foundSourcePlayer = gameSession.players.find { it.name == nightCommand.sourcePlayer.name }!!
+        val foundTargetPlayer = gameSession.players.find { it.name == nightCommand.targetPlayer.name }!!
         when(nightCommand.mission)
         {
             Missions.GODFATHER_SHOOTS_PLAYER ->

@@ -40,6 +40,8 @@ class AssignRoleCards : AppCompatActivity() {
 
     private lateinit var cardAnimator : ObjectAnimator
 
+    private lateinit var mainGameIntent : Intent
+
     companion object
     {
         const val ROLE_NAME_GODFATHER = "GodFather"
@@ -191,6 +193,8 @@ class AssignRoleCards : AppCompatActivity() {
         if(!prepareNextRoleSelection())
             throw Exception("No players specified.")
 
+        mainGameIntent = Intent(this@AssignRoleCards, MainGameActivity::class.java)
+
         imageViewCard.setOnClickListener {
             if(!isCardEnable)
             {
@@ -212,7 +216,6 @@ class AssignRoleCards : AppCompatActivity() {
             players.add(Player(currentPlayerName, currentPlayerRole))
             if(!prepareNextRoleSelection())
             {
-                val mainGameIntent = Intent(this@AssignRoleCards, MainGameActivity::class.java)
                 mainGameIntent.putParcelableArrayListExtra(Constants.INTENT_PLAYERS_LIST, players)
                 finish()
                 startActivity(mainGameIntent)

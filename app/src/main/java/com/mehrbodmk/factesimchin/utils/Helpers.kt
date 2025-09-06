@@ -38,11 +38,14 @@ class Helpers {
 
         fun stopMainMenuMusic()
         {
-            if(mainMenuSoundPlayer?.isPlaying == true)
-            {
-                mainMenuSoundPlayer?.stop()
+            try {
+                if(mainMenuSoundPlayer?.isPlaying == true)
+                {
+                    mainMenuSoundPlayer?.stop()
+                    mainMenuSoundPlayer?.release()
+                }
             }
-            mainMenuSoundPlayer?.release()
+            catch (ex: IllegalStateException) { /* Do nothing. */ }
         }
 
         fun askUserYesNo(context:Context, theme: Int, title: String, message: String,
