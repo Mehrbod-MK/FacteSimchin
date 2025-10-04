@@ -130,25 +130,7 @@ class TimerActivity : AppCompatActivity() {
             updateButtons()
         }
         buttonTimerStartPause.setOnClickListener {
-            if(!hasSetInitialTimeValue)
-            {
-                gameSession.initialTimerValue = gameSession.timerValue
-                hasSetInitialTimeValue = true
-            }
-            isTimerRunning = !isTimerRunning
-            if(isTimerRunning)
-            {
-                startTimer(gameSession.timerValue)
-                Helpers.playSoundEffect(this@TimerActivity, R.raw.checkbox_on)
-                buttonTimerStartPause.setImageResource(R.drawable.icon_pause)
-            }
-            else
-            {
-                countdownTimer!!.cancel()
-                Helpers.playSoundEffect(this@TimerActivity, R.raw.checkbox_off)
-                buttonTimerStartPause.setImageResource(R.drawable.icon_play)
-                stopAlarmSound()
-            }
+            toggleTimer()
         }
         buttonTimerReset.setOnClickListener {
             hasSetInitialTimeValue = false
@@ -158,7 +140,30 @@ class TimerActivity : AppCompatActivity() {
             gameSession.timerValue = gameSession.initialTimerValue
             stopAlarmSound()
             updateUI()
-            Helpers.playSoundEffect(this@TimerActivity, R.raw.click_object)
+            toggleTimer()
+        }
+    }
+
+    private fun toggleTimer()
+    {
+        if(!hasSetInitialTimeValue)
+        {
+            gameSession.initialTimerValue = gameSession.timerValue
+            hasSetInitialTimeValue = true
+        }
+        isTimerRunning = !isTimerRunning
+        if(isTimerRunning)
+        {
+            startTimer(gameSession.timerValue)
+            Helpers.playSoundEffect(this@TimerActivity, R.raw.checkbox_on)
+            buttonTimerStartPause.setImageResource(R.drawable.icon_pause)
+        }
+        else
+        {
+            countdownTimer!!.cancel()
+            Helpers.playSoundEffect(this@TimerActivity, R.raw.checkbox_off)
+            buttonTimerStartPause.setImageResource(R.drawable.icon_play)
+            stopAlarmSound()
         }
     }
 
