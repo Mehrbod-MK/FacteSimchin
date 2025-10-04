@@ -140,4 +140,11 @@
     <string name="player_was_drunk">بازیکن %1$s دیشب مست بود و عملیاتش به درستی انجام نشد.</string>
     <string name="lecter_saves_mafia">نجات مافیا</string>
     <string name="lecter_saved_mafia_from_shot">دکتر لکتر تونست مافیا %1$s رو از تیر شهر نجات بده.</string>
+    <string name="dummy_bullet">مشقی</string>
+    <string name="war_bullet">جنگی</string>
+    <string name="please_choose_shooter">لطفاً بازیکنی را که قصد شلیک تیر روز را دارد، انتخاب کنید:</string>
+    <string name="bullet_accepted_choose_target">تیر بازیکن \'%1$s\' تأیید شد.\nبه چه کسی شلیک می‌کنید؟</string>
+    <string name="war_bullet_is_shot_with_role">تیر بازیکن \'%1$s\' «%2$s» بود و بازیکن هدف \'%3$s\' با ساید %4$s از بازی خارج می‌شود.</string>
+    <string name="dummy_bullet_is_shot">تیر بازیکن «%1$s» \'مشقی\' بود و اتفاق خاصی نیفتاد.</string>
+    <string name="mafia_no_colons">مافیا</string>
 </resources>

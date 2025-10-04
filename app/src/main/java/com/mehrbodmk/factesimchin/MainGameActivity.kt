@@ -368,19 +368,67 @@ class MainGameActivity : AppCompatActivity() {
             alertDialogBombs.show()
         }
         buttonViewBullets.setOnClickListener {
-            val stringBuilder = StringBuilder()
-            for(player in gameSession.players.filter { it.nightStatus.hasWarBullet || it.nightStatus.hasDummyBullet })
-            {
-                stringBuilder.appendLine(getString(R.string.report_bullet, player.name,
-                    AssignRoleCards.getRoleLocalName(this@MainGameActivity, player.role.type),
-                    if(player.nightStatus.hasDummyBullet) getString(R.string.bullet_dummy) else getString(R.string.bullet_war)))
-            }
+            val playersWithBullets = gameSession.players.filter { !it.isDead && (it.nightStatus.hasDummyBullet || it.nightStatus.hasWarBullet) }
+            val playersNamesAndTheirBullets : Array<String> = playersWithBullets.map { getString(R.string.player_name_and_role_format,
+                it.name, if(it.nightStatus.hasDummyBullet) getString(R.string.dummy_bullet) else getString(R.string.war_bullet)) }.toTypedArray()
             val alertDialogBullets = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.report_game_bullets))
-                .setMessage(stringBuilder.toString())
-                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .setSingleChoiceItems(playersNamesAndTheirBullets, 0) { dialog, which ->
+                    showShootBulletDialog(playersWithBullets[which])
+                    dialog.dismiss()
+                }
+                // .setMessage(getString(R.string.please_choose_shooter))
+                .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
             alertDialogBullets.show()
         }
+    }
+
+    private fun showShootBulletDialog(shooter: Player)
+    {
+        var targetPlayerIndex = 0
+        AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.bullet_accepted_choose_target, shooter.name))
+            .setSingleChoiceItems(gameSession.players.filter { !it.isDead }.map { getString(R.string.player_name_and_role_format,
+                it.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, it.role.type)) }
+                .toTypedArray(), 0) { _, which ->
+                targetPlayerIndex = which
+            }
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+                shootPlayerWithDayBullet(shooter, gameSession.players[targetPlayerIndex])
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    private fun shootPlayerWithDayBullet(shooter: Player, target: Player)
+    {
+        if(shooter.nightStatus.hasWarBullet)
+        {
+            // Kill player.
+            target.isDead = true
+
+            AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setMessage(getString(R.string.war_bullet_is_shot_with_role,
+                    shooter.name,
+                    if(shooter.nightStatus.hasDummyBullet) getString(R.string.dummy_bullet) else getString(R.string.war_bullet),
+                    target.name,
+                    if(target.role.isMafia == true) getString(R.string.role_mafia) else getString(R.string.role_citizen)))
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                .show()
+        }
+        else if(shooter.nightStatus.hasDummyBullet)
+        {
+            AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setMessage(getString(R.string.dummy_bullet_is_shot, shooter.name))
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                .show()
+        }
+
+        shooter.nightStatus.hasDummyBullet = false
+        shooter.nightStatus.hasWarBullet = false
+
+        updateUI()
     }
 
     private fun makeDecisionForNightCommands(nightCommands: Iterable<NightCommand>)
