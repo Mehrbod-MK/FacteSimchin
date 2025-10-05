@@ -1,51 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="position"
+            type="java.lang.String" />
+
+        <variable
+            name="player"
+            type="com.mehrbodmk.factesimchin.models.PlayerPresence" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#00000000">
+        android:background="#00000000"
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSelectPlayerNameItem"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:id="@+id/buttonSelectPlayerNameItem"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            android:backgroundTint="#3F51B5"
+            android:layout_weight="1"
+            android:backgroundTint="@{player.present ? @color/present : @color/absent, default=@color/present}"
+            android:text="@{player.present ? @string/present : @string/absent, default=@string/present}"
             android:textColor="#ffffff"
-            android:text="@string/present"
             android:textSize="20sp"
-            />
+            tools:text="@string/present" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/list_item_text"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_weight="2"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/mafia_game"
-            android:textColor="#ffffff"
-            android:ellipsize="marquee"
-            android:textSize="20sp"
             android:layout_gravity="center"
-            android:background="#00000000"/>
+            android:layout_weight="2"
+            android:background="#00000000"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@{position + '-' + player.name}"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            tools:text="@string/mafia_game" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/list_item_removeButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="60dp"
             android:layout_margin="7dp"
+            android:layout_weight="1"
             android:background="@drawable/button_selector"
+            android:gravity="center_horizontal|center_vertical"
             android:text="@string/remove"
             android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:gravity="center_horizontal|center_vertical" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>
