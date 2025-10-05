@@ -140,4 +140,6 @@
     <string name="player_was_drunk">بازیکن %1$s دیشب مست بود و عملیاتش به درستی انجام نشد.</string>
     <string name="lecter_saves_mafia">نجات مافیا</string>
     <string name="lecter_saved_mafia_from_shot">دکتر لکتر تونست مافیا %1$s رو از تیر شهر نجات بده.</string>
+    <string name="select_role">تعیین نقش ها</string>
+    <string name="add_player">Add new player</string>
 </resources>
