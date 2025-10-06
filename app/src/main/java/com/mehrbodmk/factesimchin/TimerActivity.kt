@@ -120,7 +120,6 @@ class TimerActivity : AppCompatActivity() {
             gameSession.isTimerMusicEnabled = !gameSession.isTimerMusicEnabled
             if(gameSession.isTimerMusicEnabled)
             {
-
                 Helpers.playSoundEffect(this@TimerActivity, R.raw.checkbox_on)
             }
             else
