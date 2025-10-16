@@ -11,5 +11,6 @@ data class GameSession(
     var timerValue: Int = 0,
     var initialTimerValue: Int = 30,
     var isTimerMusicEnabled: Boolean = true,
-    var bombsActive: ArrayList<Bomb> = arrayListOf()
+    var bombsActive: ArrayList<Bomb> = arrayListOf(),
+    var middayStatus: MiddayStatus = MiddayStatus()
 ) : Parcelable

@@ -134,12 +134,14 @@ class TimerActivity : AppCompatActivity() {
         buttonTimerReset.setOnClickListener {
             hasSetInitialTimeValue = false
             countdownTimer?.cancel()
+            val wasTimerRunning = isTimerRunning
             isTimerRunning = false
             buttonTimerStartPause.setImageResource(R.drawable.icon_play)
             gameSession.timerValue = gameSession.initialTimerValue
             stopAlarmSound()
             updateUI()
-            toggleTimer()
+            if(wasTimerRunning)
+                toggleTimer()
         }
     }
 

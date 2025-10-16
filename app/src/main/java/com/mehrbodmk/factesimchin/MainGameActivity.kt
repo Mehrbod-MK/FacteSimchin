@@ -26,6 +26,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mehrbodmk.factesimchin.models.GameSession
+import com.mehrbodmk.factesimchin.models.MiddayStatus
+import com.mehrbodmk.factesimchin.models.MiddayStepsInOrder
 import com.mehrbodmk.factesimchin.models.Missions
 import com.mehrbodmk.factesimchin.models.NightAction
 import com.mehrbodmk.factesimchin.models.NightStatus
@@ -50,6 +52,7 @@ class MainGameActivity : AppCompatActivity() {
     private lateinit var textViewGameTurn: TextView
     private lateinit var listViewPlayers: ListView
     private lateinit var buttonGoNight: FloatingActionButton
+    private lateinit var buttonGoMidDay: FloatingActionButton
     private lateinit var buttonTimer: FloatingActionButton
     private lateinit var buttonShowHideRoles: FloatingActionButton
     private lateinit var textViewNumMafiasAlive: TextView
@@ -62,6 +65,7 @@ class MainGameActivity : AppCompatActivity() {
     private lateinit var buttonViewBombs: FloatingActionButton
 
     private var nightStepIndex : Int = 0
+    private var middayStepIndex : Int = 0
 
     private val timerActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result ->
@@ -82,12 +86,19 @@ class MainGameActivity : AppCompatActivity() {
     }
     private var getSleepOrWakeResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
     { result ->
+        val isMiddayWaking = gameSession.middayStatus != MiddayStatus()
         if(result.resultCode == Activity.RESULT_OK)
         {
-            nightStepIndex++;
+            if(!isMiddayWaking)
+                nightStepIndex++
+            else
+                middayStepIndex++
         }
         // Don't allow user to cancel.
-        decideNextNightSteps()
+        if(!isMiddayWaking)
+            decideNextNightSteps()
+        else
+            decideNextMiddaySteps()
     }
     private var getNightActionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         result ->
@@ -99,6 +110,17 @@ class MainGameActivity : AppCompatActivity() {
         }
         // Don't allow user to cancel.
         decideNextNightSteps()
+    }
+    private var getMiddayActionResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        if(result.resultCode == Activity.RESULT_OK) {
+            val middayCommands: ArrayList<NightCommand> =
+                result.data?.getParcelableArrayListExtra(Constants.INTENT_NIGHT_COMMANDS)!!
+            makeDecisionForMiddayCommands(middayCommands)
+            middayStepIndex++;
+        }
+        // Don't allow user to cancel.
+        decideNextMiddaySteps()
     }
 
     private var mediaPlayerGodfatherSong : MediaPlayer? = null
@@ -117,6 +139,7 @@ class MainGameActivity : AppCompatActivity() {
         textViewGameTurn = findViewById(R.id.textViewGameTurn)
         listViewPlayers = findViewById(R.id.listViewGamePlayers)
         buttonGoNight = findViewById(R.id.buttonGoNight)
+        buttonGoMidDay = findViewById(R.id.buttonGoMidday)
         buttonTimer = findViewById(R.id.buttonTimer)
         buttonShowHideRoles = findViewById(R.id.buttonShowHideRoles)
         textViewNumMafiasAlive = findViewById(R.id.textViewNumMafiasAlive)
@@ -141,6 +164,104 @@ class MainGameActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        updateUI()
+    }
+
+    private fun decidePostMiddayEvents() {
+        val middayEventsStringBuilder: StringBuilder = StringBuilder()
+
+        // If midday was for detonating bombs...
+        if(gameSession.middayStatus.wakeDetonator)
+        {
+            var hasAtLeastOneBombExploded = false
+
+            // First, decide bombs that are not detonated by detonator.
+            for(bomb in gameSession.bombsActive.filter { it.detonator == null })
+            {
+                detonateBombByPlayerThemselves(bomb)
+                return
+            }
+
+            // Then, look for bombs detonated by detonator.
+            for(bomb in gameSession.bombsActive.filter { it.detonator != null })
+            {
+                if(bomb.bombCode == bomb.detonationCode)
+                {
+                    middayEventsStringBuilder.appendLine(getString(R.string.bomb_detonated_by_detonator, bomb.target.name))
+                    middayEventsStringBuilder.appendLine()
+                }
+                else
+                {
+                    hasAtLeastOneBombExploded = true
+                    bomb.detonator!!.isDead = true
+                    middayEventsStringBuilder.appendLine(getString(R.string.bomb_exploded_by_detonator, bomb.detonator!!.name))
+                    middayEventsStringBuilder.appendLine()
+                }
+            }
+
+            // Play explosion sound if at least one bomb was not detonated successfully.
+            if(hasAtLeastOneBombExploded)
+            {
+                Helpers.playSoundEffect(this@MainGameActivity, R.raw.explosion)
+            }
+
+            // Clear list of bombs.
+            gameSession.bombsActive = arrayListOf()
+        }
+
+        // Reset midday status.
+        gameSession.middayStatus = MiddayStatus()
+
+        // Display midday events.
+        val resultString = middayEventsStringBuilder.toString()
+        val alertDialogEvents = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.midday_events_title))
+            .setMessage(resultString)
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+        alertDialogEvents.show()
+    }
+
+    private fun detonateBombByPlayerThemselves(bomb: Bomb)
+    {
+        AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setTitle(getString(R.string.bomb_not_detonated_player_detonate, bomb.target.name))
+            .setSingleChoiceItems(arrayOf("1", "2", "3", "4"), 0) { dialog, which ->
+                val guessedBombCode = which + 1
+                if(guessedBombCode == bomb.bombCode)
+                    detonateBombByCorrectCode(bomb)
+                else
+                    explodeBombByIncorrectCode(bomb)
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun detonateBombByCorrectCode(bomb: Bomb)
+    {
+        gameSession.bombsActive.remove(bomb)
+        AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setMessage(getString(R.string.bomb_detonated_with_correct_code))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                decidePostMiddayEvents()
+                dialog.dismiss() }
+            .show()
+    }
+
+    private fun explodeBombByIncorrectCode(bomb: Bomb)
+    {
+        val dyingPlayer = if(bomb.detonator == null) bomb.target else bomb.detonator
+        dyingPlayer!!.isDead = true
+        gameSession.bombsActive.remove(bomb)
+        AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+            .setMessage(getString(R.string.bomb_exploded_say_goodbye_to, dyingPlayer.name))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                decidePostMiddayEvents()
+                dialog.dismiss()
+            }
+            .show()
+        Helpers.playSoundEffect(this@MainGameActivity, R.raw.explosion)
+
         updateUI()
     }
 
@@ -320,6 +441,7 @@ class MainGameActivity : AppCompatActivity() {
             player.nightStatus = NightStatus(
                 hasDummyBullet = player.nightStatus.hasDummyBullet,
                 hasWarBullet = player.nightStatus.hasWarBullet,
+                isDrunk = player.nightStatus.isDrunk,
             )
         }
     }
@@ -345,7 +467,25 @@ class MainGameActivity : AppCompatActivity() {
             Helpers.askUserYesNo(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme,
                 getString(R.string.question), getString(R.string.are_you_sure_go_night),
                 getString(R.string.yes), getString(R.string.no),
-                R.raw.dialog_show, R.raw.dialog_hide, { goNight() }, { })
+                R.raw.dialog_show, R.raw.dialog_hide, {
+                    if(canGoNight()) goNight() }, { })
+        }
+        buttonGoMidDay.setOnClickListener {
+            if(canGoMidDay())
+            {
+                Helpers.askUserYesNo(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme,
+                    getString(R.string.question), getString(R.string.are_you_sure_go_midday),
+                    getString(R.string.yes), getString(R.string.no),
+                    R.raw.dialog_show, R.raw.dialog_hide, {
+                        goMidday() }, { })
+            }
+            else
+            {
+                Helpers.displaySimplePopup(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme,
+                    "", getString(R.string.cannot_go_midday),
+                    getString(R.string.ok),
+                    R.raw.dialog_show, R.raw.dialog_hide, {})
+            }
         }
         buttonShowHideRoles.setOnClickListener {
             val arePlayersVisible = gameSession.players[0].showRole
@@ -408,6 +548,9 @@ class MainGameActivity : AppCompatActivity() {
             // Kill player.
             target.isDead = true
 
+            // Play war bullet sound effect.
+            Helpers.playSoundEffect(this@MainGameActivity, R.raw.war_bullet)
+
             AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setMessage(getString(R.string.war_bullet_is_shot_with_role,
                     shooter.name,
@@ -419,6 +562,9 @@ class MainGameActivity : AppCompatActivity() {
         }
         else if(shooter.nightStatus.hasDummyBullet)
         {
+            // Play dummy bullet sound effect.
+            Helpers.playSoundEffect(this@MainGameActivity, R.raw.dummy_bullet)
+
             AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setMessage(getString(R.string.dummy_bullet_is_shot, shooter.name))
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
@@ -435,6 +581,30 @@ class MainGameActivity : AppCompatActivity() {
     {
         for(nightCommand in nightCommands)
             makeDecisionForNightCommand(nightCommand)
+    }
+
+    private fun makeDecisionForMiddayCommands(middayCommands: Iterable<NightCommand>)
+    {
+        for(middayCommand in middayCommands)
+            makeDecisionForMiddayCommand(middayCommand)
+    }
+
+    private fun makeDecisionForMiddayCommand(middayCommand: NightCommand)
+    {
+        val foundSourcePlayer = gameSession.players.find { it.name == middayCommand.sourcePlayer.name }!!
+        val foundTargetPlayer = gameSession.players.find { it.name == middayCommand.targetPlayer.name }!!
+        when(middayCommand.mission)
+        {
+            Missions.DETONATOR_DETONATES ->
+            {
+                if(!foundSourcePlayer.nightStatus.isDrunk)
+                {
+                    gameSession.bombsActive.first { it.target.name == foundTargetPlayer.name }.detonator = foundSourcePlayer
+                    gameSession.bombsActive.first { it.target.name == foundTargetPlayer.name }.detonationCode = middayCommand.bombCode
+                }
+            }
+            else -> { /* Do nothing. */ }
+        }
     }
 
     private fun makeDecisionForNightCommand(nightCommand: NightCommand)
@@ -533,6 +703,34 @@ class MainGameActivity : AppCompatActivity() {
             decideNextNightSteps()
     }
 
+    private fun goMidday()
+    {
+        middayStepIndex = 0
+        // Wake Detonator only.
+        gameSession.middayStatus = MiddayStatus(true, false)
+        decideNextMiddaySteps()
+    }
+
+    private fun canGoNight() : Boolean
+    {
+        if(gameSession.bombsActive.any { !it.target.isDead })
+        {
+            AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                .setTitle(getString(R.string.cannot_go_night))
+                .setMessage(getString(R.string.cannot_go_night_bombs))
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                .show()
+            return false
+        }
+
+        return true
+    }
+
+    private fun canGoMidDay() : Boolean
+    {
+        return gameSession.bombsActive.any { !it.target.isDead }
+    }
+
     private fun playGodfatherWaltzMusic()
     {
         mediaPlayerGodfatherSong = MediaPlayer.create(this@MainGameActivity, R.raw.godfather_waltz)
@@ -545,6 +743,92 @@ class MainGameActivity : AppCompatActivity() {
         if(mediaPlayerGodfatherSong?.isPlaying == true)
             mediaPlayerGodfatherSong?.stop()
         mediaPlayerGodfatherSong?.release()
+    }
+
+    private fun decideNextMiddaySteps()
+    {
+        if(middayStepIndex >= MiddayStepsInOrder.entries.size)
+        {
+            updateUI()
+            return
+        }
+        val middayStepNow = MiddayStepsInOrder.entries[middayStepIndex]
+        val sleepOrWakeIntent = Intent(this@MainGameActivity, SleepOrWakeSomeoneActivity::class.java)
+        val middayActionIntent = Intent(this@MainGameActivity, NightActionActivity::class.java)
+        when(middayStepNow)
+        {
+            MiddayStepsInOrder.SLEEP_MIDDAY_EVERYONE ->
+            {
+                playGodfatherWaltzMusic()
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_midday, getString(R.string.everyone_sleep_midday)))
+            }
+            MiddayStepsInOrder.WAKE_DETONATOR ->
+            {
+                if(!gameSession.middayStatus.wakeDetonator)
+                {
+                    bypassMiddayDecision()
+                    return
+                }
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
+                    R.drawable.card_detonator, R.string.wake_up, R.string.role_detonator)
+            }
+            MiddayStepsInOrder.DETONATOR_DETONATES ->
+            {
+                if(!gameSession.middayStatus.wakeDetonator)
+                {
+                    bypassMiddayDecision()
+                    return
+                }
+                if(gameSession.players.none { it.role.type == RoleTypes.DETONATOR })
+                {
+                    bypassMiddayDecision()
+                    return
+                }
+                val roleLocalName = getString(R.string.role_detonator)
+                val verbString = getString(R.string.detonator_does_what)
+                val sourcePlayers = gameSession.players.filter { !it.isDead && it.role.type == RoleTypes.DETONATOR }
+                val missions = getPossibleMissionsForRole(RoleTypes.DETONATOR)
+                val targetPlayers = gameSession.bombsActive.map { it.target }.filter { !it.isDead }
+                middayActionIntent.putExtra(Constants.INTENT_NIGHT_ACTION, NightAction(R.drawable.card_detonator, roleLocalName, RoleTypes.DETONATOR, verbString, sourcePlayers, missions, targetPlayers))
+            }
+            MiddayStepsInOrder.SLEEP_DETONATOR ->
+            {
+                if(!gameSession.middayStatus.wakeDetonator)
+                {
+                    bypassMiddayDecision()
+                    return
+                }
+                prepareSimpleSleepOrWakeCommand(sleepOrWakeIntent, RoleTypes.DETONATOR,
+                    R.drawable.card_detonator, R.string.sleep, R.string.role_detonator)
+            }
+            MiddayStepsInOrder.WAKE_UP_EVERYONE ->
+            {
+                stopGodFatherWaltzMusic()
+                sleepOrWakeIntent.putExtra(Constants.INTENT_SLEEP_OR_WAKE_SOMEONE_COMMAND, SleepOrWakeSomeoneCommand(R.drawable.card_day, getString(R.string.wake_up_everyone)))
+            }
+            MiddayStepsInOrder.DISPLAY_MIDDAY_EVENTS ->
+            {
+                decidePostMiddayEvents()
+                bypassMiddayDecision()
+            }
+        }
+
+        // Simple wake/sleep.
+        if(sleepOrWakeIntent.extras != null && sleepOrWakeIntent.extras?.size()!! > 0)
+        {
+            getSleepOrWakeResult.launch(sleepOrWakeIntent)
+        }
+        // Night Actions -> Commands.
+        else if(middayActionIntent.extras != null && middayActionIntent.extras?.size()!! > 0)
+        {
+            getMiddayActionResult.launch(middayActionIntent)
+        }
+    }
+
+    private fun bypassMiddayDecision()
+    {
+        middayStepIndex++
+        decideNextMiddaySteps()
     }
 
     private fun decideNextNightSteps()

@@ -69,5 +69,22 @@ class Helpers {
             playSoundEffect(context, dialogOpenSoundId)
             builder.show()
         }
+
+        fun displaySimplePopup(context:Context, theme: Int, title: String, message: String,
+                               okButtonText: String,
+                               dialogOpenSoundId: Int, dialogCloseSoundId: Int,
+                               onOk: () -> Unit)
+        {
+            val builder = AlertDialog.Builder(context, theme)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(okButtonText, { dialog, _ ->
+                    dialog.dismiss()
+                    playSoundEffect(context, dialogCloseSoundId)
+                    onOk.invoke()
+                })
+            playSoundEffect(context, dialogOpenSoundId)
+            builder.show()
+        }
     }
 }

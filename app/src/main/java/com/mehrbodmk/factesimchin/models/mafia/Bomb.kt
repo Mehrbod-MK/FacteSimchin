@@ -9,4 +9,6 @@ data class Bomb(
     var bomber: Player,
     var target: Player,
     var bombCode: Int,
+    var detonator: Player? = null,
+    var detonationCode: Int? = null,
 ) : Parcelable

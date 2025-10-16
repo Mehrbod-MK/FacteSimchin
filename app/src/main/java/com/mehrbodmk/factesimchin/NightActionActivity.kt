@@ -218,7 +218,8 @@ class NightActionActivity : AppCompatActivity() {
 
     private fun selectBombCodeDialog()
     {
-        if(selectedMissionIndex < 0 || nightAction.missions[selectedMissionIndex] != Missions.BOMBER_BOMBS_PLAYER)
+        if(selectedMissionIndex < 0 || (nightAction.missions[selectedMissionIndex] != Missions.BOMBER_BOMBS_PLAYER
+                    && nightAction.missions[selectedMissionIndex] != Missions.DETONATOR_DETONATES))
             return
         var selectedBombCodeItem = 0
         val alertDialogChooseBombCode = AlertDialog.Builder(this@NightActionActivity, R.style.FacteSimchin_AlertDialogsTheme)
@@ -373,7 +374,7 @@ class NightActionActivity : AppCompatActivity() {
             else
                 result = false
         }
-        if(mission == Missions.BOMBER_BOMBS_PLAYER)
+        if(mission == Missions.BOMBER_BOMBS_PLAYER || mission == Missions.DETONATOR_DETONATES)
         {
             if(selectedBombCodeIndex >= 0)
                 bombCode = selectedBombCodeIndex + 1
@@ -438,6 +439,19 @@ class NightActionActivity : AppCompatActivity() {
                 }
 
                 Missions.BOMBER_BOMBS_PLAYER ->
+                {
+                    linearLayoutBomberBomb.visibility = View.VISIBLE
+                    if(selectedBombCodeIndex >= 0)
+                    {
+                        buttonChooseBomberBombCode.text = "${selectedBombCodeIndex + 1}"
+                    }
+                    else
+                    {
+                        buttonChooseBomberBombCode.text = chooseString
+                    }
+                }
+
+                Missions.DETONATOR_DETONATES ->
                 {
                     linearLayoutBomberBomb.visibility = View.VISIBLE
                     if(selectedBombCodeIndex >= 0)
