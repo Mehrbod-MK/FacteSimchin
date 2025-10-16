@@ -108,7 +108,7 @@
     <string name="report_bullet">بازیکن %1$s با نقش %2$s، تیر %3$s دارد.</string>
     <string name="bullet_war">جنگی</string>
     <string name="bullet_dummy">مشقی</string>
-    <string name="report_bomb">بمب %1$s جلوی بازیکن %2$s با کد %3$s فعال است.</string>
+    <string name="report_bomb">بمب جلوی بازیکن \'%1$s\' با کد %2$s فعال است.</string>
     <string name="died"> (مرده)</string>
     <string name="please_choose_roles">لطفاً نقش‌ها را انتخاب کنید:</string>
     <string name="mafia_talk">مذاکره</string>
@@ -159,4 +159,5 @@
     <string name="bomb_exploded_say_goodbye_to">متأسفانه، بمب منفجر شد و خداحافظی می‌کنیم با \'%1$s\'</string>
     <string name="bomb_detonated_by_detonator">بمب بازیکن \'%1$s\' توسط نگهبان خنثی با موفقیت خنثی شد. تبریک به شهر!</string>
     <string name="bomb_exploded_by_detonator">نگهبان نتونست کد بمب رو به درستی حدس بزنه، خداحافظی می‌کنیم با \'%1$s\'</string>
+    <string name="cannot_go_night_bullets">تیر تفنگدار در بازی در جریان است و باید شلیک شود.</string>
 </resources>

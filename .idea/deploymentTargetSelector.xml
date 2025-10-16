@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="facte-simchin">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-08-18T21:45:37.611182900Z">
+        <DropdownSelection timestamp="2025-10-16T20:04:22.811972300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCWA0FRCXM" />

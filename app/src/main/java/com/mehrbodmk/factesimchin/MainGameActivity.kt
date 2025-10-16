@@ -468,7 +468,7 @@ class MainGameActivity : AppCompatActivity() {
                 getString(R.string.question), getString(R.string.are_you_sure_go_night),
                 getString(R.string.yes), getString(R.string.no),
                 R.raw.dialog_show, R.raw.dialog_hide, {
-                    if(canGoNight()) goNight() }, { })
+                    if(canGoNight(true)) goNight() }, { })
         }
         buttonGoMidDay.setOnClickListener {
             if(canGoMidDay())
@@ -499,7 +499,7 @@ class MainGameActivity : AppCompatActivity() {
             val stringBuilder = StringBuilder()
             for(bomb in gameSession.bombsActive)
             {
-                stringBuilder.appendLine(getString(R.string.report_bomb, bomb.bomber.name, bomb.target.name, bomb.bombCode.toString()))
+                stringBuilder.appendLine(getString(R.string.report_bomb, bomb.target.name, bomb.bombCode.toString()))
             }
             val alertDialogBombs = AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
                 .setTitle(getString(R.string.report_game_bombs))
@@ -711,15 +711,30 @@ class MainGameActivity : AppCompatActivity() {
         decideNextMiddaySteps()
     }
 
-    private fun canGoNight() : Boolean
+    private fun canGoNight(displayAlertDialogs: Boolean) : Boolean
     {
         if(gameSession.bombsActive.any { !it.target.isDead })
         {
-            AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
-                .setTitle(getString(R.string.cannot_go_night))
-                .setMessage(getString(R.string.cannot_go_night_bombs))
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
-                .show()
+            if(displayAlertDialogs)
+            {
+                AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                    .setTitle(getString(R.string.cannot_go_night))
+                    .setMessage(getString(R.string.cannot_go_night_bombs))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
+            return false
+        }
+        if(gameSession.players.any { it.nightStatus.hasDummyBullet || it.nightStatus.hasWarBullet })
+        {
+            if(displayAlertDialogs)
+            {
+                AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
+                    .setTitle(getString(R.string.cannot_go_night))
+                    .setMessage(getString(R.string.cannot_go_night_bullets))
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
             return false
         }
 
@@ -1390,6 +1405,8 @@ class MainGameActivity : AppCompatActivity() {
         buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
             View.INVISIBLE else View.VISIBLE
         buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
+        buttonGoNight.visibility = if(canGoNight(false)) View.VISIBLE else View.INVISIBLE
+        buttonGoMidDay.visibility = if(canGoMidDay()) View.VISIBLE else View.INVISIBLE
 
         updateStats()
     }
