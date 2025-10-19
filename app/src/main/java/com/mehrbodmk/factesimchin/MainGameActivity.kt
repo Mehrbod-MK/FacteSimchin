@@ -526,16 +526,17 @@ class MainGameActivity : AppCompatActivity() {
     private fun showShootBulletDialog(shooter: Player)
     {
         var targetPlayerIndex = 0
+        val targetPlayers = gameSession.players.filter { !it.isDead }
         AlertDialog.Builder(this@MainGameActivity, R.style.FacteSimchin_AlertDialogsTheme)
             .setTitle(getString(R.string.bullet_accepted_choose_target, shooter.name))
-            .setSingleChoiceItems(gameSession.players.filter { !it.isDead }.map { getString(R.string.player_name_and_role_format,
+            .setSingleChoiceItems(targetPlayers.map { getString(R.string.player_name_and_role_format,
                 it.name, AssignRoleCards.getRoleLocalName(this@MainGameActivity, it.role.type)) }
                 .toTypedArray(), 0) { _, which ->
                 targetPlayerIndex = which
             }
             .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
-                shootPlayerWithDayBullet(shooter, gameSession.players[targetPlayerIndex])
+                shootPlayerWithDayBullet(shooter, targetPlayers[targetPlayerIndex])
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
             .show()
@@ -603,6 +604,7 @@ class MainGameActivity : AppCompatActivity() {
                     gameSession.bombsActive.first { it.target.name == foundTargetPlayer.name }.detonationCode = middayCommand.bombCode
                 }
             }
+
             else -> { /* Do nothing. */ }
         }
     }
@@ -660,13 +662,23 @@ class MainGameActivity : AppCompatActivity() {
                 {
                     foundTargetPlayer.nightStatus.hasDummyBullet = true
                 }
+                // Otherwise, give war bullet.
+                else
+                {
+                    foundTargetPlayer.nightStatus.hasWarBullet = true
+                }
             }
             Missions.GUNNER_GIVES_WAR_BULLET ->
             {
-                // If gunner is not drunk, hand over the dummy bullet.
+                // If gunner is not drunk, hand over the war bullet.
                 if(!foundSourcePlayer.nightStatus.isDrunk)
                 {
                     foundTargetPlayer.nightStatus.hasWarBullet = true
+                }
+                // Otherwise, give dummy bullet.
+                else
+                {
+                    foundTargetPlayer.nightStatus.hasDummyBullet = true
                 }
             }
             Missions.DETONATOR_DETONATES -> throw InvalidObjectException("Detonator is not allowed to detonate bombs at night...!")
