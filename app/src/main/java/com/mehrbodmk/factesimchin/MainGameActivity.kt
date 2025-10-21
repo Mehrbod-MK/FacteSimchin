@@ -737,7 +737,7 @@ class MainGameActivity : AppCompatActivity() {
             }
             return false
         }
-        if(gameSession.players.any { it.nightStatus.hasDummyBullet || it.nightStatus.hasWarBullet })
+        if(gameSession.players.any { !it.isDead && (it.nightStatus.hasDummyBullet || it.nightStatus.hasWarBullet) })
         {
             if(displayAlertDialogs)
             {
@@ -1414,16 +1414,11 @@ class MainGameActivity : AppCompatActivity() {
                 R.layout.game_player_list_item,
                 gameSession.players)
         textViewGameTurn.text = getGameTurnText()
-        buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
-            View.INVISIBLE else View.VISIBLE
-        buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
-        buttonGoNight.visibility = if(canGoNight(false)) View.VISIBLE else View.INVISIBLE
-        buttonGoMidDay.visibility = if(canGoMidDay()) View.VISIBLE else View.INVISIBLE
 
-        updateStats()
+        updateStatusBar()
     }
 
-    private fun updateStats()
+    private fun updateStatusBar()
     {
         textViewNumMafiasAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == true }.toString()
         textViewNumMafiasDead.text = gameSession.players.count { it.isDead && it.role.isMafia == true }.toString()
@@ -1431,6 +1426,12 @@ class MainGameActivity : AppCompatActivity() {
         textViewNumCitizensDead.text = gameSession.players.count { it.isDead && it.role.isMafia == false }.toString()
         textViewNumNeutralsAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == null }.toString()
         textViewNumNeutralsDead.text = gameSession.players.count { it.isDead && it.role.isMafia == null }.toString()
+
+        buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
+            View.INVISIBLE else View.VISIBLE
+        buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
+        buttonGoNight.visibility = if(canGoNight(false)) View.VISIBLE else View.INVISIBLE
+        buttonGoMidDay.visibility = if(canGoMidDay()) View.VISIBLE else View.INVISIBLE
     }
 
     private fun getGameTurnText() : String
@@ -1500,7 +1501,7 @@ class MainGameActivity : AppCompatActivity() {
                 else
                 {
                     item.isDead = !item.isDead
-                    mainGameActivity?.updateStats()
+                    mainGameActivity?.updateStatusBar()
                 }
                 notifyDataSetChanged()
             }

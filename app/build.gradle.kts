@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -12,16 +14,42 @@ android {
         applicationId = "com.mehrbodmk.factesimchin"
         minSdk = 28
         targetSdk = 36
-        versionCode = 10
-        versionName = "0.5.2.0"
+        versionCode = 11
+        versionName = "0.5.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val props = project.rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use {
+        Properties().apply { load(it) }
+    }
+
+    fun getSecret(key: String): String? =
+        System.getenv(key) ?: props?.getProperty(key)
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = getSecret("KEYSTORE_PATH")
+            val keystorePassword = getSecret("KEYSTORE_PASSWORD")
+            val keyAlias = getSecret("KEY_ALIAS")
+            val keyPassword = getSecret("KEY_PASSWORD")
+
+            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+                storeFile = File(keystorePath)
+                storePassword = keystorePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            } else {
+                println("⚠️ Signing config skipped: missing credentials.")
+            }
+        }
+    }
+
+
     buildTypes {
-        release {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
-            isDebuggable = false
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
