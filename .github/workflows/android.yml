@@ -54,31 +54,11 @@ jobs:
           VERSION_NAME=${GITHUB_REF##*/}  # Extract the version tag (e.g. v1.0.0)
           mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
 
-      - name: Generate release notes from raw commits
-        id: release_notes
-        run: |
-          git fetch --tags
-          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
-          CURRENT_TAG=${GITHUB_REF#refs/tags/}
-
-          if [ -z "$PREVIOUS_TAG" ]; then
-            git log --pretty=format:"- %s" > release_notes_raw.txt
-          else
-            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes_raw.txt
-          fi
-
-          # Escape characters that break GitHub env files
-          sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g' release_notes_raw.txt > release_notes.txt
-
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          cat release_notes.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Create GitHub Release and upload renamed APK
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body: ${{ env.RELEASE_NOTES }}
+          generate_release_notes: true
           files: app/build/outputs/apk/release/FacteSimchin_${{ github.ref_name }}.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
