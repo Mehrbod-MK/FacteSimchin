@@ -5,6 +5,8 @@ on:
     branches:
       - master
       - develop
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -47,9 +49,33 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Upload Release APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+      - name: Rename APK to versioned name
+        run: |
+          VERSION_NAME=${GITHUB_REF##*/}  # Extract the version tag (e.g. v1.0.0)
+          mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
+        
+      - name: Generate release notes from commits
+        id: release_notes
+        run: |
+          git fetch --tags
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
 
+          if [ -z "$PREVIOUS_TAG" ]; then
+            git log --pretty=format:"- %s" > release_notes.txt
+          else
+            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
+          fi
+
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          cat release_notes.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release and upload renamed APK
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body: ${{ env.RELEASE_NOTES }}
+          files: app/build/outputs/apk/release/FacteSimchin_${{ github.ref_name }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
