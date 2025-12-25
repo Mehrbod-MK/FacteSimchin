@@ -54,7 +54,7 @@ jobs:
           VERSION_NAME=${GITHUB_REF##*/}  # Extract the version tag (e.g. v1.0.0)
           mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
 
-      - name: Generate release notes from commits
+      - name: Generate release notes from raw commits
         id: release_notes
         run: |
           git fetch --tags
