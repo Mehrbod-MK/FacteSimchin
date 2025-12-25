@@ -55,21 +55,24 @@ jobs:
           mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
         
       - name: Generate release notes from commits
-        id: release_notes
-        run: |
-          git fetch --tags
-          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
-          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+      id: release_notes
+      run: |
+        git fetch --tags
+        PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n '2p')
+        CURRENT_TAG=${GITHUB_REF#refs/tags/}
 
-          if [ -z "$PREVIOUS_TAG" ]; then
-            git log --pretty=format:"- %s" > release_notes.txt
-          else
-            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
-          fi
+        if [ -z "$PREVIOUS_TAG" ]; then
+          git log --pretty=format:"- %s" > release_notes.txt
+        else
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
+        fi
 
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          cat release_notes.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+        # Correct multiline env syntax
+        {
+          echo "RELEASE_NOTES<<EOF"
+          cat release_notes.txt
+          echo "EOF"
+        } >> $GITHUB_ENV
 
       - name: Create GitHub Release and upload renamed APK
         uses: softprops/action-gh-release@v1
