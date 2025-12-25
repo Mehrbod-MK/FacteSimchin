@@ -67,6 +67,7 @@ jobs:
             git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
           fi
 
+          # Add release notes to environment variable (make sure EOF is correctly used)
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
