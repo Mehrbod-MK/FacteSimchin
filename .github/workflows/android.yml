@@ -54,6 +54,7 @@ jobs:
           VERSION_NAME=${GITHUB_REF##*/}  # Extract the version tag (e.g. v1.0.0)
           mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
 
+      # Tag check.
       - name: Create GitHub Release and upload renamed APK
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
