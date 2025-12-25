@@ -62,12 +62,14 @@ jobs:
           CURRENT_TAG=${GITHUB_REF#refs/tags/}
 
           if [ -z "$PREVIOUS_TAG" ]; then
-            git log --pretty=format:"- %s" > release_notes.txt
+            git log --pretty=format:"- %s" > release_notes_raw.txt
           else
-            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
+            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes_raw.txt
           fi
 
-          # Safe multiline environment variable
+          # Escape characters that break GitHub env files
+          sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g' release_notes_raw.txt > release_notes.txt
+
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           cat release_notes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
