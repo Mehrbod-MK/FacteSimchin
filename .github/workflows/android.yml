@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Unit Tests
         run: ./gradlew test
-        
+
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
@@ -53,7 +53,7 @@ jobs:
         run: |
           VERSION_NAME=${GITHUB_REF##*/}  # Extract the version tag (e.g. v1.0.0)
           mv app/build/outputs/apk/release/app-release.apk "app/build/outputs/apk/release/FacteSimchin_${VERSION_NAME}.apk"
-        
+
       - name: Generate release notes from commits
         id: release_notes
         run: |
@@ -67,12 +67,10 @@ jobs:
             git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" > release_notes.txt
           fi
 
-          # Correct multiline env syntax
-          {
-            echo "RELEASE_NOTES<<EOF"
-            cat release_notes.txt
-            echo "EOF"
-          } >> $GITHUB_ENV
+          # Safe multiline environment variable
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          cat release_notes.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Create GitHub Release and upload renamed APK
         uses: softprops/action-gh-release@v1
