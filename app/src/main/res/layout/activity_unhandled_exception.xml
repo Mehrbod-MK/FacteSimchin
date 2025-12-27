@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UnhandledExceptionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:background="#00000000"
+        android:orientation="vertical"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#00000000">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#00000000"
+                    android:src="@drawable/card_app_crashed"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:text="@string/sorry_error_happened"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="25sp"/>
+
+                <TextView
+                    android:id="@+id/textViewUnhandledExceptionDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="30sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonCopyExceptionDetailsToClipboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_selector"
+                    android:textColor="#ffffff"
+                    android:text="@string/copy_to_clipboard"
+                    android:textSize="30sp"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonTerminateGame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_selector"
+                    android:textColor="#ffffff"
+                    android:text="@string/exit_game"
+                    android:textSize="30sp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
