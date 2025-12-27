@@ -12,34 +12,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FacteSimchin">
         <activity
+            android:name=".UnhandledExceptionActivity"
+            android:exported="false" />
+        <activity
             android:name=".NightActionActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".SleepOrWakeSomeoneActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".TimerActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".MainGameActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".AssignRoleCards"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".ChooseRolesActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".PlayersActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:configChanges="orientation|screenSize" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

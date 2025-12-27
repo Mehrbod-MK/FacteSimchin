@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mehrbodmk.factesimchin.utils.CrashHandler
 import com.mehrbodmk.factesimchin.utils.Helpers
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
 
         textViewAppVersion = findViewById(R.id.textViewAppVersion)
         textViewAppVersion.text = getString(R.string.mordad_1404_with_version, getAppVersionString())

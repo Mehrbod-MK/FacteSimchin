@@ -160,4 +160,9 @@
     <string name="bomb_detonated_by_detonator">بمب بازیکن \'%1$s\' توسط نگهبان خنثی با موفقیت خنثی شد. تبریک به شهر!</string>
     <string name="bomb_exploded_by_detonator">نگهبان نتونست کد بمب رو به درستی حدس بزنه، خداحافظی می‌کنیم با \'%1$s\'</string>
     <string name="cannot_go_night_bullets">تیر تفنگدار در بازی در جریان است و باید شلیک شود.</string>
+    <string name="sorry_error_happened">متأسفانه، خطای ناخواسته به وقوع پیوست.\n\nبا بستن و اجرای دوباره برنامه، می توانید بازی قبلی را ادامه دهید.\n\nجزئیات خطا به شرح ذیل است:</string>
+    <string name="copy_to_clipboard">کپی به کلیپ بورد</string>
+    <string name="exit_game">خروج از بازی</string>
+    <string name="clipboard_write_success">کپی شد.</string>
+    <string name="clipboard_write_failure">کپی نشد!</string>
 </resources>
