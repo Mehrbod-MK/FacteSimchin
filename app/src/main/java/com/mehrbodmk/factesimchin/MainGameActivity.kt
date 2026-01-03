@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mehrbodmk.factesimchin.models.GameSession
 import com.mehrbodmk.factesimchin.models.MiddayStatus
 import com.mehrbodmk.factesimchin.models.MiddayStepsInOrder
@@ -33,6 +36,7 @@ import com.mehrbodmk.factesimchin.models.NightAction
 import com.mehrbodmk.factesimchin.models.NightStatus
 import com.mehrbodmk.factesimchin.models.NightStepsInOrder
 import com.mehrbodmk.factesimchin.models.Player
+import com.mehrbodmk.factesimchin.models.PlayerPresence
 import com.mehrbodmk.factesimchin.models.PlayerStates
 import com.mehrbodmk.factesimchin.models.RoleTypes
 import com.mehrbodmk.factesimchin.models.commands.NightCommand
@@ -152,8 +156,15 @@ class MainGameActivity : AppCompatActivity() {
         buttonViewBombs = findViewById(R.id.buttonViewBombs)
         attachEvents()
 
-        val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)!!
-        createGameSession(players)
+        val players = intent.getParcelableArrayListExtra<Player>(Constants.INTENT_PLAYERS_LIST)
+        if(players == null)
+        {
+            loadGame()
+        }
+        else
+        {
+            createGameSession(players)
+        }
 
         playersListAdapter = PlayersListAdapter(this@MainGameActivity, R.layout.game_player_list_item, gameSession.players)
         listViewPlayers.adapter = playersListAdapter
@@ -219,6 +230,9 @@ class MainGameActivity : AppCompatActivity() {
             .setMessage(resultString)
             .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
         alertDialogEvents.show()
+
+        updateUI()
+        saveGame()
     }
 
     private fun detonateBombByPlayerThemselves(bomb: Bomb)
@@ -432,6 +446,7 @@ class MainGameActivity : AppCompatActivity() {
 
         removeNightFlags()
         updateUI()
+        saveGame()
     }
 
     private fun removeNightFlags()
@@ -707,6 +722,7 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun goNight()
     {
+        saveGame()
         nightStepIndex = 0
         resetAllNightStats()
         if(gameSession.round == 1)
@@ -717,6 +733,7 @@ class MainGameActivity : AppCompatActivity() {
 
     private fun goMidday()
     {
+        saveGame()
         middayStepIndex = 0
         // Wake Detonator only.
         gameSession.middayStatus = MiddayStatus(true, false)
@@ -1427,9 +1444,9 @@ class MainGameActivity : AppCompatActivity() {
         textViewNumNeutralsAlive.text = gameSession.players.count { !it.isDead && it.role.isMafia == null }.toString()
         textViewNumNeutralsDead.text = gameSession.players.count { it.isDead && it.role.isMafia == null }.toString()
 
-        buttonViewBullets.visibility = if(gameSession.players.map { it.nightStatus }.none { it.hasWarBullet || it.hasDummyBullet })
+        buttonViewBullets.visibility = if(gameSession.players.filter { !it.isDead }.map { it.nightStatus }.none { (it.hasWarBullet || it.hasDummyBullet) })
             View.INVISIBLE else View.VISIBLE
-        buttonViewBombs.visibility = if(gameSession.bombsActive.none()) View.INVISIBLE else View.VISIBLE
+        buttonViewBombs.visibility = if(gameSession.bombsActive.any { !it.target.isDead }) View.VISIBLE else View.INVISIBLE
         buttonGoNight.visibility = if(canGoNight(false)) View.VISIBLE else View.INVISIBLE
         buttonGoMidDay.visibility = if(canGoMidDay()) View.VISIBLE else View.INVISIBLE
     }
@@ -1447,6 +1464,38 @@ class MainGameActivity : AppCompatActivity() {
         listViewPlayers.adapter = PlayersListAdapter(this@MainGameActivity,
             R.layout.game_player_list_item,
             gameSession.players)  // Rebind if needed
+    }
+
+    private fun saveGame()
+    {
+        try {
+            val fileName = Constants.FILENAME_SAVE_GAME
+            val fileContents = Gson().toJson(gameSession)
+            this.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+            Toast.makeText(this@MainGameActivity, R.string.save_game_successful, Toast.LENGTH_SHORT).show()
+        }
+        catch (_: Exception)
+        {
+            Toast.makeText(this@MainGameActivity, R.string.save_game_unsuccessful, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun loadGame() : Boolean
+    {
+        try {
+            val fileName = Constants.FILENAME_SAVE_GAME
+            val fileContents = this.openFileInput(fileName).bufferedReader().use { it.readText() }
+            val type = object : TypeToken<GameSession>() {}.type
+            gameSession = Gson().fromJson(fileContents, type)
+            Toast.makeText(this@MainGameActivity, R.string.load_game_successful, Toast.LENGTH_SHORT).show()
+            return true
+        }
+        catch(_: Exception) {
+            Toast.makeText(this@MainGameActivity, R.string.load_game_unsuccessful, Toast.LENGTH_SHORT).show()
+            return false
+        }
     }
 
     private class PlayersListAdapter(

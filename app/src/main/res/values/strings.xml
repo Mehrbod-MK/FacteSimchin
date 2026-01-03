@@ -165,4 +165,10 @@
     <string name="exit_game">خروج از بازی</string>
     <string name="clipboard_write_success">کپی شد.</string>
     <string name="clipboard_write_failure">کپی نشد!</string>
+    <string name="detonator_not_available">باید حداقل یک نگهبان در بازی انتخاب کنید!</string>
+    <string name="save_game_successful">بازی ذخیره شد.</string>
+    <string name="save_game_unsuccessful">بازی ذخیره نشد!</string>
+    <string name="load_game_successful">بازی بارگیری شد.</string>
+    <string name="load_game_unsuccessful">بازی بارگیری نشد!</string>
+    <string name="question_continue_game">آیا مایل به ادامه بازی قبلی هستید؟\nدر صورت عدم تمایل، اطلاعات قبلی حذف خواهند شد.</string>
 </resources>

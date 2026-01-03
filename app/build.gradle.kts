@@ -10,12 +10,16 @@ android {
     namespace = "com.mehrbodmk.factesimchin"
     compileSdk = 36
 
+    lint {
+        checkReleaseBuilds = false
+    }
+
     defaultConfig {
         applicationId = "com.mehrbodmk.factesimchin"
         minSdk = 28
         targetSdk = 36
-        versionCode = 11
-        versionName = "0.5.2.1"
+        versionCode = 12
+        versionName = "0.6.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

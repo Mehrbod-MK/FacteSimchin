@@ -133,6 +133,8 @@ class ChooseRolesActivity : AppCompatActivity() {
         val numMafias = roleTypes.filter { it.isMafia == true }.sumOf { it.count }
         val numCitizens = roleTypes.filter { it.isMafia == false }.sumOf { it.count }
         val numNeutrals = roleTypes.filter { it.isMafia == null }.sumOf { it.count }
+        val numBombers = roleTypes.filter { it.roleType == RoleTypes.BOMBER }.sumOf { it.count }
+        val numDetonators = roleTypes.filter { it.roleType == RoleTypes.DETONATOR }.sumOf { it.count }
         if((numMafias + numCitizens + numNeutrals) != players.count())
         {
             Toast.makeText(this@ChooseRolesActivity, R.string.incorrect_number_of_roles, Toast.LENGTH_SHORT).show()
@@ -148,6 +150,12 @@ class ChooseRolesActivity : AppCompatActivity() {
         else if(numMafias >= numCitizens)
         {
             Toast.makeText(this@ChooseRolesActivity, R.string.mafia_always_wins, Toast.LENGTH_SHORT).show()
+            Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
+            return false
+        }
+        else if(numBombers > 0 && numDetonators <= 0)
+        {
+            Toast.makeText(this@ChooseRolesActivity, R.string.detonator_not_available, Toast.LENGTH_SHORT).show()
             Helpers.playSoundEffect(this@ChooseRolesActivity, R.raw.event_bad)
             return false
         }

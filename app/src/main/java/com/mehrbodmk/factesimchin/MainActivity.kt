@@ -13,8 +13,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.mehrbodmk.factesimchin.utils.Constants
 import com.mehrbodmk.factesimchin.utils.CrashHandler
 import com.mehrbodmk.factesimchin.utils.Helpers
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +48,16 @@ class MainActivity : AppCompatActivity() {
             Helpers.playSoundEffect(this@MainActivity, R.raw.button)
             startActivity(Intent(this@MainActivity, PlayersActivity::class.java))
         }
+
+        // Check if previous save game exists.
+        if(doesPreviousSaveGameFileExist())
+        {
+            Helpers.askUserYesNo(this@MainActivity, R.style.FacteSimchin_AlertDialogsTheme,
+                getString(R.string.question), getString(R.string.question_continue_game), getString(R.string.yes),
+                getString(R.string.no), R.raw.dialog_show, R.raw.dialog_hide, {
+                    startActivity(Intent(this@MainActivity, MainGameActivity::class.java))
+                }, { })
+        }
     }
 
     private fun getAppVersionString(): String
@@ -63,5 +75,12 @@ class MainActivity : AppCompatActivity() {
         animator.duration = 3000
         animator.repeatCount = ValueAnimator.INFINITE
         animator.start()
+    }
+
+    private fun doesPreviousSaveGameFileExist() : Boolean
+    {
+        val fileName = Constants.FILENAME_SAVE_GAME
+        val file = File(this.filesDir, fileName)
+        return file.exists()
     }
 }

@@ -11,5 +11,6 @@ class Constants {
         const val INTENT_NIGHT_COMMANDS = "night_commands"
 
         const val FILENAME_PLAYERS_LIST = "players_list.txt"
+        const val FILENAME_SAVE_GAME = "facte_simchin.sav"
     }
 }

@@ -6,7 +6,9 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
 import android.text.ClipboardManager
+import com.google.gson.Gson
 import com.mehrbodmk.factesimchin.R
+import com.mehrbodmk.factesimchin.models.GameSession
 
 class Helpers {
 
